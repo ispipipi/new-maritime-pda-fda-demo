@@ -388,6 +388,60 @@
       font-weight: 700;
     }
 
+    .sample-library {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .sample-library-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      color: var(--color-text-secondary);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .sample-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .sample-card {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      background: rgba(10, 15, 30, 0.45);
+    }
+
+    .sample-card h3 {
+      font-size: 18px;
+    }
+
+    .sample-meta {
+      display: grid;
+      gap: 4px;
+      color: var(--color-text-secondary);
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .sample-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .sample-actions a {
+      text-decoration: none;
+    }
+
     .badges {
       display: flex;
       flex-wrap: wrap;
@@ -1035,6 +1089,7 @@
 
       .context-strip,
       .form-grid,
+      .sample-grid,
       .kpi-row {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -1064,6 +1119,7 @@
       .doc-details,
       .context-strip,
       .form-grid,
+      .sample-grid,
       .kpi-row {
         grid-template-columns: 1fr;
       }
@@ -1147,7 +1203,10 @@
       "Pilotage Outward": "Pilotage Out",
       "Towage Inward (2 tugs)": "Tug Services Inward",
       "Towage Outward (2 tugs)": "Tug Services Outward",
-      "Fresh Water Supply": "Fresh Water"
+      "Fresh Water Supply": "Fresh Water",
+      "Customs Overtime": "CUSTOMS OVT",
+      "O.C.C Fees": "OCC FEES",
+      "LMC Traffic Right": "LMC TRAFIC SERVICE"
     };
 
     const MOCK_CONTEXT = {
@@ -1207,6 +1266,109 @@
       ["Immigration Fees", "Other", 540, "New item - not in PDA"]
     ];
 
+    const REAL_EXAMPLES = {
+      diddi: {
+        label: "M/T DIDDI · ANGO-ANGO",
+        pdaPdf: "examples/pda-mt-diddi-calling-ango-ango.pdf",
+        fdaPdf: "examples/dxb-1577-25-ango-ango-fda.pdf",
+        context: {
+          vessel: "M/T DIDDI",
+          imo: "Sample vessel",
+          port: "ANGO-ANGO, DRC",
+          eta: "2025-11-22",
+          agent: "AMICONGO",
+          currency: "USD",
+          pdaReference: "PDA-SHACC-MAT-11-8121048-2025",
+          fdaReference: "FDA-DXB-1577-25",
+          date: "2025-11-20",
+          operationDate: "2025-11-23"
+        },
+        pdaItems: [
+          ["CVM / Pilot Bonus", "Pilotage", 7000, "From AMICONGO proforma invoice"],
+          ["Harbour Master", "Port Dues", 5000, "Police, security visit, clearance and overtime"],
+          ["Quarantine", "Port Dues", 1000, "Sanitary control and overtime agent"],
+          ["Customs Office Overtime", "Other", 200, ""],
+          ["Matadi City Hall Pollution Tax", "Other", 250, ""],
+          ["Seamen's Pool Watchmen", "Husbandry", 3500, ""],
+          ["LMC Traffic Dues Gasoil", "Port Dues", 18634, "8,000 MT gasoil"],
+          ["LMC Traffic Dues Gasoline", "Port Dues", 6490, "2,400 MT gasoline"],
+          ["O.C.C Fees", "Port Dues", 52000, "5.00 USD / MT"],
+          ["Statistics Charges", "Port Dues", 10400, "1.00 USD / MT"],
+          ["Regulation Charges", "Port Dues", 10400, "1.00 USD / MT"],
+          ["OGEFREM Fees", "Other", 10207.60, ""],
+          ["Agency Fees", "Agency Fee", 5000, ""]
+        ],
+        fdaItems: [
+          ["CVM / Pilot Bonus", "Pilotage", 8800, "Final pilot gratuifications"],
+          ["Harbour Master", "Port Dues", 4400, "Final harbour master charges"],
+          ["Quarantine", "Port Dues", 250, "Final quarantine charges"],
+          ["Customs Office Overtime", "Other", 200, ""],
+          ["Matadi City Hall Pollution Tax", "Other", 250, ""],
+          ["Seamen's Pool Watchmen", "Husbandry", 3500, ""],
+          ["LMC Traffic Dues Gasoil", "Port Dues", 29121.67, "Final traffic right"],
+          ["O.C.C Fees", "Port Dues", 60717.37, "Final OCC fees"],
+          ["Statistics Charges", "Port Dues", 12159.85, ""],
+          ["Regulation Charges", "Port Dues", 12159.85, ""],
+          ["OGEFREM Fees", "Other", 15558.97, ""],
+          ["Agency Fees", "Agency Fee", 5000, ""]
+        ]
+      },
+      ruby: {
+        label: "M/T AFRICAN RUBY · BANANA",
+        pdaPdf: "examples/pda-of-mt-african-ruby.pdf",
+        fdaPdf: "examples/dxb-1120-25-mt-african-ruby-banana-fda.pdf",
+        context: {
+          vessel: "M/T AFRICAN RUBY",
+          imo: "Sample vessel",
+          port: "BANANA BUOY #16, Congo River",
+          eta: "2025-08-28",
+          agent: "AMICONGO",
+          currency: "USD",
+          pdaReference: "PDA-BAN-FACT-4208031-2025",
+          fdaReference: "FDA-DXB-1120-25",
+          date: "2025-08-20",
+          operationDate: "2025-08-28 to 2025-08-31"
+        },
+        pdaItems: [
+          ["Pilotage", "Pilotage", 8500, "Pilot gratification and stay on board"],
+          ["Pilotine Hire", "Pilotage", 3085.60, ""],
+          ["Harbour Master Dues", "Port Dues", 4600, "Police and agent overtime"],
+          ["Sanitary Dues", "Port Dues", 1450, ""],
+          ["PTNTIC Tax", "Other", 800, ""],
+          ["Customs Overtime", "Other", 570, ""],
+          ["Pollution Tax", "Other", 475, ""],
+          ["A.N.R Intelligence Services", "Other", 200, ""],
+          ["OGEFREM", "Other", 1341.01, ""],
+          ["O.C.C Fees", "Port Dues", 8000, ""],
+          ["Agency Fees", "Agency Fee", 5000, ""],
+          ["Statistics Charges", "Port Dues", 1600, ""],
+          ["Regulation Charges", "Port Dues", 1600, ""],
+          ["LMC Traffic Right", "Port Dues", 3950.62, ""]
+        ],
+        fdaItems: [
+          ["Pilotage", "Pilotage", 8500, ""],
+          ["Pilotine Hire", "Pilotage", 3085.60, ""],
+          ["Harbour Master Dues", "Port Dues", 4500, ""],
+          ["Sanitary Dues", "Port Dues", 1400, ""],
+          ["PTNTIC Tax", "Other", 800, ""],
+          ["Customs Overtime", "Other", 410, ""],
+          ["Pollution Tax", "Other", 475, ""],
+          ["A.N.R Intelligence Services", "Other", 200, ""],
+          ["OGEFREM", "Other", 925.10, ""],
+          ["O.C.C Fees", "Port Dues", 7992.20, ""],
+          ["State Agent Fees", "Agency Fee", 5000, "Final invoice wording"],
+          ["Statistics Charges", "Port Dues", 1600.57, ""],
+          ["Regulation Charges", "Port Dues", 1600.57, ""],
+          ["LMC Traffic Service", "Port Dues", 3952.03, ""],
+          ["Agency Fees", "Agency Fee", 2950, "Additional FDA agency fees"],
+          ["Clearance Charges", "Other", 267, "New item"],
+          ["ISPS", "Port Dues", 194, "New item"],
+          ["Communication & Petties", "Other", 157, "New item"],
+          ["Bank Charges", "Other", 188, "New item"]
+        ]
+      }
+    };
+
     const app = document.getElementById("app");
     const stepNav = document.getElementById("stepNav");
     const progressCopy = document.getElementById("progressCopy");
@@ -1228,6 +1390,7 @@
       docType: "PDA",
       pdaItems: [],
       fdaItems: [],
+      activeExample: "",
       comparisonFilter: "all",
       editPdaDoc: true,
       editFdaDoc: true,
@@ -1393,8 +1556,27 @@
       startParsing("PDA", () => {
         state.context = { ...MOCK_CONTEXT };
         state.pdaItems = cloneItems(MOCK_PDA_ITEMS, "USD");
+        state.fdaItems = [];
+        state.fdaLoaded = false;
+        state.activeExample = "";
         state.pdaLoaded = true;
         showToast("PDA extracted", "12 disbursement lines structured for review.");
+        setStep(1);
+      });
+    }
+
+    function loadPdaExample(key) {
+      const sample = REAL_EXAMPLES[key];
+      if (!sample) return;
+      startParsing("PDA", () => {
+        state.context = { ...sample.context };
+        state.pdaItems = cloneItems(sample.pdaItems, "USD");
+        state.fdaItems = [];
+        state.fdaLoaded = false;
+        state.approvedAmounts = {};
+        state.activeExample = key;
+        state.pdaLoaded = true;
+        showToast("Sample PDA loaded", `${sample.label} is ready for validation.`);
         setStep(1);
       });
     }
@@ -1403,11 +1585,33 @@
       startParsing("FDA", () => {
         state.fdaItems = cloneItems(MOCK_FDA_ITEMS, "USD");
         state.fdaLoaded = true;
+        state.activeExample = state.activeExample || "";
         state.approvedAmounts = {};
         compareItems().forEach(row => {
           state.approvedAmounts[row.key] = row.fdaAmount;
         });
         showToast("FDA compared", "Final DA matched against the active PDA.");
+        render();
+      });
+    }
+
+    function loadFdaExample(key) {
+      const sample = REAL_EXAMPLES[key];
+      if (!sample) return;
+      startParsing("FDA", () => {
+        if (!state.pdaLoaded || state.activeExample !== key) {
+          state.context = { ...sample.context };
+          state.pdaItems = cloneItems(sample.pdaItems, "USD");
+          state.pdaLoaded = true;
+        }
+        state.fdaItems = cloneItems(sample.fdaItems, "USD");
+        state.fdaLoaded = true;
+        state.activeExample = key;
+        state.approvedAmounts = {};
+        compareItems().forEach(row => {
+          state.approvedAmounts[row.key] = row.fdaAmount;
+        });
+        showToast("Sample FDA compared", `${sample.label} final account matched to its PDA.`);
         render();
       });
     }
@@ -1465,6 +1669,42 @@
             </div>
             ${state.droppedName ? `<span class="muted mono">${state.droppedName}</span>` : ""}
             <button class="btn primary" id="${type.toLowerCase()}DemoBtn" type="button" ${state.parsing ? "disabled" : ""}>${buttonText}</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function exampleLibraryHTML(type) {
+      const isFda = type === "FDA";
+      return `
+        <div class="sample-library">
+          <div class="sample-library-head">
+            <span>${isFda ? "Real FDA examples" : "Real PDA examples"}</span>
+            <span>${Object.keys(REAL_EXAMPLES).length} sample pairs</span>
+          </div>
+          <div class="sample-grid">
+            ${Object.entries(REAL_EXAMPLES).map(([key, sample]) => {
+              const items = isFda ? sample.fdaItems : sample.pdaItems;
+              const pdf = isFda ? sample.fdaPdf : sample.pdaPdf;
+              const totalLabel = money(total(items.map(row => ({ amount: row[2] }))));
+              const isActive = state.activeExample === key;
+              return `
+                <div class="sample-card">
+                  <h3>${sample.label}</h3>
+                  <div class="sample-meta">
+                    <span>${isFda ? sample.context.fdaReference : sample.context.pdaReference}</span>
+                    <span>${items.length} extracted lines · ${totalLabel}</span>
+                    <span>${sample.context.agent} · ${sample.context.port}</span>
+                  </div>
+                  <div class="sample-actions">
+                    <a class="btn small" href="${pdf}" target="_blank" rel="noopener">View PDF</a>
+                    <button class="btn small ${isActive ? "primary" : ""}" type="button" data-load-${type.toLowerCase()}-example="${key}">
+                      ${isFda ? "Load FDA sample" : "Load PDA sample"}
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join("")}
           </div>
         </div>
       `;
@@ -1529,11 +1769,15 @@
           </div>
           <div class="panel panel-pad">
             ${uploadZoneHTML("PDA")}
+            ${exampleLibraryHTML("PDA")}
             ${contextInputsHTML()}
           </div>
         </section>
       `;
       document.getElementById("pdaDemoBtn").addEventListener("click", loadPdaDemo);
+      document.querySelectorAll("[data-load-pda-example]").forEach(button => {
+        button.addEventListener("click", () => loadPdaExample(button.dataset.loadPdaExample));
+      });
       document.querySelectorAll("[data-doc-type]").forEach(button => {
         button.addEventListener("click", () => {
           state.docType = button.dataset.docType;
@@ -1916,6 +2160,7 @@
             </div>
             <div class="panel panel-pad">
               ${uploadZoneHTML("FDA")}
+              ${exampleLibraryHTML("FDA")}
             </div>
             <div class="footer-actions">
               <button class="btn" type="button" id="backPdaDoc">← Back</button>
@@ -1924,6 +2169,9 @@
           </section>
         `;
         document.getElementById("fdaDemoBtn").addEventListener("click", loadFdaDemo);
+        document.querySelectorAll("[data-load-fda-example]").forEach(button => {
+          button.addEventListener("click", () => loadFdaExample(button.dataset.loadFdaExample));
+        });
         document.getElementById("backPdaDoc").addEventListener("click", () => setStep(2));
         attachDrop("fdaDrop", "FDA");
         return;
