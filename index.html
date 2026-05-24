@@ -1,0 +1,2242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NEW MARITIME · PDA/FDA Automation Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --color-bg: #0a0f1e;
+      --color-surface: #0f1829;
+      --color-surface-elevated: #162035;
+      --color-border: #1e2d4a;
+      --color-accent: #c9a84c;
+      --color-accent-hover: #e0bc6a;
+      --color-text-primary: #e8edf5;
+      --color-text-secondary: #8a9ab8;
+      --color-success: #2ecc71;
+      --color-warning: #f39c12;
+      --color-danger: #e74c3c;
+      --color-white: #ffffff;
+      --shadow-elevated: 0 4px 24px rgba(0,0,0,0.4);
+      --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --display: "Barlow Condensed", Impact, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        linear-gradient(120deg, rgba(201,168,76,0.08), transparent 34%),
+        radial-gradient(circle at 12% 0%, rgba(46,204,113,0.06), transparent 26%),
+        var(--color-bg);
+      color: var(--color-text-primary);
+      font-family: var(--sans);
+    }
+
+    body { overflow-x: hidden; }
+
+    button,
+    input,
+    select,
+    textarea { font: inherit; }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 24px;
+      align-items: center;
+      min-height: 76px;
+      padding: 16px 28px;
+      background: rgba(10, 15, 30, 0.92);
+      border-bottom: 1px solid var(--color-border);
+      backdrop-filter: blur(18px);
+    }
+
+    .wordmark {
+      display: grid;
+      gap: 0;
+      min-width: 170px;
+      letter-spacing: 0;
+    }
+
+    .wordmark strong {
+      font-family: var(--display);
+      font-size: 28px;
+      line-height: 0.9;
+      color: var(--color-white);
+    }
+
+    .wordmark span {
+      margin-top: 4px;
+      color: var(--color-accent);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(92px, 1fr));
+      gap: 8px;
+      align-items: end;
+    }
+
+    .step-pill {
+      position: relative;
+      min-height: 44px;
+      padding: 4px 6px 10px;
+      color: var(--color-text-secondary);
+      background: transparent;
+      text-align: left;
+    }
+
+    .step-pill::after {
+      content: "";
+      position: absolute;
+      left: 6px;
+      right: 6px;
+      bottom: 0;
+      height: 2px;
+      background: var(--color-border);
+      border-radius: 10px;
+      transition: background 240ms ease, transform 240ms ease;
+    }
+
+    .step-pill .step-number {
+      display: block;
+      margin-bottom: 4px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--color-accent);
+    }
+
+    .step-pill .step-label {
+      display: block;
+      overflow: hidden;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .step-pill.active {
+      color: var(--color-text-primary);
+    }
+
+    .step-pill.active::after {
+      background: var(--color-accent);
+      transform: scaleY(1.4);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-copy {
+      color: var(--color-text-secondary);
+      font-family: var(--mono);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 0 16px;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      background: var(--color-surface-elevated);
+      color: var(--color-text-primary);
+      font-size: 13px;
+      font-weight: 700;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(201,168,76,0.56);
+    }
+
+    .btn.primary {
+      border-color: transparent;
+      background: var(--color-accent);
+      color: #111725;
+    }
+
+    .btn.primary:hover { background: var(--color-accent-hover); }
+
+    .btn.ghost {
+      background: transparent;
+    }
+
+    .btn.small {
+      min-height: 32px;
+      padding: 0 10px;
+      font-size: 12px;
+    }
+
+    .btn.danger:hover {
+      border-color: rgba(231,76,60,0.65);
+      color: #ffb4ab;
+    }
+
+    .main-stage {
+      width: 100%;
+      max-width: 1248px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+    .screen {
+      animation: screenIn 300ms ease both;
+    }
+
+    @keyframes screenIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: end;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--color-accent);
+      font-family: var(--display);
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: var(--display);
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(38px, 5vw, 70px);
+      line-height: 0.92;
+      max-width: 850px;
+    }
+
+    h2 {
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    h3 {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .muted {
+      color: var(--color-text-secondary);
+    }
+
+    .mono {
+      font-family: var(--mono);
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      background: rgba(15, 24, 41, 0.88);
+      box-shadow: var(--shadow-elevated);
+    }
+
+    .panel-pad {
+      padding: 20px;
+    }
+
+    .panel-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .upload-zone {
+      position: relative;
+      display: grid;
+      min-height: 320px;
+      place-items: center;
+      padding: 32px;
+      overflow: hidden;
+      border: 1px dashed rgba(201,168,76,0.68);
+      border-radius: 6px;
+      background:
+        linear-gradient(135deg, rgba(201,168,76,0.08), transparent 42%),
+        rgba(15, 24, 41, 0.94);
+      transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+    }
+
+    .upload-zone.is-over,
+    .upload-zone:hover {
+      border-color: var(--color-accent-hover);
+      background:
+        linear-gradient(135deg, rgba(201,168,76,0.13), transparent 42%),
+        var(--color-surface);
+      transform: translateY(-1px);
+    }
+
+    .upload-inner {
+      display: grid;
+      justify-items: center;
+      gap: 16px;
+      max-width: 580px;
+      text-align: center;
+    }
+
+    .doc-icon {
+      position: relative;
+      width: 84px;
+      height: 108px;
+      border: 1px solid rgba(232,237,245,0.22);
+      border-radius: 6px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02));
+    }
+
+    .doc-icon::before,
+    .doc-icon::after {
+      content: "";
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      height: 2px;
+      background: rgba(232,237,245,0.38);
+      box-shadow: 0 16px rgba(232,237,245,0.32), 0 32px rgba(232,237,245,0.24), 0 48px rgba(232,237,245,0.18);
+    }
+
+    .doc-icon::before { top: 24px; }
+    .doc-icon::after {
+      top: 84px;
+      background: var(--color-accent);
+      box-shadow: none;
+    }
+
+    .upload-zone.parsing .doc-icon .scan-line {
+      position: absolute;
+      left: -7px;
+      right: -7px;
+      height: 3px;
+      background: var(--color-accent-hover);
+      box-shadow: 0 0 16px rgba(224,188,106,0.8);
+      animation: scan 1.15s ease-in-out infinite;
+    }
+
+    @keyframes scan {
+      0% { top: 10px; opacity: 0; }
+      12% { opacity: 1; }
+      86% { opacity: 1; }
+      100% { top: 95px; opacity: 0; }
+    }
+
+    .upload-copy {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 0 9px;
+      border: 1px solid rgba(201,168,76,0.32);
+      border-radius: 4px;
+      background: rgba(201,168,76,0.08);
+      color: var(--color-accent-hover);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      color: var(--color-text-secondary);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 38px;
+      padding: 8px 10px;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      outline: none;
+      background: #0b1221;
+      color: var(--color-text-primary);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--color-accent);
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      background: rgba(10,15,30,0.6);
+    }
+
+    .segmented button {
+      min-height: 34px;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--color-text-secondary);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .segmented button.active {
+      background: var(--color-accent);
+      color: #101725;
+    }
+
+    .context-strip {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 1px;
+      overflow: hidden;
+      margin-bottom: 18px;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      background: var(--color-border);
+    }
+
+    .context-item {
+      min-height: 66px;
+      padding: 12px;
+      background: rgba(15,24,41,0.94);
+    }
+
+    .context-item span {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--color-text-secondary);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .context-item strong {
+      display: block;
+      overflow: hidden;
+      font-family: var(--mono);
+      font-size: 13px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      background: #0b1221;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    th,
+    td {
+      padding: 10px 10px;
+      border-bottom: 1px solid rgba(30,45,74,0.82);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #111a2d;
+      color: var(--color-text-secondary);
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    tbody tr:hover td {
+      background: rgba(255,255,255,0.018);
+    }
+
+    td.amount,
+    th.amount {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    td input,
+    td select {
+      min-height: 32px;
+      padding: 6px 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .row-actions {
+      width: 44px;
+      text-align: center;
+    }
+
+    .trash {
+      width: 30px;
+      height: 30px;
+      border: 1px solid rgba(231,76,60,0.25);
+      border-radius: 4px;
+      background: transparent;
+      color: #ffafa7;
+      opacity: 0;
+      transition: opacity 160ms ease, background 160ms ease;
+    }
+
+    tr:hover .trash { opacity: 1; }
+
+    .trash:hover { background: rgba(231,76,60,0.12); }
+
+    .grand-row td {
+      border-bottom: 0;
+      background: rgba(201,168,76,0.1);
+      color: var(--color-accent-hover);
+      font-weight: 800;
+    }
+
+    .side-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .side-list-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      min-height: 34px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(30,45,74,0.7);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .chart-box {
+      min-height: 240px;
+      padding: 12px;
+    }
+
+    .fallback-chart {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .fallback-bar {
+      display: grid;
+      gap: 5px;
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .fallback-meter {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 10px;
+      background: rgba(232,237,245,0.1);
+    }
+
+    .fallback-meter span {
+      display: block;
+      height: 100%;
+      background: var(--color-accent);
+    }
+
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .document-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .document-preview {
+      min-height: 720px;
+      padding: 38px;
+      border-radius: 6px;
+      background: var(--color-white);
+      color: #172033;
+      box-shadow: var(--shadow-elevated);
+    }
+
+    .doc-letterhead {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: start;
+      padding-bottom: 22px;
+      border-bottom: 3px solid #172033;
+    }
+
+    .doc-letterhead strong {
+      display: block;
+      font-family: var(--display);
+      font-size: 38px;
+      line-height: 0.9;
+      color: #0a0f1e;
+      text-transform: uppercase;
+    }
+
+    .doc-letterhead span {
+      display: block;
+      margin-top: 6px;
+      color: #5b6680;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .doc-ref {
+      text-align: right;
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .doc-title {
+      margin: 28px 0 18px;
+      font-family: var(--display);
+      font-size: 34px;
+      color: #0a0f1e;
+      text-transform: uppercase;
+    }
+
+    .doc-details {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      overflow: hidden;
+      margin-bottom: 22px;
+      border: 1px solid #d8deea;
+      border-radius: 4px;
+      background: #d8deea;
+    }
+
+    .doc-detail {
+      padding: 10px;
+      background: #f7f8fb;
+    }
+
+    .doc-detail span {
+      display: block;
+      margin-bottom: 4px;
+      color: #667085;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .doc-detail strong {
+      display: block;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #172033;
+    }
+
+    .doc-table {
+      border: 1px solid #d8deea;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .doc-table table {
+      color: #172033;
+      font-size: 11px;
+    }
+
+    .doc-table th {
+      background: #172033;
+      color: #ffffff;
+      border-bottom-color: #172033;
+    }
+
+    .doc-table td {
+      border-bottom-color: #e5e9f1;
+    }
+
+    .doc-table td input {
+      min-height: 28px;
+      border-color: transparent;
+      background: transparent;
+      color: #172033;
+      text-align: right;
+    }
+
+    .doc-table td input:enabled {
+      border-color: #d8deea;
+      background: #ffffff;
+    }
+
+    .doc-total {
+      display: flex;
+      justify-content: flex-end;
+      gap: 22px;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 2px solid #172033;
+      font-family: var(--mono);
+      font-weight: 800;
+      color: #0a0f1e;
+    }
+
+    .doc-note {
+      margin-top: 26px;
+      padding: 12px 14px;
+      border-left: 4px solid #c9a84c;
+      background: #f7f3e6;
+      color: #344054;
+      font-size: 12px;
+    }
+
+    .signature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 48px;
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .signature-line {
+      padding-top: 12px;
+      border-top: 1px solid #172033;
+    }
+
+    .controls-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .control-card {
+      padding: 14px;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      background: rgba(15,24,41,0.9);
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      min-height: 36px;
+      color: var(--color-text-secondary);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      border-radius: 50px;
+      background: var(--color-border);
+      transition: background 180ms ease;
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #ffffff;
+      transition: transform 180ms ease;
+    }
+
+    .switch input:checked + .slider {
+      background: var(--color-accent);
+    }
+
+    .switch input:checked + .slider::before {
+      transform: translateX(20px);
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .kpi {
+      padding: 14px;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      background: rgba(15,24,41,0.9);
+    }
+
+    .kpi span {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--color-text-secondary);
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .kpi strong {
+      display: block;
+      font-family: var(--mono);
+      font-size: 19px;
+    }
+
+    .kpi.success strong { color: var(--color-success); }
+    .kpi.warning strong { color: var(--color-warning); }
+    .kpi.danger strong { color: var(--color-danger); }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .filter-btn {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      background: rgba(15,24,41,0.9);
+      color: var(--color-text-secondary);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .filter-btn.active {
+      border-color: var(--color-accent);
+      color: var(--color-accent-hover);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 26px;
+      padding: 0 9px;
+      border-radius: 4px;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .status-badge.success {
+      background: rgba(46,204,113,0.12);
+      color: #8bf1b5;
+    }
+
+    .status-badge.warning {
+      background: rgba(243,156,18,0.14);
+      color: #ffd089;
+    }
+
+    .status-badge.danger {
+      background: rgba(231,76,60,0.14);
+      color: #ffaaa1;
+    }
+
+    .row-note {
+      display: block;
+      margin-top: 4px;
+      color: var(--color-warning);
+      font-family: var(--sans);
+      font-size: 11px;
+      font-style: italic;
+      font-weight: 700;
+    }
+
+    .row-note.missing {
+      color: #ffaaa1;
+    }
+
+    .attention-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .attention-item {
+      padding: 10px;
+      border: 1px solid rgba(201,168,76,0.22);
+      border-radius: 4px;
+      background: rgba(201,168,76,0.07);
+      font-size: 12px;
+    }
+
+    .attention-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-family: var(--mono);
+    }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 50;
+      display: grid;
+      gap: 4px;
+      min-width: 260px;
+      max-width: calc(100vw - 48px);
+      padding: 14px 16px;
+      border: 1px solid rgba(201,168,76,0.4);
+      border-radius: 6px;
+      background: #10192b;
+      box-shadow: var(--shadow-elevated);
+      transform: translateY(20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast strong {
+      color: var(--color-accent-hover);
+      font-size: 13px;
+    }
+
+    .toast span {
+      color: var(--color-text-secondary);
+      font-size: 12px;
+    }
+
+    @media (max-width: 1060px) {
+      .topbar {
+        grid-template-columns: 1fr auto;
+      }
+
+      .steps {
+        grid-column: 1 / -1;
+        order: 3;
+      }
+
+      .grid-two,
+      .document-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .context-strip,
+      .form-grid,
+      .kpi-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar,
+      .main-stage {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .step-pill {
+        min-height: 32px;
+      }
+
+      .step-pill .step-label {
+        white-space: normal;
+      }
+
+      .page-head,
+      .doc-letterhead,
+      .doc-details,
+      .context-strip,
+      .form-grid,
+      .kpi-row {
+        grid-template-columns: 1fr;
+      }
+
+      .document-preview {
+        padding: 22px;
+      }
+
+      .footer-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .footer-actions .btn {
+        width: 100%;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .topbar,
+      .page-head,
+      .controls-stack,
+      .footer-actions,
+      .toast {
+        display: none !important;
+      }
+
+      .main-stage {
+        max-width: none;
+        padding: 0;
+      }
+
+      .document-grid {
+        display: block;
+      }
+
+      .document-preview {
+        min-height: auto;
+        padding: 24px;
+        box-shadow: none;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="wordmark" aria-label="NEW MARITIME">
+        <strong>NEW MARITIME</strong>
+        <span>West Africa Hub Agent</span>
+      </div>
+      <nav class="steps" id="stepNav" aria-label="PDA FDA workflow steps"></nav>
+      <div class="top-actions">
+        <span class="progress-copy" id="progressCopy">Step 1 of 5</span>
+        <button class="btn ghost" id="resetBtn" type="button">Reset Demo</button>
+      </div>
+    </header>
+    <main class="main-stage" id="app"></main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const STEPS = [
+      "Upload PDA",
+      "Review PDA",
+      "Generate Client PDA",
+      "Upload & Compare FDA",
+      "Generate Client FDA"
+    ];
+
+    const CATEGORIES = ["Port Dues", "Pilotage", "Towage", "Agency Fee", "Husbandry", "Other"];
+    const CURRENCIES = ["USD", "EUR", "GBP", "XOF"];
+
+    const ITEM_ALIASES = {
+      "Pilotage Inward": "Pilotage In",
+      "Pilotage Outward": "Pilotage Out",
+      "Towage Inward (2 tugs)": "Tug Services Inward",
+      "Towage Outward (2 tugs)": "Tug Services Outward",
+      "Fresh Water Supply": "Fresh Water"
+    };
+
+    const MOCK_CONTEXT = {
+      vessel: "MV ATLANTIC STAR",
+      imo: "9512847",
+      port: "Port of Tema, Ghana",
+      eta: "2025-06-14",
+      agent: "WESTAF MARITIME SERVICES LTD",
+      currency: "USD",
+      pdaReference: "PDA-2025-0614-TEM-001",
+      fdaReference: "FDA-2025-0721-TEM-001",
+      date: "2025-05-20",
+      operationDate: "2025-06-14 to 2025-06-17"
+    };
+
+    const EMPTY_CONTEXT = {
+      vessel: "",
+      imo: "",
+      port: "",
+      eta: "",
+      agent: "",
+      currency: "USD",
+      pdaReference: "",
+      fdaReference: "",
+      date: "",
+      operationDate: ""
+    };
+
+    const MOCK_PDA_ITEMS = [
+      ["Port Dues (GRT based)", "Port Dues", 12450, ""],
+      ["Pilotage Inward", "Pilotage", 4200, ""],
+      ["Pilotage Outward", "Pilotage", 4200, ""],
+      ["Towage Inward (2 tugs)", "Towage", 9800, ""],
+      ["Towage Outward (2 tugs)", "Towage", 9800, ""],
+      ["Mooring / Unmooring", "Port Dues", 1850, ""],
+      ["Ship's Agent Fee", "Agency Fee", 3500, ""],
+      ["Launch Services", "Husbandry", 620, ""],
+      ["Garbage Disposal (MARPOL)", "Husbandry", 480, ""],
+      ["Crew Provisions", "Husbandry", 2100, ""],
+      ["Fresh Water Supply", "Husbandry", 750, ""],
+      ["Communication / Port Authority", "Other", 380, ""]
+    ];
+
+    const MOCK_FDA_ITEMS = [
+      ["Port Dues (GRT based)", "Port Dues", 12450, "Exact match"],
+      ["Pilotage In", "Pilotage", 4200, "Exact match (normalized name)"],
+      ["Pilotage Out", "Pilotage", 4550, "+350 - overtime surcharge applied"],
+      ["Tug Services Inward", "Towage", 9800, "Exact match (normalized name)"],
+      ["Tug Services Outward", "Towage", 11200, "+1,400 - 3rd tug requested"],
+      ["Mooring / Unmooring", "Port Dues", 1850, "Exact match"],
+      ["Ship's Agent Fee", "Agency Fee", 3500, "Exact match"],
+      ["Launch Services", "Husbandry", 780, "+160 - extra trips"],
+      ["Garbage Disposal (MARPOL)", "Husbandry", 480, "Exact match"],
+      ["Crew Provisions", "Husbandry", 2100, "Exact match"],
+      ["Fresh Water", "Husbandry", 920, "+170 - additional quantity"],
+      ["Communication / Port Authority", "Other", 380, "Exact match"],
+      ["Immigration Fees", "Other", 540, "New item - not in PDA"]
+    ];
+
+    const app = document.getElementById("app");
+    const stepNav = document.getElementById("stepNav");
+    const progressCopy = document.getElementById("progressCopy");
+    const resetBtn = document.getElementById("resetBtn");
+    const toast = document.getElementById("toast");
+
+    let categoryChart = null;
+    let varianceChart = null;
+    let toastTimer = null;
+
+    const initialState = () => ({
+      step: 0,
+      context: { ...EMPTY_CONTEXT },
+      pdaLoaded: false,
+      fdaLoaded: false,
+      parsing: false,
+      parsingLabel: "",
+      droppedName: "",
+      docType: "PDA",
+      pdaItems: [],
+      fdaItems: [],
+      comparisonFilter: "all",
+      editPdaDoc: true,
+      editFdaDoc: true,
+      showConversion: false,
+      conversionRate: 0.92,
+      approvedAmounts: {}
+    });
+
+    let state = initialState();
+
+    function money(value, currency = "USD") {
+      const number = Number(value) || 0;
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency,
+        minimumFractionDigits: 2
+      }).format(number);
+    }
+
+    function numberFormat(value) {
+      return new Intl.NumberFormat("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(Number(value) || 0);
+    }
+
+    function parseAmount(value) {
+      const parsed = Number(String(value).replace(/,/g, ""));
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    function cloneItems(items, currency = "USD") {
+      return items.map((row, index) => ({
+        id: `${Date.now()}-${index}-${row[0].replace(/\W+/g, "-")}`,
+        item: row[0],
+        category: row[1],
+        amount: row[2],
+        currency,
+        notes: row[3] || ""
+      }));
+    }
+
+    function total(items, key = "amount") {
+      return items.reduce((sum, item) => sum + (Number(item[key]) || 0), 0);
+    }
+
+    function byCategory(items) {
+      return CATEGORIES.reduce((acc, category) => {
+        const amount = items
+          .filter(item => item.category === category)
+          .reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+        if (amount > 0) acc[category] = amount;
+        return acc;
+      }, {});
+    }
+
+    function normalizeName(name) {
+      return String(name)
+        .toLowerCase()
+        .replace(/\(.*?\)/g, "")
+        .replace(/&/g, "and")
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim();
+    }
+
+    function canonicalName(name) {
+      const normalized = normalizeName(name);
+      for (const pdaName in ITEM_ALIASES) {
+        const fdaName = ITEM_ALIASES[pdaName];
+        if (normalized === normalizeName(pdaName) || normalized === normalizeName(fdaName)) {
+          return normalizeName(pdaName);
+        }
+      }
+      return normalized;
+    }
+
+    function compareItems() {
+      const pdaMap = new Map();
+      const fdaMap = new Map();
+      const order = [];
+
+      state.pdaItems.forEach(item => {
+        const key = canonicalName(item.item);
+        pdaMap.set(key, item);
+        order.push(key);
+      });
+
+      state.fdaItems.forEach(item => {
+        const key = canonicalName(item.item);
+        fdaMap.set(key, item);
+        if (!order.includes(key)) order.push(key);
+      });
+
+      return order.map(key => {
+        const pda = pdaMap.get(key) || null;
+        const fda = fdaMap.get(key) || null;
+        const pdaAmount = pda ? Number(pda.amount) || 0 : 0;
+        const fdaAmount = fda ? Number(fda.amount) || 0 : 0;
+        const deviation = fdaAmount - pdaAmount;
+        const deviationPct = pdaAmount === 0 ? 100 : (deviation / pdaAmount) * 100;
+        const absPct = Math.abs(deviationPct);
+        let status = "success";
+        let statusLabel = "On Target";
+        let statusIcon = "🟢";
+        if (!pda || !fda || absPct > 15) {
+          status = "danger";
+          statusLabel = "Escalate";
+          statusIcon = "🔴";
+        } else if (absPct > 5) {
+          status = "warning";
+          statusLabel = "Review";
+          statusIcon = "🟡";
+        }
+        return {
+          key,
+          item: pda ? pda.item : fda.item,
+          category: (fda || pda).category,
+          pda,
+          fda,
+          pdaAmount,
+          fdaAmount,
+          deviation,
+          deviationPct,
+          status,
+          statusLabel,
+          statusIcon,
+          note: !pda ? "New item - not in PDA" : (!fda ? "Missing in FDA" : "")
+        };
+      });
+    }
+
+    function varianceLevel(percent) {
+      const abs = Math.abs(percent);
+      if (abs > 15) return "danger";
+      if (abs > 5) return "warning";
+      return "success";
+    }
+
+    function setStep(step) {
+      state.step = Math.max(0, Math.min(4, step));
+      render();
+    }
+
+    function showToast(title, message) {
+      clearTimeout(toastTimer);
+      toast.innerHTML = `<strong>${title}</strong><span>${message}</span>`;
+      toast.classList.add("show");
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+    function startParsing(type, done) {
+      state.parsing = true;
+      state.parsingLabel = type === "FDA" ? "Reconciling final invoices" : "Extracting PDA line items";
+      render();
+      setTimeout(() => {
+        state.parsing = false;
+        state.parsingLabel = "";
+        done();
+      }, 1500);
+    }
+
+    function loadPdaDemo() {
+      startParsing("PDA", () => {
+        state.context = { ...MOCK_CONTEXT };
+        state.pdaItems = cloneItems(MOCK_PDA_ITEMS, "USD");
+        state.pdaLoaded = true;
+        showToast("PDA extracted", "12 disbursement lines structured for review.");
+        setStep(1);
+      });
+    }
+
+    function loadFdaDemo() {
+      startParsing("FDA", () => {
+        state.fdaItems = cloneItems(MOCK_FDA_ITEMS, "USD");
+        state.fdaLoaded = true;
+        state.approvedAmounts = {};
+        compareItems().forEach(row => {
+          state.approvedAmounts[row.key] = row.fdaAmount;
+        });
+        showToast("FDA compared", "Final DA matched against the active PDA.");
+        render();
+      });
+    }
+
+    function simulateDroppedFile(fileName, type) {
+      state.droppedName = fileName;
+      if (type === "FDA") {
+        loadFdaDemo();
+      } else {
+        loadPdaDemo();
+      }
+    }
+
+    function inputValue(value) {
+      return String(value ?? "").replace(/"/g, "&quot;");
+    }
+
+    function renderNav() {
+      stepNav.innerHTML = STEPS.map((label, index) => `
+        <button class="step-pill ${index === state.step ? "active" : ""}" type="button" data-step="${index}" ${canNavigate(index) ? "" : "disabled"}>
+          <span class="step-number">${String(index + 1).padStart(2, "0")}</span>
+          <span class="step-label">${label}</span>
+        </button>
+      `).join("");
+      progressCopy.textContent = `Step ${state.step + 1} of 5`;
+      stepNav.querySelectorAll("[data-step]").forEach(button => {
+        button.addEventListener("click", () => {
+          const next = Number(button.dataset.step);
+          if (canNavigate(next)) setStep(next);
+        });
+      });
+    }
+
+    function canNavigate(step) {
+      if (step === 0) return true;
+      if (step >= 1 && !state.pdaLoaded) return false;
+      if (step >= 4 && !state.fdaLoaded) return false;
+      return true;
+    }
+
+    function uploadZoneHTML(type) {
+      const title = type === "FDA" ? "Drop FDA document here" : "Drop PDA document here";
+      const subtitle = type === "FDA" ? "PDF, Excel, invoice pack, or paste email body" : "PDF, Excel, or paste email body";
+      const buttonText = type === "FDA" ? "Load Demo FDA" : "Load Demo Data";
+      return `
+        <div class="upload-zone ${state.parsing ? "parsing" : ""}" id="${type.toLowerCase()}Drop">
+          <div class="upload-inner">
+            <div class="doc-icon" aria-hidden="true"><span class="scan-line"></span></div>
+            <p class="upload-copy">${state.parsing ? state.parsingLabel : `${title} (${subtitle})`}</p>
+            <div class="badges" aria-label="Accepted formats">
+              <span class="badge">PDF</span>
+              <span class="badge">XLSX</span>
+              <span class="badge">TXT</span>
+              <span class="badge">EMAIL</span>
+            </div>
+            ${state.droppedName ? `<span class="muted mono">${state.droppedName}</span>` : ""}
+            <button class="btn primary" id="${type.toLowerCase()}DemoBtn" type="button" ${state.parsing ? "disabled" : ""}>${buttonText}</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function attachDrop(zoneId, type) {
+      const zone = document.getElementById(zoneId);
+      if (!zone) return;
+      ["dragenter", "dragover"].forEach(eventName => {
+        zone.addEventListener(eventName, event => {
+          event.preventDefault();
+          zone.classList.add("is-over");
+        });
+      });
+      ["dragleave", "drop"].forEach(eventName => {
+        zone.addEventListener(eventName, event => {
+          event.preventDefault();
+          zone.classList.remove("is-over");
+        });
+      });
+      zone.addEventListener("drop", event => {
+        const file = event.dataTransfer.files[0];
+        simulateDroppedFile(file ? file.name : `${type}_email_body.txt`, type);
+      });
+    }
+
+    function contextInputsHTML() {
+      return `
+        <div class="form-grid">
+          <div class="field">
+            <label for="vesselName">Vessel Name</label>
+            <input id="vesselName" value="${inputValue(state.context.vessel)}" data-context="vessel">
+          </div>
+          <div class="field">
+            <label for="imoNumber">IMO Number</label>
+            <input id="imoNumber" value="${inputValue(state.context.imo)}" data-context="imo">
+          </div>
+          <div class="field">
+            <label for="portCall">Port of Call</label>
+            <input id="portCall" value="${inputValue(state.context.port)}" data-context="port">
+          </div>
+          <div class="field">
+            <label for="etaDate">ETA</label>
+            <input id="etaDate" type="date" value="${inputValue(state.context.eta)}" data-context="eta">
+          </div>
+        </div>
+      `;
+    }
+
+    function screenUploadPda() {
+      app.innerHTML = `
+        <section class="screen">
+          <div class="page-head">
+            <div>
+              <span class="eyebrow">PDA Intake</span>
+              <h1>Disbursement account automation for West Africa port calls</h1>
+            </div>
+            <div class="segmented" aria-label="Document type">
+              <button type="button" class="${state.docType === "PDA" ? "active" : ""}" data-doc-type="PDA">Proforma DA (PDA)</button>
+              <button type="button" class="${state.docType === "FDA" ? "active" : ""}" data-doc-type="FDA">Final DA (FDA)</button>
+            </div>
+          </div>
+          <div class="panel panel-pad">
+            ${uploadZoneHTML("PDA")}
+            ${contextInputsHTML()}
+          </div>
+        </section>
+      `;
+      document.getElementById("pdaDemoBtn").addEventListener("click", loadPdaDemo);
+      document.querySelectorAll("[data-doc-type]").forEach(button => {
+        button.addEventListener("click", () => {
+          state.docType = button.dataset.docType;
+          render();
+        });
+      });
+      document.querySelectorAll("[data-context]").forEach(input => {
+        input.addEventListener("input", () => {
+          state.context[input.dataset.context] = input.value;
+        });
+      });
+      attachDrop("pdaDrop", "PDA");
+    }
+
+    function contextStripHTML() {
+      const entries = [
+        ["Vessel", state.context.vessel],
+        ["IMO", state.context.imo],
+        ["Port", state.context.port],
+        ["Date", state.context.date],
+        ["Agent", state.context.agent],
+        ["Currency", state.context.currency]
+      ];
+      return `
+        <div class="context-strip">
+          ${entries.map(([label, value]) => `
+            <div class="context-item"><span>${label}</span><strong>${value}</strong></div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function optionsHTML(options, selected) {
+      return options.map(option => `<option value="${option}" ${option === selected ? "selected" : ""}>${option}</option>`).join("");
+    }
+
+    function renderPdaTableRows() {
+      return state.pdaItems.map((item, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td><input value="${inputValue(item.item)}" data-pda-field="item" data-id="${item.id}"></td>
+          <td><select data-pda-field="category" data-id="${item.id}">${optionsHTML(CATEGORIES, item.category)}</select></td>
+          <td class="amount"><input value="${numberFormat(item.amount)}" data-pda-field="amount" data-id="${item.id}"></td>
+          <td><select data-pda-field="currency" data-id="${item.id}">${optionsHTML(CURRENCIES, item.currency)}</select></td>
+          <td><input value="${inputValue(item.notes)}" data-pda-field="notes" data-id="${item.id}" placeholder="Optional"></td>
+          <td class="row-actions"><button class="trash" type="button" title="Delete row" data-delete-pda="${item.id}">×</button></td>
+        </tr>
+      `).join("");
+    }
+
+    function screenReviewPda() {
+      app.innerHTML = `
+        <section class="screen">
+          <div class="page-head">
+            <div>
+              <span class="eyebrow">PDA Review & Validation</span>
+              <h1>Validate extracted port disbursement lines</h1>
+            </div>
+            <button class="btn" id="addRowBtn" type="button">Add Row</button>
+          </div>
+          ${contextStripHTML()}
+          <div class="grid-two">
+            <div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Item / Service</th>
+                      <th>Category</th>
+                      <th class="amount">Amount</th>
+                      <th>Currency</th>
+                      <th>Notes</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${renderPdaTableRows()}
+                    <tr class="grand-row">
+                      <td colspan="3">Grand Total</td>
+                      <td class="amount">${money(total(state.pdaItems))}</td>
+                      <td colspan="3"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="footer-actions">
+                <button class="btn" type="button" id="backUpload">← Back</button>
+                <button class="btn primary" type="button" id="goPdaDoc">Generate Client PDA →</button>
+              </div>
+            </div>
+            <aside class="panel">
+              <div class="panel-title">
+                <h3>Total by Category</h3>
+                <span class="badge">${money(total(state.pdaItems))}</span>
+              </div>
+              <div class="chart-box">
+                <canvas id="categoryChart" height="220"></canvas>
+                <div id="categoryFallback"></div>
+                <div class="side-list" id="categoryTotals"></div>
+              </div>
+            </aside>
+          </div>
+        </section>
+      `;
+      attachPdaTableEvents();
+      document.getElementById("addRowBtn").addEventListener("click", () => {
+        state.pdaItems.push({
+          id: `${Date.now()}-new-row`,
+          item: "New Disbursement Item",
+          category: "Other",
+          amount: 0,
+          currency: "USD",
+          notes: ""
+        });
+        render();
+      });
+      document.getElementById("backUpload").addEventListener("click", () => setStep(0));
+      document.getElementById("goPdaDoc").addEventListener("click", () => setStep(2));
+      renderCategoryChart();
+    }
+
+    function attachPdaTableEvents() {
+      document.querySelectorAll("[data-pda-field]").forEach(input => {
+        input.addEventListener("change", () => {
+          const item = state.pdaItems.find(row => row.id === input.dataset.id);
+          if (!item) return;
+          const field = input.dataset.pdaField;
+          item[field] = field === "amount" ? parseAmount(input.value) : input.value;
+          render();
+        });
+      });
+      document.querySelectorAll("[data-delete-pda]").forEach(button => {
+        button.addEventListener("click", () => {
+          state.pdaItems = state.pdaItems.filter(row => row.id !== button.dataset.deletePda);
+          render();
+        });
+      });
+    }
+
+    function renderCategoryChart() {
+      const data = byCategory(state.pdaItems);
+      const labels = Object.keys(data);
+      const values = Object.values(data);
+      const totals = document.getElementById("categoryTotals");
+      if (totals) {
+        totals.innerHTML = labels.map((label, index) => `
+          <div class="side-list-row"><span>${label}</span><strong>${money(values[index])}</strong></div>
+        `).join("");
+      }
+      const canvas = document.getElementById("categoryChart");
+      const fallback = document.getElementById("categoryFallback");
+      if (!canvas) return;
+      if (!window.Chart) {
+        canvas.style.display = "none";
+        renderFallbackBars(fallback, labels, values);
+        return;
+      }
+      if (categoryChart) categoryChart.destroy();
+      categoryChart = new Chart(canvas, {
+        type: "doughnut",
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            backgroundColor: ["#c9a84c", "#2ecc71", "#f39c12", "#e74c3c", "#6aa9ff", "#8a9ab8"],
+            borderColor: "#0f1829",
+            borderWidth: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: "#e8edf5", font: { family: "Inter" } } }
+          }
+        }
+      });
+    }
+
+    function renderFallbackBars(container, labels, values) {
+      if (!container) return;
+      const max = Math.max(...values, 1);
+      container.innerHTML = `
+        <div class="fallback-chart">
+          ${labels.map((label, index) => `
+            <div class="fallback-bar">
+              <span>${label} · ${money(values[index])}</span>
+              <div class="fallback-meter"><span style="width:${Math.max(4, values[index] / max * 100)}%"></span></div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function documentDetailsHTML() {
+      const entries = [
+        ["Vessel", state.context.vessel],
+        ["IMO", state.context.imo],
+        ["Port of Call", state.context.port],
+        ["ETA", state.context.eta]
+      ];
+      return `
+        <div class="doc-details">
+          ${entries.map(([label, value]) => `
+            <div class="doc-detail"><span>${label}</span><strong>${value}</strong></div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function letterheadHTML(title, reference) {
+      return `
+        <div class="doc-letterhead">
+          <div>
+            <strong>NEW MARITIME</strong>
+            <span>Marine Disbursement Accounts</span>
+          </div>
+          <div class="doc-ref">
+            <div>Reference: ${reference}</div>
+            <div>Date: ${state.context.date}</div>
+            <div>Currency: ${state.context.currency}</div>
+          </div>
+        </div>
+        <div class="doc-title">${title}</div>
+      `;
+    }
+
+    function screenPdaDocument() {
+      app.innerHTML = `
+        <section class="screen">
+          <div class="page-head">
+            <div>
+              <span class="eyebrow">Client PDA Output</span>
+              <h1>Client-ready proforma disbursement account</h1>
+            </div>
+          </div>
+          <div class="document-grid">
+            <article class="document-preview" id="printArea">
+              ${letterheadHTML("Proforma Disbursement Account", state.context.pdaReference)}
+              ${documentDetailsHTML()}
+              <div class="doc-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Item / Service</th>
+                      <th>Category</th>
+                      <th class="amount">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${state.pdaItems.map((item, index) => `
+                      <tr>
+                        <td>${index + 1}</td>
+                        <td>${item.item}</td>
+                        <td>${item.category}</td>
+                        <td class="amount"><input ${state.editPdaDoc ? "" : "disabled"} value="${numberFormat(item.amount)}" data-doc-pda-amount="${item.id}"></td>
+                      </tr>
+                    `).join("")}
+                  </tbody>
+                </table>
+              </div>
+              <div class="doc-total"><span>Grand Total</span><span>${money(total(state.pdaItems))}</span></div>
+              <div class="doc-note">This Proforma DA is subject to final reconciliation. All figures in USD unless otherwise stated.</div>
+            </article>
+            ${documentControlsHTML("PDA")}
+          </div>
+          <div class="footer-actions">
+            <button class="btn" type="button" id="backReview">← Back to Review</button>
+            <button class="btn primary" type="button" id="goFdaCompare">Upload FDA & Compare →</button>
+          </div>
+        </section>
+      `;
+      attachPdaDocumentEvents();
+      document.getElementById("backReview").addEventListener("click", () => setStep(1));
+      document.getElementById("goFdaCompare").addEventListener("click", () => setStep(3));
+    }
+
+    function documentControlsHTML(kind) {
+      return `
+        <aside class="controls-stack">
+          <div class="control-card">
+            <div class="toggle-row">
+              <span>Edit amounts</span>
+              <label class="switch">
+                <input type="checkbox" id="${kind.toLowerCase()}EditToggle" ${kind === "PDA" ? (state.editPdaDoc ? "checked" : "") : (state.editFdaDoc ? "checked" : "")}>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="control-card">
+            <div class="toggle-row">
+              <span>Currency converter</span>
+              <label class="switch">
+                <input type="checkbox" id="conversionToggle" ${state.showConversion ? "checked" : ""}>
+                <span class="slider"></span>
+              </label>
+            </div>
+            ${state.showConversion ? `
+              <div class="field" style="margin-top:12px">
+                <label for="conversionRate">USD to EUR rate</label>
+                <input id="conversionRate" type="number" step="0.01" value="${state.conversionRate}">
+              </div>
+            ` : ""}
+          </div>
+          <div class="control-card controls-stack">
+            <button class="btn primary" type="button" id="exportPdfBtn">📄 Export PDF</button>
+            <button class="btn" type="button" id="exportExcelBtn">📊 Export Excel</button>
+          </div>
+        </aside>
+      `;
+    }
+
+    function attachPdaDocumentEvents() {
+      document.querySelectorAll("[data-doc-pda-amount]").forEach(input => {
+        input.addEventListener("change", () => {
+          const item = state.pdaItems.find(row => row.id === input.dataset.docPdaAmount);
+          if (item) item.amount = parseAmount(input.value);
+          render();
+        });
+      });
+      const editToggle = document.getElementById("pdaEditToggle");
+      if (editToggle) editToggle.addEventListener("change", () => {
+        state.editPdaDoc = editToggle.checked;
+        render();
+      });
+      attachDocumentControls("PDA");
+    }
+
+    function attachDocumentControls(kind) {
+      const conversionToggle = document.getElementById("conversionToggle");
+      if (conversionToggle) conversionToggle.addEventListener("change", () => {
+        state.showConversion = conversionToggle.checked;
+        render();
+      });
+      const conversionRate = document.getElementById("conversionRate");
+      if (conversionRate) conversionRate.addEventListener("input", () => {
+        state.conversionRate = Number(conversionRate.value) || 0;
+      });
+      document.getElementById("exportPdfBtn").addEventListener("click", () => window.print());
+      document.getElementById("exportExcelBtn").addEventListener("click", () => {
+        if (kind === "PDA") exportPdaExcel();
+        else exportFdaExcel();
+      });
+    }
+
+    function exportPdaExcel() {
+      if (!window.XLSX) {
+        showToast("Excel export unavailable", "SheetJS CDN is not loaded in this browser session.");
+        return;
+      }
+      const rows = [
+        ["Reference", state.context.pdaReference],
+        ["Vessel", state.context.vessel],
+        ["IMO", state.context.imo],
+        ["Port of Call", state.context.port],
+        [],
+        ["#", "Item / Service", "Category", "Amount", "Currency", "Notes"],
+        ...state.pdaItems.map((item, index) => [index + 1, item.item, item.category, item.amount, item.currency, item.notes]),
+        [],
+        ["Grand Total", "", "", total(state.pdaItems), "USD", ""]
+      ];
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.aoa_to_sheet(rows);
+      XLSX.utils.book_append_sheet(wb, ws, "PDA Items");
+      XLSX.writeFile(wb, `${state.context.pdaReference}.xlsx`);
+      showToast("Excel exported", "PDA workbook generated.");
+    }
+
+    function screenFdaComparison() {
+      if (!state.fdaLoaded) {
+        app.innerHTML = `
+          <section class="screen">
+            <div class="page-head">
+              <div>
+                <span class="eyebrow">FDA Intake</span>
+                <h1>Upload final disbursement account for variance review</h1>
+              </div>
+            </div>
+            <div class="panel panel-pad">
+              ${uploadZoneHTML("FDA")}
+            </div>
+            <div class="footer-actions">
+              <button class="btn" type="button" id="backPdaDoc">← Back</button>
+              <span class="muted mono">Active PDA: ${state.context.pdaReference}</span>
+            </div>
+          </section>
+        `;
+        document.getElementById("fdaDemoBtn").addEventListener("click", loadFdaDemo);
+        document.getElementById("backPdaDoc").addEventListener("click", () => setStep(2));
+        attachDrop("fdaDrop", "FDA");
+        return;
+      }
+
+      const rows = compareItems();
+      const filteredRows = rows.filter(row => state.comparisonFilter === "all" || row.status === state.comparisonFilter);
+      const pdaTotal = total(state.pdaItems);
+      const fdaTotal = total(state.fdaItems);
+      const netVariance = fdaTotal - pdaTotal;
+      const netPct = pdaTotal ? (netVariance / pdaTotal) * 100 : 0;
+      const level = varianceLevel(netPct);
+
+      app.innerHTML = `
+        <section class="screen">
+          <div class="page-head">
+            <div>
+              <span class="eyebrow">FDA Comparison</span>
+              <h1>Automatic variance control against the original PDA</h1>
+            </div>
+          </div>
+          <div class="kpi-row">
+            <div class="kpi"><span>Total PDA</span><strong>${money(pdaTotal)}</strong></div>
+            <div class="kpi"><span>Total FDA</span><strong>${money(fdaTotal)}</strong></div>
+            <div class="kpi ${level}"><span>Net Variance</span><strong>${netVariance >= 0 ? "+" : ""}${money(netVariance)}</strong></div>
+            <div class="kpi ${level}"><span>Variance %</span><strong>${netPct >= 0 ? "+" : ""}${numberFormat(netPct)}%</strong></div>
+          </div>
+          <div class="filters">
+            ${[
+              ["all", "Show All"],
+              ["danger", "🔴 Escalate only"],
+              ["warning", "🟡 Review only"],
+              ["success", "🟢 On Target"]
+            ].map(([value, label]) => `<button class="filter-btn ${state.comparisonFilter === value ? "active" : ""}" type="button" data-filter="${value}">${label}</button>`).join("")}
+          </div>
+          <div class="grid-two">
+            <div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Item / Service</th>
+                      <th>Category</th>
+                      <th class="amount">PDA Amount</th>
+                      <th class="amount">FDA Amount</th>
+                      <th class="amount">Deviation (USD)</th>
+                      <th class="amount">Deviation (%)</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${filteredRows.map(row => `
+                      <tr>
+                        <td>
+                          ${row.item}
+                          ${row.note ? `<span class="row-note ${row.note.includes("Missing") ? "missing" : ""}">${row.note}</span>` : ""}
+                        </td>
+                        <td>${row.category}</td>
+                        <td class="amount">${row.pda ? money(row.pdaAmount) : "—"}</td>
+                        <td class="amount"><input value="${numberFormat(row.fdaAmount)}" data-fda-amount="${row.key}" ${row.fda ? "" : "disabled"}></td>
+                        <td class="amount">${row.deviation >= 0 ? "+" : ""}${money(row.deviation)}</td>
+                        <td class="amount">${row.deviationPct >= 0 ? "+" : ""}${numberFormat(row.deviationPct)}%</td>
+                        <td><span class="status-badge ${row.status}">${row.statusIcon} · ${row.statusLabel}</span></td>
+                      </tr>
+                    `).join("")}
+                  </tbody>
+                </table>
+              </div>
+              <div class="footer-actions">
+                <button class="btn" type="button" id="backPdaFromCompare">← Back</button>
+                <button class="btn primary" type="button" id="goFdaDoc">Generate Client FDA →</button>
+              </div>
+            </div>
+            <aside class="panel">
+              <div class="panel-title">
+                <h3>Variance Analysis</h3>
+                <span class="badge">${rows.length} lines</span>
+              </div>
+              <div class="chart-box">
+                <canvas id="varianceChart" height="220"></canvas>
+                <div id="varianceFallback"></div>
+                <div class="attention-list">
+                  ${attentionItemsHTML(rows)}
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+      `;
+      attachComparisonEvents();
+      renderVarianceChart();
+    }
+
+    function attentionItemsHTML(rows) {
+      return rows
+        .slice()
+        .sort((a, b) => Math.abs(b.deviation) - Math.abs(a.deviation))
+        .slice(0, 3)
+        .map(row => `
+          <div class="attention-item">
+            <strong>${row.item}</strong>
+            <span>${row.deviation >= 0 ? "+" : ""}${money(row.deviation)} · ${row.deviationPct >= 0 ? "+" : ""}${numberFormat(row.deviationPct)}%</span>
+          </div>
+        `).join("");
+    }
+
+    function attachComparisonEvents() {
+      document.querySelectorAll("[data-filter]").forEach(button => {
+        button.addEventListener("click", () => {
+          state.comparisonFilter = button.dataset.filter;
+          render();
+        });
+      });
+      document.querySelectorAll("[data-fda-amount]").forEach(input => {
+        input.addEventListener("change", () => {
+          const row = compareItems().find(item => item.key === input.dataset.fdaAmount);
+          if (row && row.fda) {
+            row.fda.amount = parseAmount(input.value);
+            state.approvedAmounts[row.key] = row.fda.amount;
+          }
+          render();
+        });
+      });
+      document.getElementById("backPdaFromCompare").addEventListener("click", () => setStep(2));
+      document.getElementById("goFdaDoc").addEventListener("click", () => setStep(4));
+    }
+
+    function renderVarianceChart() {
+      const pdaByCat = byCategory(state.pdaItems);
+      const fdaByCat = byCategory(state.fdaItems);
+      const labels = Array.from(new Set([...Object.keys(pdaByCat), ...Object.keys(fdaByCat)]));
+      const pdaValues = labels.map(label => pdaByCat[label] || 0);
+      const fdaValues = labels.map(label => fdaByCat[label] || 0);
+      const canvas = document.getElementById("varianceChart");
+      const fallback = document.getElementById("varianceFallback");
+      if (!canvas) return;
+      if (!window.Chart) {
+        canvas.style.display = "none";
+        renderFallbackBars(fallback, labels.map(label => `${label} FDA`), fdaValues);
+        return;
+      }
+      if (varianceChart) varianceChart.destroy();
+      varianceChart = new Chart(canvas, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [
+            { label: "PDA", data: pdaValues, backgroundColor: "rgba(138,154,184,0.7)" },
+            { label: "FDA", data: fdaValues, backgroundColor: "rgba(201,168,76,0.88)" }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ticks: { color: "#8a9ab8" }, grid: { color: "rgba(30,45,74,0.5)" } },
+            y: { ticks: { color: "#8a9ab8" }, grid: { color: "rgba(30,45,74,0.5)" } }
+          },
+          plugins: {
+            legend: { labels: { color: "#e8edf5", font: { family: "Inter" } } }
+          }
+        }
+      });
+    }
+
+    function screenFdaDocument() {
+      const rows = compareItems();
+      app.innerHTML = `
+        <section class="screen">
+          <div class="page-head">
+            <div>
+              <span class="eyebrow">Client FDA Output</span>
+              <h1>Final reconciled disbursement account cover sheet</h1>
+            </div>
+          </div>
+          <div class="document-grid">
+            <article class="document-preview" id="printArea">
+              ${letterheadHTML("Final Disbursement Account", state.context.fdaReference)}
+              ${documentDetailsHTML()}
+              <div class="doc-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Item</th>
+                      <th class="amount">PDA Amount</th>
+                      <th class="amount">FDA Amount</th>
+                      <th class="amount">Variance</th>
+                      <th class="amount">Approved Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${rows.map(row => `
+                      <tr>
+                        <td>${row.item}</td>
+                        <td class="amount">${row.pda ? money(row.pdaAmount) : "—"}</td>
+                        <td class="amount">${row.fda ? money(row.fdaAmount) : "—"}</td>
+                        <td class="amount">${row.deviation >= 0 ? "+" : ""}${money(row.deviation)}</td>
+                        <td class="amount"><input ${state.editFdaDoc ? "" : "disabled"} value="${numberFormat(state.approvedAmounts[row.key] ?? row.fdaAmount)}" data-approved="${row.key}"></td>
+                      </tr>
+                    `).join("")}
+                  </tbody>
+                </table>
+              </div>
+              <div class="doc-total"><span>Grand Total Approved</span><span>${money(approvedTotal(rows))}</span></div>
+              <div class="doc-note">This Final DA reflects all third-party invoices received. Variances are detailed above.</div>
+              <div class="signature-grid">
+                <div class="signature-line">Prepared by</div>
+                <div class="signature-line">Approved by</div>
+                <div class="signature-line">Date</div>
+              </div>
+            </article>
+            ${documentControlsHTML("FDA")}
+          </div>
+          <div class="footer-actions">
+            <button class="btn" type="button" id="backComparison">← Back to Comparison</button>
+            <button class="btn primary" type="button" id="completeReset">✅ Complete & Reset Demo</button>
+          </div>
+        </section>
+      `;
+      attachFdaDocumentEvents();
+      document.getElementById("backComparison").addEventListener("click", () => setStep(3));
+      document.getElementById("completeReset").addEventListener("click", () => {
+        showToast("Demo complete", "FDA workflow reset will start in two seconds.");
+        setTimeout(resetState, 2000);
+      });
+    }
+
+    function approvedTotal(rows) {
+      return rows.reduce((sum, row) => sum + (Number(state.approvedAmounts[row.key] ?? row.fdaAmount) || 0), 0);
+    }
+
+    function attachFdaDocumentEvents() {
+      document.querySelectorAll("[data-approved]").forEach(input => {
+        input.addEventListener("change", () => {
+          state.approvedAmounts[input.dataset.approved] = parseAmount(input.value);
+          render();
+        });
+      });
+      const editToggle = document.getElementById("fdaEditToggle");
+      if (editToggle) editToggle.addEventListener("change", () => {
+        state.editFdaDoc = editToggle.checked;
+        render();
+      });
+      attachDocumentControls("FDA");
+    }
+
+    function exportFdaExcel() {
+      if (!window.XLSX) {
+        showToast("Excel export unavailable", "SheetJS CDN is not loaded in this browser session.");
+        return;
+      }
+      const rows = compareItems();
+      const pdaTotal = total(state.pdaItems);
+      const fdaTotal = total(state.fdaItems);
+      const approved = approvedTotal(rows);
+      const wb = XLSX.utils.book_new();
+      const summary = [
+        ["Reference", state.context.fdaReference],
+        ["Vessel", state.context.vessel],
+        ["IMO", state.context.imo],
+        ["Port of Call", state.context.port],
+        ["Operation Date", state.context.operationDate],
+        [],
+        ["Total PDA", pdaTotal],
+        ["Total FDA", fdaTotal],
+        ["Net Variance", fdaTotal - pdaTotal],
+        ["Variance %", pdaTotal ? (fdaTotal - pdaTotal) / pdaTotal : 0],
+        ["Grand Total Approved", approved]
+      ];
+      const detail = [
+        ["Item", "Category", "PDA Amount", "FDA Amount", "Variance", "Variance %", "Status", "Approved Amount"],
+        ...rows.map(row => [
+          row.item,
+          row.category,
+          row.pdaAmount,
+          row.fdaAmount,
+          row.deviation,
+          row.deviationPct / 100,
+          row.statusLabel,
+          state.approvedAmounts[row.key] ?? row.fdaAmount
+        ])
+      ];
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(summary), "Summary");
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(detail), "Items Detail");
+      XLSX.writeFile(wb, `${state.context.fdaReference}.xlsx`);
+      showToast("Excel exported", "FDA workbook generated with Summary and Items Detail.");
+    }
+
+    function resetState() {
+      if (categoryChart) {
+        categoryChart.destroy();
+        categoryChart = null;
+      }
+      if (varianceChart) {
+        varianceChart.destroy();
+        varianceChart = null;
+      }
+      state = initialState();
+      showToast("Demo reset", "Ready for a new PDA intake.");
+      render();
+    }
+
+    function render() {
+      renderNav();
+      if (state.step === 0) screenUploadPda();
+      if (state.step === 1) screenReviewPda();
+      if (state.step === 2) screenPdaDocument();
+      if (state.step === 3) screenFdaComparison();
+      if (state.step === 4) screenFdaDocument();
+    }
+
+    resetBtn.addEventListener("click", resetState);
+    render();
+  </script>
+</body>
+</html>
