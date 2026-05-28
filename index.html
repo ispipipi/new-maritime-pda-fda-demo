@@ -1284,7 +1284,7 @@
           operationDate: "2025-11-23"
         },
         pdaItems: [
-          ["CVM / Pilot Bonus", "Pilotage", 7000, "From AMICONGO proforma invoice"],
+          ["CVM / Pilot Bonus", "Pilotage", 7000, "From AMICONGO proforma invoice", 111271.44],
           ["Harbour Master", "Port Dues", 5000, "Police, security visit, clearance and overtime"],
           ["Quarantine", "Port Dues", 1000, "Sanitary control and overtime agent"],
           ["Customs Office Overtime", "Other", 200, ""],
@@ -1295,11 +1295,11 @@
           ["O.C.C Fees", "Port Dues", 52000, "5.00 USD / MT"],
           ["Statistics Charges", "Port Dues", 10400, "1.00 USD / MT"],
           ["Regulation Charges", "Port Dues", 10400, "1.00 USD / MT"],
-          ["OGEFREM Fees", "Other", 10207.60, ""],
+          ["OGEFREM Fees", "Other", 10207.60, "", 5200],
           ["Agency Fees", "Agency Fee", 5000, ""]
         ],
         fdaItems: [
-          ["CVM / Pilot Bonus", "Pilotage", 8800, "Final pilot gratuifications"],
+          ["CVM / Pilot Bonus", "Pilotage", 8800, "Final pilot gratuifications", 111241.88],
           ["Harbour Master", "Port Dues", 4400, "Final harbour master charges"],
           ["Quarantine", "Port Dues", 250, "Final quarantine charges"],
           ["Customs Office Overtime", "Other", 200, ""],
@@ -1309,7 +1309,7 @@
           ["O.C.C Fees", "Port Dues", 60717.37, "Final OCC fees"],
           ["Statistics Charges", "Port Dues", 12159.85, ""],
           ["Regulation Charges", "Port Dues", 12159.85, ""],
-          ["OGEFREM Fees", "Other", 15558.97, ""],
+          ["OGEFREM Fees", "Other", 15558.97, "", 6129.93],
           ["Agency Fees", "Agency Fee", 5000, ""]
         ]
       },
@@ -1343,7 +1343,8 @@
           ["Agency Fees", "Agency Fee", 5000, ""],
           ["Statistics Charges", "Port Dues", 1600, ""],
           ["Regulation Charges", "Port Dues", 1600, ""],
-          ["LMC Traffic Right", "Port Dues", 3950.62, ""]
+          ["LMC Traffic Right", "Port Dues", 3950.62, ""],
+          ["OGEFREM FERI", "Other", 0, "Amount shown in EUR on the PDA", 850]
         ],
         fdaItems: [
           ["Pilotage", "Pilotage", 8500, ""],
@@ -1391,6 +1392,7 @@
       pdaItems: [],
       fdaItems: [],
       activeExample: "",
+      approvedEurAmounts: {},
       comparisonFilter: "all",
       editPdaDoc: true,
       editFdaDoc: true,
@@ -1408,6 +1410,10 @@
         currency,
         minimumFractionDigits: 2
       }).format(number);
+    }
+
+    function eurMoney(value) {
+      return money(value, "EUR");
     }
 
     function numberFormat(value) {
@@ -1428,6 +1434,7 @@
         item: row[0],
         category: row[1],
         amount: row[2],
+        eurAmount: row[4] || 0,
         currency,
         notes: row[3] || ""
       }));
@@ -1435,6 +1442,14 @@
 
     function total(items, key = "amount") {
       return items.reduce((sum, item) => sum + (Number(item[key]) || 0), 0);
+    }
+
+    function hasEur(items) {
+      return items.some(item => Number(item.eurAmount) > 0);
+    }
+
+    function sampleRowsToItems(rows) {
+      return rows.map(row => ({ amount: row[2] || 0, eurAmount: row[4] || 0 }));
     }
 
     function byCategory(items) {
@@ -1489,7 +1504,10 @@
         const fda = fdaMap.get(key) || null;
         const pdaAmount = pda ? Number(pda.amount) || 0 : 0;
         const fdaAmount = fda ? Number(fda.amount) || 0 : 0;
+        const pdaEur = pda ? Number(pda.eurAmount) || 0 : 0;
+        const fdaEur = fda ? Number(fda.eurAmount) || 0 : 0;
         const deviation = fdaAmount - pdaAmount;
+        const eurDeviation = fdaEur - pdaEur;
         const deviationPct = pdaAmount === 0 ? 100 : (deviation / pdaAmount) * 100;
         const absPct = Math.abs(deviationPct);
         let status = "success";
@@ -1512,7 +1530,10 @@
           fda,
           pdaAmount,
           fdaAmount,
+          pdaEur,
+          fdaEur,
           deviation,
+          eurDeviation,
           deviationPct,
           status,
           statusLabel,
@@ -1559,6 +1580,7 @@
         state.fdaItems = [];
         state.fdaLoaded = false;
         state.activeExample = "";
+        state.approvedEurAmounts = {};
         state.pdaLoaded = true;
         showToast("PDA extracted", "12 disbursement lines structured for review.");
         setStep(1);
@@ -1574,6 +1596,7 @@
         state.fdaItems = [];
         state.fdaLoaded = false;
         state.approvedAmounts = {};
+        state.approvedEurAmounts = {};
         state.activeExample = key;
         state.pdaLoaded = true;
         showToast("Sample PDA loaded", `${sample.label} is ready for validation.`);
@@ -1587,8 +1610,10 @@
         state.fdaLoaded = true;
         state.activeExample = state.activeExample || "";
         state.approvedAmounts = {};
+        state.approvedEurAmounts = {};
         compareItems().forEach(row => {
           state.approvedAmounts[row.key] = row.fdaAmount;
+          state.approvedEurAmounts[row.key] = row.fdaEur;
         });
         showToast("FDA compared", "Final DA matched against the active PDA.");
         render();
@@ -1608,8 +1633,10 @@
         state.fdaLoaded = true;
         state.activeExample = key;
         state.approvedAmounts = {};
+        state.approvedEurAmounts = {};
         compareItems().forEach(row => {
           state.approvedAmounts[row.key] = row.fdaAmount;
+          state.approvedEurAmounts[row.key] = row.fdaEur;
         });
         showToast("Sample FDA compared", `${sample.label} final account matched to its PDA.`);
         render();
@@ -1686,7 +1713,10 @@
             ${Object.entries(REAL_EXAMPLES).map(([key, sample]) => {
               const items = isFda ? sample.fdaItems : sample.pdaItems;
               const pdf = isFda ? sample.fdaPdf : sample.pdaPdf;
-              const totalLabel = money(total(items.map(row => ({ amount: row[2] }))));
+              const sampleItems = sampleRowsToItems(items);
+              const usdTotal = money(total(sampleItems));
+              const eurTotal = total(sampleItems, "eurAmount");
+              const totalLabel = eurTotal > 0 ? `${usdTotal} · ${eurMoney(eurTotal)}` : usdTotal;
               const isActive = state.activeExample === key;
               return `
                 <div class="sample-card">
@@ -1821,6 +1851,7 @@
           <td><input value="${inputValue(item.item)}" data-pda-field="item" data-id="${item.id}"></td>
           <td><select data-pda-field="category" data-id="${item.id}">${optionsHTML(CATEGORIES, item.category)}</select></td>
           <td class="amount"><input value="${numberFormat(item.amount)}" data-pda-field="amount" data-id="${item.id}"></td>
+          <td class="amount"><input value="${Number(item.eurAmount) ? numberFormat(item.eurAmount) : ""}" data-pda-field="eurAmount" data-id="${item.id}" placeholder="—"></td>
           <td><select data-pda-field="currency" data-id="${item.id}">${optionsHTML(CURRENCIES, item.currency)}</select></td>
           <td><input value="${inputValue(item.notes)}" data-pda-field="notes" data-id="${item.id}" placeholder="Optional"></td>
           <td class="row-actions"><button class="trash" type="button" title="Delete row" data-delete-pda="${item.id}">×</button></td>
@@ -1848,7 +1879,8 @@
                       <th>#</th>
                       <th>Item / Service</th>
                       <th>Category</th>
-                      <th class="amount">Amount</th>
+                      <th class="amount">Amount USD</th>
+                      <th class="amount">Amount EUR</th>
                       <th>Currency</th>
                       <th>Notes</th>
                       <th></th>
@@ -1859,6 +1891,7 @@
                     <tr class="grand-row">
                       <td colspan="3">Grand Total</td>
                       <td class="amount">${money(total(state.pdaItems))}</td>
+                      <td class="amount">${hasEur(state.pdaItems) ? eurMoney(total(state.pdaItems, "eurAmount")) : "—"}</td>
                       <td colspan="3"></td>
                     </tr>
                   </tbody>
@@ -1890,6 +1923,7 @@
           item: "New Disbursement Item",
           category: "Other",
           amount: 0,
+          eurAmount: 0,
           currency: "USD",
           notes: ""
         });
@@ -1906,7 +1940,7 @@
           const item = state.pdaItems.find(row => row.id === input.dataset.id);
           if (!item) return;
           const field = input.dataset.pdaField;
-          item[field] = field === "amount" ? parseAmount(input.value) : input.value;
+          item[field] = field === "amount" || field === "eurAmount" ? parseAmount(input.value) : input.value;
           render();
         });
       });
@@ -2007,6 +2041,7 @@
     }
 
     function screenPdaDocument() {
+      const showEur = hasEur(state.pdaItems);
       app.innerHTML = `
         <section class="screen">
           <div class="page-head">
@@ -2026,7 +2061,8 @@
                       <th>#</th>
                       <th>Item / Service</th>
                       <th>Category</th>
-                      <th class="amount">Amount</th>
+                      <th class="amount">Amount USD</th>
+                      ${showEur ? `<th class="amount">Amount EUR</th>` : ""}
                     </tr>
                   </thead>
                   <tbody>
@@ -2036,12 +2072,16 @@
                         <td>${item.item}</td>
                         <td>${item.category}</td>
                         <td class="amount"><input ${state.editPdaDoc ? "" : "disabled"} value="${numberFormat(item.amount)}" data-doc-pda-amount="${item.id}"></td>
+                        ${showEur ? `<td class="amount"><input ${state.editPdaDoc ? "" : "disabled"} value="${Number(item.eurAmount) ? numberFormat(item.eurAmount) : ""}" data-doc-pda-eur="${item.id}" placeholder="—"></td>` : ""}
                       </tr>
                     `).join("")}
                   </tbody>
                 </table>
               </div>
-              <div class="doc-total"><span>Grand Total</span><span>${money(total(state.pdaItems))}</span></div>
+              <div class="doc-total">
+                <span>Grand Total USD</span><span>${money(total(state.pdaItems))}</span>
+                ${showEur ? `<span>Grand Total EUR</span><span>${eurMoney(total(state.pdaItems, "eurAmount"))}</span>` : ""}
+              </div>
               <div class="doc-note">This Proforma DA is subject to final reconciliation. All figures in USD unless otherwise stated.</div>
             </article>
             ${documentControlsHTML("PDA")}
@@ -2100,6 +2140,13 @@
           render();
         });
       });
+      document.querySelectorAll("[data-doc-pda-eur]").forEach(input => {
+        input.addEventListener("change", () => {
+          const item = state.pdaItems.find(row => row.id === input.dataset.docPdaEur);
+          if (item) item.eurAmount = parseAmount(input.value);
+          render();
+        });
+      });
       const editToggle = document.getElementById("pdaEditToggle");
       if (editToggle) editToggle.addEventListener("change", () => {
         state.editPdaDoc = editToggle.checked;
@@ -2136,10 +2183,10 @@
         ["IMO", state.context.imo],
         ["Port of Call", state.context.port],
         [],
-        ["#", "Item / Service", "Category", "Amount", "Currency", "Notes"],
-        ...state.pdaItems.map((item, index) => [index + 1, item.item, item.category, item.amount, item.currency, item.notes]),
+        ["#", "Item / Service", "Category", "Amount USD", "Amount EUR", "Currency", "Notes"],
+        ...state.pdaItems.map((item, index) => [index + 1, item.item, item.category, item.amount, item.eurAmount || "", item.currency, item.notes]),
         [],
-        ["Grand Total", "", "", total(state.pdaItems), "USD", ""]
+        ["Grand Total", "", "", total(state.pdaItems), total(state.pdaItems, "eurAmount") || "", "USD / EUR", ""]
       ];
       const wb = XLSX.utils.book_new();
       const ws = XLSX.utils.aoa_to_sheet(rows);
@@ -2181,6 +2228,7 @@
       const filteredRows = rows.filter(row => state.comparisonFilter === "all" || row.status === state.comparisonFilter);
       const pdaTotal = total(state.pdaItems);
       const fdaTotal = total(state.fdaItems);
+      const showEur = hasEur(state.pdaItems) || hasEur(state.fdaItems);
       const netVariance = fdaTotal - pdaTotal;
       const netPct = pdaTotal ? (netVariance / pdaTotal) * 100 : 0;
       const level = varianceLevel(netPct);
@@ -2194,8 +2242,8 @@
             </div>
           </div>
           <div class="kpi-row">
-            <div class="kpi"><span>Total PDA</span><strong>${money(pdaTotal)}</strong></div>
-            <div class="kpi"><span>Total FDA</span><strong>${money(fdaTotal)}</strong></div>
+            <div class="kpi"><span>Total PDA</span><strong>${money(pdaTotal)}${showEur ? `<br>${eurMoney(total(state.pdaItems, "eurAmount"))}` : ""}</strong></div>
+            <div class="kpi"><span>Total FDA</span><strong>${money(fdaTotal)}${showEur ? `<br>${eurMoney(total(state.fdaItems, "eurAmount"))}` : ""}</strong></div>
             <div class="kpi ${level}"><span>Net Variance</span><strong>${netVariance >= 0 ? "+" : ""}${money(netVariance)}</strong></div>
             <div class="kpi ${level}"><span>Variance %</span><strong>${netPct >= 0 ? "+" : ""}${numberFormat(netPct)}%</strong></div>
           </div>
@@ -2215,9 +2263,12 @@
                     <tr>
                       <th>Item / Service</th>
                       <th>Category</th>
-                      <th class="amount">PDA Amount</th>
-                      <th class="amount">FDA Amount</th>
+                      <th class="amount">PDA USD</th>
+                      ${showEur ? `<th class="amount">PDA EUR</th>` : ""}
+                      <th class="amount">FDA USD</th>
+                      ${showEur ? `<th class="amount">FDA EUR</th>` : ""}
                       <th class="amount">Deviation (USD)</th>
+                      ${showEur ? `<th class="amount">Deviation (EUR)</th>` : ""}
                       <th class="amount">Deviation (%)</th>
                       <th>Status</th>
                     </tr>
@@ -2231,8 +2282,11 @@
                         </td>
                         <td>${row.category}</td>
                         <td class="amount">${row.pda ? money(row.pdaAmount) : "—"}</td>
+                        ${showEur ? `<td class="amount">${row.pda && row.pdaEur ? eurMoney(row.pdaEur) : "—"}</td>` : ""}
                         <td class="amount"><input value="${numberFormat(row.fdaAmount)}" data-fda-amount="${row.key}" ${row.fda ? "" : "disabled"}></td>
+                        ${showEur ? `<td class="amount"><input value="${row.fdaEur ? numberFormat(row.fdaEur) : ""}" data-fda-eur="${row.key}" ${row.fda ? "" : "disabled"} placeholder="—"></td>` : ""}
                         <td class="amount">${row.deviation >= 0 ? "+" : ""}${money(row.deviation)}</td>
+                        ${showEur ? `<td class="amount">${row.eurDeviation ? `${row.eurDeviation >= 0 ? "+" : ""}${eurMoney(row.eurDeviation)}` : "—"}</td>` : ""}
                         <td class="amount">${row.deviationPct >= 0 ? "+" : ""}${numberFormat(row.deviationPct)}%</td>
                         <td><span class="status-badge ${row.status}">${row.statusIcon} · ${row.statusLabel}</span></td>
                       </tr>
@@ -2295,6 +2349,16 @@
           render();
         });
       });
+      document.querySelectorAll("[data-fda-eur]").forEach(input => {
+        input.addEventListener("change", () => {
+          const row = compareItems().find(item => item.key === input.dataset.fdaEur);
+          if (row && row.fda) {
+            row.fda.eurAmount = parseAmount(input.value);
+            state.approvedEurAmounts[row.key] = row.fda.eurAmount;
+          }
+          render();
+        });
+      });
       document.getElementById("backPdaFromCompare").addEventListener("click", () => setStep(2));
       document.getElementById("goFdaDoc").addEventListener("click", () => setStep(4));
     }
@@ -2339,6 +2403,7 @@
 
     function screenFdaDocument() {
       const rows = compareItems();
+      const showEur = hasEur(state.pdaItems) || hasEur(state.fdaItems);
       app.innerHTML = `
         <section class="screen">
           <div class="page-head">
@@ -2356,10 +2421,14 @@
                   <thead>
                     <tr>
                       <th>Item</th>
-                      <th class="amount">PDA Amount</th>
-                      <th class="amount">FDA Amount</th>
-                      <th class="amount">Variance</th>
-                      <th class="amount">Approved Amount</th>
+                      <th class="amount">PDA USD</th>
+                      ${showEur ? `<th class="amount">PDA EUR</th>` : ""}
+                      <th class="amount">FDA USD</th>
+                      ${showEur ? `<th class="amount">FDA EUR</th>` : ""}
+                      <th class="amount">Variance USD</th>
+                      ${showEur ? `<th class="amount">Variance EUR</th>` : ""}
+                      <th class="amount">Approved USD</th>
+                      ${showEur ? `<th class="amount">Approved EUR</th>` : ""}
                     </tr>
                   </thead>
                   <tbody>
@@ -2367,15 +2436,22 @@
                       <tr>
                         <td>${row.item}</td>
                         <td class="amount">${row.pda ? money(row.pdaAmount) : "—"}</td>
+                        ${showEur ? `<td class="amount">${row.pda && row.pdaEur ? eurMoney(row.pdaEur) : "—"}</td>` : ""}
                         <td class="amount">${row.fda ? money(row.fdaAmount) : "—"}</td>
+                        ${showEur ? `<td class="amount">${row.fda && row.fdaEur ? eurMoney(row.fdaEur) : "—"}</td>` : ""}
                         <td class="amount">${row.deviation >= 0 ? "+" : ""}${money(row.deviation)}</td>
+                        ${showEur ? `<td class="amount">${row.eurDeviation ? `${row.eurDeviation >= 0 ? "+" : ""}${eurMoney(row.eurDeviation)}` : "—"}</td>` : ""}
                         <td class="amount"><input ${state.editFdaDoc ? "" : "disabled"} value="${numberFormat(state.approvedAmounts[row.key] ?? row.fdaAmount)}" data-approved="${row.key}"></td>
+                        ${showEur ? `<td class="amount"><input ${state.editFdaDoc ? "" : "disabled"} value="${Number(state.approvedEurAmounts[row.key] ?? row.fdaEur) ? numberFormat(state.approvedEurAmounts[row.key] ?? row.fdaEur) : ""}" data-approved-eur="${row.key}" placeholder="—"></td>` : ""}
                       </tr>
                     `).join("")}
                   </tbody>
                 </table>
               </div>
-              <div class="doc-total"><span>Grand Total Approved</span><span>${money(approvedTotal(rows))}</span></div>
+              <div class="doc-total">
+                <span>Grand Total Approved USD</span><span>${money(approvedTotal(rows))}</span>
+                ${showEur ? `<span>Grand Total Approved EUR</span><span>${eurMoney(approvedEurTotal(rows))}</span>` : ""}
+              </div>
               <div class="doc-note">This Final DA reflects all third-party invoices received. Variances are detailed above.</div>
               <div class="signature-grid">
                 <div class="signature-line">Prepared by</div>
@@ -2403,10 +2479,20 @@
       return rows.reduce((sum, row) => sum + (Number(state.approvedAmounts[row.key] ?? row.fdaAmount) || 0), 0);
     }
 
+    function approvedEurTotal(rows) {
+      return rows.reduce((sum, row) => sum + (Number(state.approvedEurAmounts[row.key] ?? row.fdaEur) || 0), 0);
+    }
+
     function attachFdaDocumentEvents() {
       document.querySelectorAll("[data-approved]").forEach(input => {
         input.addEventListener("change", () => {
           state.approvedAmounts[input.dataset.approved] = parseAmount(input.value);
+          render();
+        });
+      });
+      document.querySelectorAll("[data-approved-eur]").forEach(input => {
+        input.addEventListener("change", () => {
+          state.approvedEurAmounts[input.dataset.approvedEur] = parseAmount(input.value);
           render();
         });
       });
@@ -2427,6 +2513,7 @@
       const pdaTotal = total(state.pdaItems);
       const fdaTotal = total(state.fdaItems);
       const approved = approvedTotal(rows);
+      const approvedEur = approvedEurTotal(rows);
       const wb = XLSX.utils.book_new();
       const summary = [
         ["Reference", state.context.fdaReference],
@@ -2435,23 +2522,30 @@
         ["Port of Call", state.context.port],
         ["Operation Date", state.context.operationDate],
         [],
-        ["Total PDA", pdaTotal],
-        ["Total FDA", fdaTotal],
+        ["Total PDA USD", pdaTotal],
+        ["Total PDA EUR", total(state.pdaItems, "eurAmount") || ""],
+        ["Total FDA USD", fdaTotal],
+        ["Total FDA EUR", total(state.fdaItems, "eurAmount") || ""],
         ["Net Variance", fdaTotal - pdaTotal],
         ["Variance %", pdaTotal ? (fdaTotal - pdaTotal) / pdaTotal : 0],
-        ["Grand Total Approved", approved]
+        ["Grand Total Approved USD", approved],
+        ["Grand Total Approved EUR", approvedEur || ""]
       ];
       const detail = [
-        ["Item", "Category", "PDA Amount", "FDA Amount", "Variance", "Variance %", "Status", "Approved Amount"],
+        ["Item", "Category", "PDA USD", "PDA EUR", "FDA USD", "FDA EUR", "Variance USD", "Variance EUR", "Variance %", "Status", "Approved USD", "Approved EUR"],
         ...rows.map(row => [
           row.item,
           row.category,
           row.pdaAmount,
+          row.pdaEur || "",
           row.fdaAmount,
+          row.fdaEur || "",
           row.deviation,
+          row.eurDeviation || "",
           row.deviationPct / 100,
           row.statusLabel,
-          state.approvedAmounts[row.key] ?? row.fdaAmount
+          state.approvedAmounts[row.key] ?? row.fdaAmount,
+          (state.approvedEurAmounts[row.key] ?? row.fdaEur) || ""
         ])
       ];
       XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(summary), "Summary");
