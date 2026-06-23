@@ -3,52 +3,66 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NEW MARITIME · PDA/FDA Automation Demo</title>
+  <title>NEW MARITIME · Operations Platform Demo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
   <style>
     :root {
-      --color-bg: #0a0f1e;
-      --color-surface: #0f1829;
-      --color-surface-elevated: #162035;
-      --color-border: #1e2d4a;
-      --color-accent: #c9a84c;
-      --color-accent-hover: #e0bc6a;
-      --color-text-primary: #e8edf5;
-      --color-text-secondary: #8a9ab8;
-      --color-success: #2ecc71;
-      --color-warning: #f39c12;
-      --color-danger: #e74c3c;
-      --color-white: #ffffff;
-      --shadow-elevated: 0 4px 24px rgba(0,0,0,0.4);
-      --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      --sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --display: "Barlow Condensed", Impact, sans-serif;
+      --bg: #0a0e1a;
+      --bg2: #111827;
+      --bg3: #1a2235;
+      --bg4: #1e2d45;
+      --border: rgba(59,130,246,0.15);
+      --border2: rgba(59,130,246,0.3);
+      --blue: #3b82f6;
+      --blue2: #60a5fa;
+      --teal: #14b8a6;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --text: #f1f5f9;
+      --text2: #94a3b8;
+      --text3: #64748b;
+      --gold: #fbbf24;
+      --purple: #8b5cf6;
+      --pink: #ec4899;
+      --shadow: 0 28px 80px rgba(3, 7, 18, 0.45);
+      --radius: 16px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html,
-    body {
+    html, body {
       margin: 0;
       min-height: 100%;
+      min-width: 1200px;
       background:
-        linear-gradient(120deg, rgba(201,168,76,0.08), transparent 34%),
-        radial-gradient(circle at 12% 0%, rgba(46,204,113,0.06), transparent 26%),
-        var(--color-bg);
-      color: var(--color-text-primary);
-      font-family: var(--sans);
+        radial-gradient(circle at top left, rgba(20,184,166,0.14), transparent 28%),
+        radial-gradient(circle at 85% 10%, rgba(59,130,246,0.16), transparent 34%),
+        linear-gradient(180deg, #09101f 0%, var(--bg) 52%, #08101d 100%);
+      color: var(--text);
+      font-family: "Inter", system-ui, sans-serif;
     }
 
-    body { overflow-x: hidden; }
+    body {
+      overflow-x: auto;
+    }
+
+    body[data-lang="en"] .es,
+    body[data-lang="es"] .en {
+      display: none !important;
+    }
 
     button,
     input,
-    select,
-    textarea { font: inherit; }
+    select {
+      font: inherit;
+    }
 
     button {
       border: 0;
@@ -56,547 +70,759 @@
       color: inherit;
     }
 
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
     .app-shell {
       min-height: 100vh;
-      display: grid;
-      grid-template-rows: auto 1fr;
     }
 
     .topbar {
       position: sticky;
       top: 0;
-      z-index: 20;
+      z-index: 100;
       display: grid;
       grid-template-columns: auto 1fr auto;
       gap: 24px;
       align-items: center;
-      min-height: 76px;
-      padding: 16px 28px;
-      background: rgba(10, 15, 30, 0.92);
-      border-bottom: 1px solid var(--color-border);
-      backdrop-filter: blur(18px);
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      background: rgba(8, 13, 24, 0.82);
     }
 
-    .wordmark {
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0;
+      background: none;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
       display: grid;
-      gap: 0;
-      min-width: 170px;
-      letter-spacing: 0;
+      place-items: center;
+      color: var(--blue2);
+      font-size: 20px;
+      background: linear-gradient(145deg, rgba(59,130,246,0.18), rgba(20,184,166,0.14));
+      border: 1px solid var(--border2);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
     }
 
-    .wordmark strong {
-      font-family: var(--display);
-      font-size: 28px;
-      line-height: 0.9;
-      color: var(--color-white);
-    }
-
-    .wordmark span {
-      margin-top: 4px;
-      color: var(--color-accent);
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .steps {
+    .brand-copy {
       display: grid;
-      grid-template-columns: repeat(5, minmax(92px, 1fr));
-      gap: 8px;
-      align-items: end;
-    }
-
-    .step-pill {
-      position: relative;
-      min-height: 44px;
-      padding: 4px 6px 10px;
-      color: var(--color-text-secondary);
-      background: transparent;
+      gap: 2px;
       text-align: left;
     }
 
-    .step-pill::after {
-      content: "";
-      position: absolute;
-      left: 6px;
-      right: 6px;
-      bottom: 0;
-      height: 2px;
-      background: var(--color-border);
-      border-radius: 10px;
-      transition: background 240ms ease, transform 240ms ease;
+    .brand-copy strong {
+      font-size: 17px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
-    .step-pill .step-number {
-      display: block;
-      margin-bottom: 4px;
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--color-accent);
-    }
-
-    .step-pill .step-label {
-      display: block;
-      overflow: hidden;
+    .brand-copy span {
+      color: var(--text2);
       font-size: 12px;
-      font-weight: 600;
-      white-space: nowrap;
-      text-overflow: ellipsis;
     }
 
-    .step-pill.active {
-      color: var(--color-text-primary);
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    .step-pill.active::after {
-      background: var(--color-accent);
-      transform: scaleY(1.4);
+    .nav-tab {
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.5);
+      color: var(--text2);
+      border: 1px solid transparent;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
     }
 
-    .top-actions {
+    .nav-tab:hover {
+      background: rgba(26, 34, 53, 0.9);
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .nav-tab.active {
+      background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(20,184,166,0.18));
+      border-color: var(--border2);
+      color: var(--blue2);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+    .topbar-tools {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .progress-copy {
-      color: var(--color-text-secondary);
-      font-family: var(--mono);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .btn {
+    .lang-toggle,
+    .live-pill {
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(17, 24, 39, 0.8);
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 40px;
-      padding: 0 16px;
-      border: 1px solid var(--color-border);
-      border-radius: 4px;
-      background: var(--color-surface-elevated);
-      color: var(--color-text-primary);
-      font-size: 13px;
-      font-weight: 700;
-      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+      gap: 10px;
+      color: var(--text2);
     }
 
-    .btn:hover {
-      transform: translateY(-1px);
-      border-color: rgba(201,168,76,0.56);
+    .lang-toggle:hover {
+      background: var(--bg3);
+      color: var(--text);
     }
 
-    .btn.primary {
-      border-color: transparent;
-      background: var(--color-accent);
-      color: #111725;
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 0 rgba(34,197,94,0.6);
+      animation: pulseDot 1.8s infinite;
     }
 
-    .btn.primary:hover { background: var(--color-accent-hover); }
-
-    .btn.ghost {
-      background: transparent;
+    @keyframes pulseDot {
+      0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.55); }
+      70% { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
+      100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
     }
 
-    .btn.small {
-      min-height: 32px;
-      padding: 0 10px;
-      font-size: 12px;
-    }
-
-    .btn.danger:hover {
-      border-color: rgba(231,76,60,0.65);
-      color: #ffb4ab;
-    }
-
-    .main-stage {
-      width: 100%;
-      max-width: 1248px;
+    .shell-main {
+      max-width: 1480px;
       margin: 0 auto;
       padding: 28px;
     }
 
-    .screen {
-      animation: screenIn 300ms ease both;
+    .page {
+      display: none;
+      animation: fadeIn 0.28s ease both;
     }
 
-    @keyframes screenIn {
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .page-head {
+    .intro-card,
+    .card {
+      background: linear-gradient(180deg, rgba(17,24,39,0.96), rgba(11,18,31,0.96));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .intro-card {
+      position: relative;
+      padding: 28px;
+      margin-bottom: 22px;
+    }
+
+    .intro-card::before,
+    .kpi-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue), transparent 72%);
+    }
+
+    .intro-grid {
       display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 20px;
-      align-items: end;
-      margin-bottom: 20px;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 28px;
+      align-items: center;
     }
 
     .eyebrow {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--color-accent);
-      font-family: var(--display);
-      font-size: 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: var(--teal);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
     }
 
     h1,
     h2,
-    h3 {
+    h3,
+    h4,
+    p {
       margin: 0;
-      font-family: var(--display);
-      font-weight: 700;
-      letter-spacing: 0;
-      text-transform: uppercase;
     }
 
-    h1 {
-      font-size: clamp(38px, 5vw, 70px);
-      line-height: 0.92;
-      max-width: 850px;
-    }
-
-    h2 {
-      font-size: 30px;
+    .intro-title {
+      font-size: 44px;
       line-height: 1;
+      letter-spacing: -0.04em;
+      max-width: 800px;
     }
 
-    h3 {
-      font-size: 20px;
-      line-height: 1;
+    .intro-copy {
+      margin-top: 16px;
+      max-width: 740px;
+      color: var(--text2);
+      line-height: 1.7;
+      font-size: 15px;
     }
 
-    .muted {
-      color: var(--color-text-secondary);
-    }
-
-    .mono {
-      font-family: var(--mono);
-    }
-
-    .grid-two {
+    .intro-stats {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 320px;
-      gap: 20px;
-      align-items: start;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
     }
 
-    .panel {
-      border: 1px solid var(--color-border);
-      border-radius: 6px;
-      background: rgba(15, 24, 41, 0.88);
-      box-shadow: var(--shadow-elevated);
+    .intro-stat {
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(26, 34, 53, 0.55);
     }
 
-    .panel-pad {
-      padding: 20px;
+    .intro-stat strong {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: var(--text);
     }
 
-    .panel-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--color-border);
+    .intro-stat span {
+      color: var(--text2);
+      font-size: 13px;
+      line-height: 1.5;
     }
 
-    .upload-zone {
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .kpi-card {
       position: relative;
-      display: grid;
-      min-height: 320px;
-      place-items: center;
-      padding: 32px;
-      overflow: hidden;
-      border: 1px dashed rgba(201,168,76,0.68);
-      border-radius: 6px;
-      background:
-        linear-gradient(135deg, rgba(201,168,76,0.08), transparent 42%),
-        rgba(15, 24, 41, 0.94);
-      transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+      padding: 22px;
+      min-height: 150px;
     }
 
-    .upload-zone.is-over,
-    .upload-zone:hover {
-      border-color: var(--color-accent-hover);
-      background:
-        linear-gradient(135deg, rgba(201,168,76,0.13), transparent 42%),
-        var(--color-surface);
+    .kpi-card .label {
+      color: var(--text2);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .kpi-card .value {
+      margin-top: 18px;
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .kpi-card .subcopy {
+      margin-top: 14px;
+      color: var(--text3);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .kpi-blue::before { background: linear-gradient(90deg, var(--blue), transparent 72%); }
+    .kpi-teal::before { background: linear-gradient(90deg, var(--teal), transparent 72%); }
+    .kpi-green::before { background: linear-gradient(90deg, var(--green), transparent 72%); }
+    .kpi-amber::before { background: linear-gradient(90deg, var(--amber), transparent 72%); }
+    .kpi-blue .value { color: var(--blue2); }
+    .kpi-teal .value { color: #59e3d1; }
+    .kpi-green .value { color: #59de7b; }
+    .kpi-amber .value { color: var(--gold); }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.9fr) minmax(340px, 1fr);
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 22px 0;
+    }
+
+    .card-header h3 {
+      font-size: 20px;
+      letter-spacing: -0.03em;
+    }
+
+    .card-header p,
+    .badge,
+    .muted {
+      color: var(--text2);
+      font-size: 13px;
+    }
+
+    .badge {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(59,130,246,0.12);
+      border: 1px solid rgba(59,130,246,0.18);
+      white-space: nowrap;
+    }
+
+    .map-card {
+      position: relative;
+      padding: 16px;
+      min-height: 560px;
+    }
+
+    .map-frame {
+      position: relative;
+      margin-top: 12px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(59,130,246,0.12);
+      background: linear-gradient(180deg, #0d1526 0%, #0a1220 100%);
+    }
+
+    .map-overlay-title {
+      position: absolute;
+      left: 20px;
+      top: 18px;
+      z-index: 2;
+      color: var(--text2);
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .world-map {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .vessel-node {
+      cursor: pointer;
+    }
+
+    .vessel-label {
+      fill: var(--text2);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .vessel-sub {
+      fill: var(--text3);
+      font-size: 8px;
+    }
+
+    .map-legend {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      padding: 16px 4px 4px;
+      color: var(--text2);
+      font-size: 12px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .fleet-card {
+      padding-bottom: 12px;
+    }
+
+    .fleet-list {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+    }
+
+    .fleet-item {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      background: rgba(17,24,39,0.3);
+      transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .fleet-item:hover {
+      background: var(--bg3);
       transform: translateY(-1px);
     }
 
-    .upload-inner {
+    .fleet-item.selected {
+      border-color: rgba(59,130,246,0.28);
+      background: rgba(59,130,246,0.15);
+      box-shadow: inset 2px 0 0 var(--blue);
+    }
+
+    .fleet-item.flash {
+      animation: fleetFlash 0.8s ease;
+    }
+
+    @keyframes fleetFlash {
+      0% { background: rgba(10,26,46,0.2); }
+      35% { background: rgba(10,26,46,0.95); }
+      100% { background: rgba(17,24,39,0.3); }
+    }
+
+    .fleet-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
       display: grid;
-      justify-items: center;
-      gap: 16px;
-      max-width: 580px;
-      text-align: center;
+      place-items: center;
+      background: rgba(26,34,53,0.92);
+      border: 1px solid var(--border);
+      font-size: 22px;
     }
 
-    .doc-icon {
-      position: relative;
-      width: 84px;
-      height: 108px;
-      border: 1px solid rgba(232,237,245,0.22);
-      border-radius: 6px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02));
+    .fleet-main strong,
+    .fleet-main span {
+      display: block;
     }
 
-    .doc-icon::before,
-    .doc-icon::after {
-      content: "";
-      position: absolute;
-      left: 16px;
-      right: 16px;
-      height: 2px;
-      background: rgba(232,237,245,0.38);
-      box-shadow: 0 16px rgba(232,237,245,0.32), 0 32px rgba(232,237,245,0.24), 0 48px rgba(232,237,245,0.18);
+    .fleet-main strong {
+      font-size: 14px;
+      margin-bottom: 6px;
     }
 
-    .doc-icon::before { top: 24px; }
-    .doc-icon::after {
-      top: 84px;
-      background: var(--color-accent);
-      box-shadow: none;
+    .fleet-main span {
+      color: var(--text2);
+      font-size: 12px;
+      line-height: 1.45;
     }
 
-    .upload-zone.parsing .doc-icon .scan-line {
-      position: absolute;
-      left: -7px;
-      right: -7px;
-      height: 3px;
-      background: var(--color-accent-hover);
-      box-shadow: 0 0 16px rgba(224,188,106,0.8);
-      animation: scan 1.15s ease-in-out infinite;
-    }
-
-    @keyframes scan {
-      0% { top: 10px; opacity: 0; }
-      12% { opacity: 1; }
-      86% { opacity: 1; }
-      100% { top: 95px; opacity: 0; }
-    }
-
-    .upload-copy {
-      margin: 0;
-      font-size: 18px;
+    .fleet-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text2);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       font-weight: 700;
     }
 
-    .sample-library {
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .status-in-port {
+      background: var(--green);
+      box-shadow: 0 0 10px rgba(34,197,94,0.75);
+    }
+
+    .status-underway {
+      background: var(--blue);
+      box-shadow: 0 0 10px rgba(59,130,246,0.75);
+    }
+
+    .status-anchored {
+      background: var(--amber);
+      box-shadow: 0 0 10px rgba(245,158,11,0.75);
+    }
+
+    .dashboard-lower {
       display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .list-card {
+      padding-bottom: 16px;
+    }
+
+    .feed-list {
+      display: grid;
+      gap: 12px;
+      padding: 18px 22px 6px;
+    }
+
+    .feed-item {
+      display: grid;
+      grid-template-columns: 12px 1fr auto;
+      gap: 14px;
+      align-items: start;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(26,34,53,0.38);
+      border: 1px solid rgba(59,130,246,0.08);
+    }
+
+    .feed-item strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 6px;
+      line-height: 1.45;
+    }
+
+    .feed-item span {
+      color: var(--text3);
+      font-size: 12px;
+    }
+
+    .feed-accent {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 4px;
+    }
+
+    .time-pill,
+    .priority-pill,
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--text2);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .priority-urgent {
+      color: #ffb4b4;
+      background: rgba(239,68,68,0.1);
+      border-color: rgba(239,68,68,0.18);
+    }
+
+    .priority-attention {
+      color: #ffd98a;
+      background: rgba(245,158,11,0.1);
+      border-color: rgba(245,158,11,0.18);
+    }
+
+    .section-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0;
+      background: none;
+      color: var(--text2);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .back-button:hover {
+      color: var(--text);
+    }
+
+    .vessel-hero {
+      padding: 26px;
+    }
+
+    .vessel-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .vessel-head h2 {
+      font-size: 32px;
+      letter-spacing: -0.04em;
+      margin-bottom: 8px;
+    }
+
+    .vessel-meta {
+      color: var(--text3);
+      font-size: 13px;
+    }
+
+    .vessel-data-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .data-block {
+      padding: 16px;
+      border-radius: 14px;
+      background: rgba(26,34,53,0.5);
+      border: 1px solid var(--border);
+    }
+
+    .data-block span {
+      display: block;
+      color: var(--text3);
+      font-size: 12px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .data-block strong {
+      display: block;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .status-pill {
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      padding: 9px 14px;
+    }
+
+    .status-pill.in-port {
+      color: #9ef5b2;
+      border-color: rgba(34,197,94,0.32);
+      background: rgba(34,197,94,0.1);
+    }
+
+    .status-pill.underway {
+      color: #9ac6ff;
+      border-color: rgba(59,130,246,0.32);
+      background: rgba(59,130,246,0.1);
+    }
+
+    .status-pill.anchored {
+      color: #ffd28a;
+      border-color: rgba(245,158,11,0.32);
+      background: rgba(245,158,11,0.1);
+    }
+
+    .timeline-card,
+    .comparison-card,
+    .table-card,
+    .builder-panel,
+    .financial-card {
+      padding: 22px;
+    }
+
+    .timeline-row {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 12px;
       margin-top: 18px;
     }
 
-    .sample-library-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      color: var(--color-text-secondary);
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
+    .timeline-step {
+      min-height: 108px;
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
     }
 
-    .sample-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .sample-card {
-      display: grid;
-      gap: 12px;
-      padding: 14px;
-      border: 1px solid var(--color-border);
-      border-radius: 6px;
-      background: rgba(10, 15, 30, 0.45);
-    }
-
-    .sample-card h3 {
-      font-size: 18px;
-    }
-
-    .sample-meta {
-      display: grid;
-      gap: 4px;
-      color: var(--color-text-secondary);
-      font-family: var(--mono);
-      font-size: 11px;
-    }
-
-    .sample-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .sample-actions a {
-      text-decoration: none;
-    }
-
-    .badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      min-height: 26px;
-      padding: 0 9px;
-      border: 1px solid rgba(201,168,76,0.32);
-      border-radius: 4px;
-      background: rgba(201,168,76,0.08);
-      color: var(--color-accent-hover);
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .field {
-      display: grid;
-      gap: 6px;
-    }
-
-    .field label {
-      color: var(--color-text-secondary);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      min-height: 38px;
-      padding: 8px 10px;
-      border: 1px solid var(--color-border);
-      border-radius: 4px;
-      outline: none;
-      background: #0b1221;
-      color: var(--color-text-primary);
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: var(--color-accent);
-    }
-
-    .segmented {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4px;
-      padding: 4px;
-      border: 1px solid var(--color-border);
-      border-radius: 6px;
-      background: rgba(10,15,30,0.6);
-    }
-
-    .segmented button {
-      min-height: 34px;
-      border-radius: 4px;
-      background: transparent;
-      color: var(--color-text-secondary);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .segmented button.active {
-      background: var(--color-accent);
-      color: #101725;
-    }
-
-    .context-strip {
-      display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 1px;
-      overflow: hidden;
-      margin-bottom: 18px;
-      border: 1px solid var(--color-border);
-      border-radius: 6px;
-      background: var(--color-border);
-    }
-
-    .context-item {
-      min-height: 66px;
-      padding: 12px;
-      background: rgba(15,24,41,0.94);
-    }
-
-    .context-item span {
+    .timeline-step small {
       display: block;
-      margin-bottom: 6px;
-      color: var(--color-text-secondary);
-      font-size: 10px;
-      font-weight: 700;
+      color: var(--text3);
+      margin-bottom: 10px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
     }
 
-    .context-item strong {
+    .timeline-step strong {
       display: block;
-      overflow: hidden;
-      font-family: var(--mono);
-      font-size: 13px;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+      font-size: 14px;
+      margin-bottom: 12px;
+      line-height: 1.45;
     }
 
-    .table-wrap {
+    .timeline-step span {
+      color: var(--text2);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .timeline-step.done {
+      background: rgba(34,197,94,0.08);
+      border-color: rgba(34,197,94,0.18);
+    }
+
+    .timeline-step.active {
+      background: rgba(59,130,246,0.1);
+      border-color: rgba(59,130,246,0.22);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+      gap: 18px;
+    }
+
+    .table-scroll {
       overflow: auto;
-      border: 1px solid var(--color-border);
-      border-radius: 6px;
-      background: #0b1221;
+      border-radius: 14px;
+      border: 1px solid rgba(59,130,246,0.1);
+      background: rgba(10,14,26,0.55);
+      margin-top: 18px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-family: var(--mono);
-      font-size: 12px;
     }
 
     th,
     td {
-      padding: 10px 10px;
-      border-bottom: 1px solid rgba(30,45,74,0.82);
+      padding: 13px 16px;
+      border-bottom: 1px solid rgba(59,130,246,0.08);
       text-align: left;
-      vertical-align: middle;
+      font-size: 13px;
     }
 
     th {
       position: sticky;
       top: 0;
-      z-index: 1;
-      background: #111a2d;
-      color: var(--color-text-secondary);
-      font-family: var(--sans);
-      font-size: 10px;
-      font-weight: 800;
+      background: rgba(12,19,33,0.98);
+      color: var(--text2);
+      font-size: 12px;
       text-transform: uppercase;
-    }
-
-    tbody tr:hover td {
-      background: rgba(255,255,255,0.018);
+      letter-spacing: 0.1em;
     }
 
     td.amount,
@@ -605,1980 +831,1579 @@
       white-space: nowrap;
     }
 
-    td input,
-    td select {
-      min-height: 32px;
-      padding: 6px 8px;
-      font-family: var(--mono);
+    .group-row td {
+      background: rgba(59,130,246,0.08);
+      color: var(--blue2);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       font-size: 12px;
     }
 
-    .row-actions {
-      width: 44px;
-      text-align: center;
-    }
-
-    .trash {
-      width: 30px;
-      height: 30px;
-      border: 1px solid rgba(231,76,60,0.25);
-      border-radius: 4px;
-      background: transparent;
-      color: #ffafa7;
-      opacity: 0;
-      transition: opacity 160ms ease, background 160ms ease;
-    }
-
-    tr:hover .trash { opacity: 1; }
-
-    .trash:hover { background: rgba(231,76,60,0.12); }
-
-    .grand-row td {
-      border-bottom: 0;
-      background: rgba(201,168,76,0.1);
-      color: var(--color-accent-hover);
+    .total-row td {
+      color: var(--gold);
       font-weight: 800;
     }
 
-    .side-list {
+    .metric-grid {
       display: grid;
-      gap: 8px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .metric-card {
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(26,34,53,0.48);
+    }
+
+    .metric-card span {
+      display: block;
+      color: var(--text3);
+      font-size: 11px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .metric-card strong {
+      display: block;
+      font-size: 20px;
+      letter-spacing: -0.03em;
+    }
+
+    .metric-card.gold strong { color: var(--gold); }
+    .metric-card.red strong { color: #ff9393; }
+
+    .progress-panel {
+      padding: 16px;
+      margin-top: 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(10,14,26,0.5);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(148,163,184,0.12);
+      margin: 12px 0 10px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+    }
+
+    .progress-panel p {
+      color: var(--text2);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .builder-layout {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .builder-panel {
+      position: sticky;
+      top: 106px;
+    }
+
+    .field-stack {
+      display: grid;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .field label {
+      display: block;
+      color: var(--text2);
+      font-size: 12px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(59,130,246,0.12);
+      background: rgba(26,34,53,0.88);
+      color: var(--text);
+      outline: none;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: rgba(96,165,250,0.55);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.14);
+    }
+
+    .generate-btn {
+      width: 100%;
+      min-height: 50px;
+      border-radius: 14px;
+      margin-top: 8px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: white;
+      box-shadow: 0 20px 50px rgba(20,184,166,0.2);
+    }
+
+    .generate-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .preview-card {
+      min-height: 760px;
+    }
+
+    .preview-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 24px 24px 0;
+    }
+
+    .preview-head h3 {
+      font-size: 24px;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    .preview-meta {
+      color: var(--text2);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .total-box {
+      min-width: 260px;
+      padding: 18px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(245,158,11,0.12), rgba(17,24,39,0.85));
+      border: 1px solid rgba(245,158,11,0.24);
+      text-align: right;
+    }
+
+    .total-box span {
+      display: block;
+      color: var(--text2);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .total-box strong {
+      display: block;
+      margin: 10px 0 8px;
+      color: var(--gold);
+      font-size: 28px;
+      letter-spacing: -0.04em;
+    }
+
+    .total-box em {
+      color: var(--text3);
+      font-size: 13px;
+      font-style: normal;
+    }
+
+    .spinner-wrap {
+      min-height: 620px;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+    }
+
+    .spinner-panel {
+      text-align: center;
+      max-width: 420px;
+    }
+
+    .spinner {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 22px;
+      border-radius: 50%;
+      border: 4px solid rgba(59,130,246,0.14);
+      border-top-color: var(--blue);
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .spinner-panel h3 {
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
+
+    .spinner-panel p {
+      color: var(--text2);
+      line-height: 1.7;
+    }
+
+    .unit-note {
+      display: block;
+      color: var(--text3);
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .subtotal-row td {
+      color: var(--text2);
+      font-weight: 700;
+      background: rgba(148,163,184,0.04);
+    }
+
+    .financial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .financial-kpi strong {
+      display: block;
+      margin-top: 16px;
+      font-size: 34px;
+      letter-spacing: -0.04em;
+    }
+
+    .financial-kpi span {
+      color: var(--text2);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .financial-kpi.blue strong { color: var(--blue2); }
+    .financial-kpi.green strong { color: #59de7b; }
+    .financial-kpi.amber strong { color: var(--gold); }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .chart-shell {
+      padding: 18px 22px 22px;
+    }
+
+    .chart-shell canvas {
+      width: 100% !important;
+      height: 240px !important;
       margin-top: 16px;
     }
 
-    .side-list-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
-      align-items: center;
-      min-height: 34px;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(30,45,74,0.7);
-      font-family: var(--mono);
-      font-size: 12px;
-    }
-
-    .chart-box {
-      min-height: 240px;
-      padding: 12px;
-    }
-
-    .fallback-chart {
-      display: grid;
-      gap: 10px;
-      margin-top: 8px;
-    }
-
-    .fallback-bar {
-      display: grid;
-      gap: 5px;
-      font-family: var(--mono);
-      font-size: 11px;
-    }
-
-    .fallback-meter {
-      height: 8px;
-      overflow: hidden;
-      border-radius: 10px;
-      background: rgba(232,237,245,0.1);
-    }
-
-    .fallback-meter span {
-      display: block;
-      height: 100%;
-      background: var(--color-accent);
-    }
-
-    .footer-actions {
+    .legend-inline {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .document-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 280px;
-      gap: 20px;
-      align-items: start;
-    }
-
-    .document-preview {
-      min-height: 720px;
-      padding: 38px;
-      border-radius: 6px;
-      background: var(--color-white);
-      color: #172033;
-      box-shadow: var(--shadow-elevated);
-    }
-
-    .doc-letterhead {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 24px;
-      align-items: start;
-      padding-bottom: 22px;
-      border-bottom: 3px solid #172033;
-    }
-
-    .doc-letterhead strong {
-      display: block;
-      font-family: var(--display);
-      font-size: 38px;
-      line-height: 0.9;
-      color: #0a0f1e;
-      text-transform: uppercase;
-    }
-
-    .doc-letterhead span {
-      display: block;
-      margin-top: 6px;
-      color: #5b6680;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .doc-ref {
-      text-align: right;
-      font-family: var(--mono);
-      font-size: 11px;
-    }
-
-    .doc-title {
-      margin: 28px 0 18px;
-      font-family: var(--display);
-      font-size: 34px;
-      color: #0a0f1e;
-      text-transform: uppercase;
-    }
-
-    .doc-details {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 1px;
-      overflow: hidden;
-      margin-bottom: 22px;
-      border: 1px solid #d8deea;
-      border-radius: 4px;
-      background: #d8deea;
-    }
-
-    .doc-detail {
-      padding: 10px;
-      background: #f7f8fb;
-    }
-
-    .doc-detail span {
-      display: block;
-      margin-bottom: 4px;
-      color: #667085;
-      font-size: 9px;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-
-    .doc-detail strong {
-      display: block;
-      font-family: var(--mono);
-      font-size: 11px;
-      color: #172033;
-    }
-
-    .doc-table {
-      border: 1px solid #d8deea;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .doc-table table {
-      color: #172033;
-      font-size: 11px;
-    }
-
-    .doc-table th {
-      background: #172033;
-      color: #ffffff;
-      border-bottom-color: #172033;
-    }
-
-    .doc-table td {
-      border-bottom-color: #e5e9f1;
-    }
-
-    .doc-table td input {
-      min-height: 28px;
-      border-color: transparent;
-      background: transparent;
-      color: #172033;
-      text-align: right;
-    }
-
-    .doc-table td input:enabled {
-      border-color: #d8deea;
-      background: #ffffff;
-    }
-
-    .doc-total {
-      display: flex;
-      justify-content: flex-end;
-      gap: 22px;
-      margin-top: 18px;
-      padding-top: 14px;
-      border-top: 2px solid #172033;
-      font-family: var(--mono);
-      font-weight: 800;
-      color: #0a0f1e;
-    }
-
-    .doc-note {
-      margin-top: 26px;
-      padding: 12px 14px;
-      border-left: 4px solid #c9a84c;
-      background: #f7f3e6;
-      color: #344054;
-      font-size: 12px;
-    }
-
-    .signature-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      margin-top: 48px;
-      font-family: var(--mono);
-      font-size: 11px;
-    }
-
-    .signature-line {
-      padding-top: 12px;
-      border-top: 1px solid #172033;
-    }
-
-    .controls-stack {
-      display: grid;
-      gap: 12px;
-    }
-
-    .control-card {
-      padding: 14px;
-      border: 1px solid var(--color-border);
-      border-radius: 6px;
-      background: rgba(15,24,41,0.9);
-    }
-
-    .toggle-row {
-      display: flex;
-      justify-content: space-between;
       align-items: center;
       gap: 14px;
-      min-height: 36px;
-      color: var(--color-text-secondary);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .switch {
-      position: relative;
-      width: 44px;
-      height: 24px;
-    }
-
-    .switch input {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-    }
-
-    .slider {
-      position: absolute;
-      inset: 0;
-      border-radius: 50px;
-      background: var(--color-border);
-      transition: background 180ms ease;
-    }
-
-    .slider::before {
-      content: "";
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #ffffff;
-      transition: transform 180ms ease;
-    }
-
-    .switch input:checked + .slider {
-      background: var(--color-accent);
-    }
-
-    .switch input:checked + .slider::before {
-      transform: translateX(20px);
-    }
-
-    .kpi-row {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .kpi {
-      padding: 14px;
-      border: 1px solid var(--color-border);
-      border-radius: 6px;
-      background: rgba(15,24,41,0.9);
-    }
-
-    .kpi span {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--color-text-secondary);
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-
-    .kpi strong {
-      display: block;
-      font-family: var(--mono);
-      font-size: 19px;
-    }
-
-    .kpi.success strong { color: var(--color-success); }
-    .kpi.warning strong { color: var(--color-warning); }
-    .kpi.danger strong { color: var(--color-danger); }
-
-    .filters {
-      display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .filter-btn {
-      min-height: 34px;
-      padding: 0 12px;
-      border: 1px solid var(--color-border);
-      border-radius: 4px;
-      background: rgba(15,24,41,0.9);
-      color: var(--color-text-secondary);
+      color: var(--text2);
       font-size: 12px;
-      font-weight: 800;
+      margin-top: 10px;
     }
 
-    .filter-btn.active {
-      border-color: var(--color-accent);
-      color: var(--color-accent-hover);
+    .legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      display: inline-block;
+      margin-right: 6px;
     }
 
-    .status-badge {
-      display: inline-flex;
+    .trend-line {
+      display: inline-block;
+      width: 18px;
+      height: 2px;
+      border-radius: 999px;
+      margin-right: 6px;
+      transform: translateY(-3px);
+    }
+
+    .breakdown-list {
+      display: grid;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .breakdown-row {
+      display: grid;
+      grid-template-columns: 220px 1fr 90px;
+      gap: 18px;
       align-items: center;
-      gap: 7px;
-      min-height: 26px;
-      padding: 0 9px;
-      border-radius: 4px;
-      font-family: var(--sans);
-      font-size: 11px;
-      font-weight: 800;
+    }
+
+    .breakdown-row strong {
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .breakdown-track {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(148,163,184,0.1);
+    }
+
+    .breakdown-track span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+    }
+
+    .breakdown-value {
+      text-align: right;
+      color: var(--text2);
+      font-size: 13px;
       white-space: nowrap;
     }
 
-    .status-badge.success {
-      background: rgba(46,204,113,0.12);
-      color: #8bf1b5;
-    }
-
-    .status-badge.warning {
-      background: rgba(243,156,18,0.14);
-      color: #ffd089;
-    }
-
-    .status-badge.danger {
-      background: rgba(231,76,60,0.14);
-      color: #ffaaa1;
-    }
-
-    .row-note {
-      display: block;
-      margin-top: 4px;
-      color: var(--color-warning);
-      font-family: var(--sans);
-      font-size: 11px;
-      font-style: italic;
-      font-weight: 700;
-    }
-
-    .row-note.missing {
-      color: #ffaaa1;
-    }
-
-    .attention-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .attention-item {
-      padding: 10px;
-      border: 1px solid rgba(201,168,76,0.22);
-      border-radius: 4px;
-      background: rgba(201,168,76,0.07);
+    .footer-note {
+      margin-top: 20px;
+      color: var(--text3);
       font-size: 12px;
-    }
-
-    .attention-item strong {
-      display: block;
-      margin-bottom: 4px;
-      font-family: var(--mono);
-    }
-
-    .toast {
-      position: fixed;
-      right: 24px;
-      bottom: 24px;
-      z-index: 50;
-      display: grid;
-      gap: 4px;
-      min-width: 260px;
-      max-width: calc(100vw - 48px);
-      padding: 14px 16px;
-      border: 1px solid rgba(201,168,76,0.4);
-      border-radius: 6px;
-      background: #10192b;
-      box-shadow: var(--shadow-elevated);
-      transform: translateY(20px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 180ms ease, transform 180ms ease;
-    }
-
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    .toast strong {
-      color: var(--color-accent-hover);
-      font-size: 13px;
-    }
-
-    .toast span {
-      color: var(--color-text-secondary);
-      font-size: 12px;
-    }
-
-    @media (max-width: 1060px) {
-      .topbar {
-        grid-template-columns: 1fr auto;
-      }
-
-      .steps {
-        grid-column: 1 / -1;
-        order: 3;
-      }
-
-      .grid-two,
-      .document-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .context-strip,
-      .form-grid,
-      .sample-grid,
-      .kpi-row {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 720px) {
-      .topbar,
-      .main-stage {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-
-      .steps {
-        grid-template-columns: 1fr;
-      }
-
-      .step-pill {
-        min-height: 32px;
-      }
-
-      .step-pill .step-label {
-        white-space: normal;
-      }
-
-      .page-head,
-      .doc-letterhead,
-      .doc-details,
-      .context-strip,
-      .form-grid,
-      .sample-grid,
-      .kpi-row {
-        grid-template-columns: 1fr;
-      }
-
-      .document-preview {
-        padding: 22px;
-      }
-
-      .footer-actions {
-        align-items: stretch;
-        flex-direction: column;
-      }
-
-      .footer-actions .btn {
-        width: 100%;
-      }
-    }
-
-    @media print {
-      body {
-        background: #ffffff;
-      }
-
-      .topbar,
-      .page-head,
-      .controls-stack,
-      .footer-actions,
-      .toast {
-        display: none !important;
-      }
-
-      .main-stage {
-        max-width: none;
-        padding: 0;
-      }
-
-      .document-grid {
-        display: block;
-      }
-
-      .document-preview {
-        min-height: auto;
-        padding: 24px;
-        box-shadow: none;
-        border-radius: 0;
-      }
+      line-height: 1.6;
     }
   </style>
 </head>
-<body>
+<body data-lang="en">
   <div class="app-shell">
     <header class="topbar">
-      <div class="wordmark" aria-label="NEW MARITIME">
-        <strong>NEW MARITIME</strong>
-        <span>West Africa Hub Agent</span>
-      </div>
-      <nav class="steps" id="stepNav" aria-label="PDA FDA workflow steps"></nav>
-      <div class="top-actions">
-        <span class="progress-copy" id="progressCopy">Step 1 of 5</span>
-        <button class="btn ghost" id="resetBtn" type="button">Reset Demo</button>
+      <button class="brand" type="button" data-page-link="dashboard" aria-label="New Maritime dashboard">
+        <span class="brand-mark">⚓</span>
+        <span class="brand-copy">
+          <strong>NEW MARITIME</strong>
+          <span><span class="en">Operations Platform</span><span class="es">Plataforma de Operaciones</span></span>
+        </span>
+      </button>
+      <nav class="nav-tabs" aria-label="Primary navigation">
+        <button class="nav-tab active" type="button" data-page-link="dashboard"><span class="en">Dashboard</span><span class="es">Panel</span></button>
+        <button class="nav-tab" type="button" data-page-link="vessel"><span class="en">Vessel Detail</span><span class="es">Detalle del Buque</span></button>
+        <button class="nav-tab" type="button" data-page-link="builder"><span class="en">PDA Builder</span><span class="es">Generador PDA</span></button>
+        <button class="nav-tab" type="button" data-page-link="financial"><span class="en">Financial</span><span class="es">Finanzas</span></button>
+      </nav>
+      <div class="topbar-tools">
+        <button class="lang-toggle" id="langToggle" type="button" aria-label="Toggle language">
+          <span><span class="en">🌐 EN / ES</span><span class="es">🌐 ES / EN</span></span>
+        </button>
+        <div class="live-pill">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span><span class="en">LIVE</span><span class="es">EN VIVO</span></span>
+        </div>
       </div>
     </header>
-    <main class="main-stage" id="app"></main>
+
+    <main class="shell-main">
+      <div id="page-dashboard" class="page active"></div>
+      <div id="page-vessel" class="page"></div>
+      <div id="page-builder" class="page"></div>
+      <div id="page-financial" class="page"></div>
+    </main>
   </div>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    const STEPS = [
-      "Upload PDA",
-      "Review PDA",
-      "Generate Client PDA",
-      "Upload & Compare FDA",
-      "Generate Client FDA"
+    const vessels = [
+      { id: 0, name: "MT AFRICAN RUBY", flag: "🇵🇦", port: "Banana, DRC", status: "in-port", imo: "IMO 9123456", grt: 8251, voyage: "VOY-18", eta: "Departed 31/08/2025", cargo: "JET A1 · 1,600 MT", operator: "KEMEXON / NEW MARITIME", disb: 44197, currency: "USD", icon: "🚢", mapX: 444, mapY: 312, pdaPort: "banana" },
+      { id: 1, name: "MT DIDDI", flag: "🇱🇷", port: "Ango Ango, DRC", status: "in-port", imo: "IMO 9234567", grt: 25400, voyage: "VOY-56", eta: "Arrived 23/11/2025", cargo: "GASOIL 8,000 MT + GASOLINE 2,400 MT", operator: "TRAFIGURA / AMICONGO", disb: 152118, currency: "USD", icon: "⛽", mapX: 440, mapY: 295, pdaPort: "ango" },
+      { id: 2, name: "MT NORDIC STAR", flag: "🇳🇴", port: "Matadi, DRC", status: "underway", imo: "IMO 9345678", grt: 12400, voyage: "VOY-22", eta: "ETA: 25/06/2026", cargo: "CRUDE OIL · 8,500 MT", operator: "SHELL / NEW MARITIME", disb: 38500, currency: "USD", icon: "🚢", mapX: 430, mapY: 278, pdaPort: "matadi" },
+      { id: 3, name: "MV CAPE VERDE", flag: "🇵🇹", port: "Atlantic Ocean", status: "underway", imo: "IMO 9456789", grt: 18200, voyage: "VOY-07", eta: "ETA: 28/06/2026", cargo: "GENERAL CARGO · 12,000 MT", operator: "MSC / NEW MARITIME", disb: 29800, currency: "USD", icon: "📦", mapX: 360, mapY: 240, pdaPort: "banana" },
+      { id: 4, name: "MT VEGA STAR", flag: "🇲🇹", port: "Valencia, Spain", status: "in-port", imo: "IMO 9567890", grt: 9800, voyage: "VOY-33", eta: "Arrived 20/06/2026", cargo: "LPG · 4,200 MT", operator: "REPSOL / NEW MARITIME", disb: 31200, currency: "USD", icon: "⛽", mapX: 425, mapY: 118, pdaPort: "valencia" },
+      { id: 5, name: "MT DUBAI PEARL", flag: "🇦🇪", port: "Dubai, UAE", status: "anchored", imo: "IMO 9678901", grt: 21000, voyage: "VOY-11", eta: "Waiting berth", cargo: "FUEL OIL · 15,000 MT", operator: "ADNOC / NEW MARITIME", disb: 67400, currency: "USD", icon: "⛽", mapX: 596, mapY: 158, pdaPort: "dubai" },
+      { id: 6, name: "MT RIVER CONGO", flag: "🇨🇩", port: "En route to Banana", status: "underway", imo: "IMO 9789012", grt: 6800, voyage: "VOY-44", eta: "ETA: 26/06/2026", cargo: "JET A1 · 2,400 MT", operator: "SEP CONGO / AMICONGO", disb: 22100, currency: "USD", icon: "🚢", mapX: 400, mapY: 260, pdaPort: "banana" },
+      { id: 7, name: "MT BUENOS AIRES", flag: "🇦🇷", port: "Buenos Aires, Argentina", status: "in-port", imo: "IMO 9890123", grt: 14500, voyage: "VOY-19", eta: "Arrived 18/06/2026", cargo: "GASOIL · 9,800 MT", operator: "YPF / NEW MARITIME", disb: 45600, currency: "USD", icon: "⛽", mapX: 205, mapY: 315, pdaPort: "banana" },
+      { id: 8, name: "MT PACIFIC WAVE", flag: "🇵🇦", port: "Pacific Ocean", status: "underway", imo: "IMO 9901234", grt: 32000, voyage: "VOY-03", eta: "ETA: 15/07/2026", cargo: "CRUDE OIL · 28,000 MT", operator: "CHEVRON / NEW MARITIME", disb: 98200, currency: "USD", icon: "🚢", mapX: 150, mapY: 200, pdaPort: "banana" }
     ];
 
-    const CATEGORIES = ["Port Dues", "Pilotage", "Towage", "Agency Fee", "Husbandry", "Other"];
-    const CURRENCIES = ["USD", "EUR", "GBP", "XOF"];
-
-    const ITEM_ALIASES = {
-      "Pilotage Inward": "Pilotage In",
-      "Pilotage Outward": "Pilotage Out",
-      "Towage Inward (2 tugs)": "Tug Services Inward",
-      "Towage Outward (2 tugs)": "Tug Services Outward",
-      "Fresh Water Supply": "Fresh Water",
-      "Customs Overtime": "CUSTOMS OVT",
-      "O.C.C Fees": "OCC FEES",
-      "LMC Traffic Right": "LMC TRAFIC SERVICE"
+    const pdaData = {
+      banana: { name: "Banana, DRC", refMT: 1600, refCrew: 27, refGRT: 8251, lines: [
+        { cat: "Navigation", desc: "Pilotage", unit: "fixed", usdBase: 8500 },
+        { cat: "Navigation", desc: "Pilotine Hire (MALU SERVICE)", unit: "fixed", usdBase: 3086 },
+        { cat: "Port Authority", desc: "Harbour Master Dues", unit: "fixed", usdBase: 4500 },
+        { cat: "Port Authority", desc: "Sanitary Dues", unit: "per crew", usdBase: 1400 },
+        { cat: "Government", desc: "PTNTIC Tax", unit: "fixed", usdBase: 800 },
+        { cat: "Government", desc: "Customs OVT", unit: "fixed", usdBase: 410 },
+        { cat: "Government", desc: "Pollution Tax", unit: "fixed", usdBase: 475 },
+        { cat: "Government", desc: "A.N.R. Intelligence Services", unit: "fixed", usdBase: 200 },
+        { cat: "Freight", desc: "OGEFREM Commission", unit: "per MT", usdBase: 925 },
+        { cat: "Freight", desc: "OCC Fees", unit: "per MT", usdBase: 7992 },
+        { cat: "Government", desc: "State Agent Fees", unit: "fixed", usdBase: 5000 },
+        { cat: "Freight", desc: "Statistics Charges", unit: "per MT", usdBase: 1601 },
+        { cat: "Freight", desc: "Regulation Charges", unit: "per MT", usdBase: 1601 },
+        { cat: "Port", desc: "LMC Trafic Service", unit: "per MT", usdBase: 3952 },
+        { cat: "Agency", desc: "AMICONGO Agency Fees", unit: "fixed", usdBase: 5000 },
+        { cat: "Agency", desc: "Clearance Charges", unit: "fixed", usdBase: 267 },
+        { cat: "Port", desc: "ISPS", unit: "fixed", usdBase: 194 },
+        { cat: "Agency", desc: "Comm. & Petties", unit: "fixed", usdBase: 157 },
+        { cat: "Bank", desc: "Bank Charges", unit: "fixed", usdBase: 188 }
+      ]},
+      ango: { name: "Ango Ango, DRC", refMT: 12159, refCrew: 30, refGRT: 25400, lines: [
+        { cat: "Navigation", desc: "CVM Pilots Gratification", unit: "per GRT", usdBase: 8800 },
+        { cat: "Port Authority", desc: "Harbour Master Police per vessel", unit: "fixed", usdBase: 600 },
+        { cat: "Port Authority", desc: "Police per crew", unit: "per crew", usdBase: 3000 },
+        { cat: "Port Authority", desc: "Security Visit", unit: "fixed", usdBase: 200 },
+        { cat: "Port Authority", desc: "Clearance In/Out", unit: "fixed", usdBase: 200 },
+        { cat: "Port Authority", desc: "Disbursements", unit: "fixed", usdBase: 100 },
+        { cat: "Port Authority", desc: "Technical Control", unit: "fixed", usdBase: 100 },
+        { cat: "Port Authority", desc: "Agents Overtime", unit: "fixed", usdBase: 400 },
+        { cat: "Sanitary", desc: "Sanitary Control", unit: "fixed", usdBase: 650 },
+        { cat: "Sanitary", desc: "Quarantine Overtime", unit: "fixed", usdBase: 350 },
+        { cat: "Government", desc: "Custom Overtime", unit: "fixed", usdBase: 200 },
+        { cat: "Government", desc: "Pollution Tax", unit: "fixed", usdBase: 250 },
+        { cat: "Port", desc: "Seamen's Pool Watchmen", unit: "fixed", usdBase: 3500 },
+        { cat: "Freight", desc: "LMC Trafic Right", unit: "per MT", usdBase: 29122 },
+        { cat: "Freight", desc: "OCC Fees 5% per MT", unit: "per MT", usdBase: 60717 },
+        { cat: "Freight", desc: "Statistics Charges", unit: "per MT", usdBase: 12160 },
+        { cat: "Freight", desc: "Regulation Charges", unit: "per MT", usdBase: 12160 },
+        { cat: "Freight", desc: "OGEFREM Commission FERI", unit: "per MT", usdBase: 15559 },
+        { cat: "Agency", desc: "AMICONGO Agency Commission", unit: "fixed", usdBase: 5000 }
+      ]},
+      matadi: { name: "Matadi, DRC", refMT: 12159, refCrew: 30, refGRT: 25400, lines: [
+        { cat: "Navigation", desc: "CVM Redevance Port (GRT based)", unit: "per GRT", usdBase: 9200 },
+        { cat: "Navigation", desc: "CVM Redevance Pilotage", unit: "fixed", usdBase: 5832 },
+        { cat: "Port Authority", desc: "Harbour Master (Note de Créance)", unit: "fixed", usdBase: 3800 },
+        { cat: "Sanitary", desc: "Sanitary Control", unit: "fixed", usdBase: 250 },
+        { cat: "Government", desc: "DGRAD Note de Perception", unit: "per GRT", usdBase: 3800 },
+        { cat: "Freight", desc: "OCC Fees", unit: "per MT", usdBase: 60717 },
+        { cat: "Freight", desc: "OGEFREM Commission", unit: "per MT", usdBase: 15559 },
+        { cat: "Port", desc: "Pool des Marins Mooring", unit: "fixed", usdBase: 3500 },
+        { cat: "Agency", desc: "AMICONGO Agency Fees", unit: "fixed", usdBase: 5000 },
+        { cat: "Agency", desc: "Administration Fee", unit: "fixed", usdBase: 267 }
+      ]},
+      valencia: { name: "Valencia, Spain", refMT: 4200, refCrew: 20, refGRT: 9800, lines: [
+        { cat: "Port", desc: "Port Dues (GT based)", unit: "per GRT", usdBase: 4200 },
+        { cat: "Navigation", desc: "Pilotage", unit: "fixed", usdBase: 3800 },
+        { cat: "Navigation", desc: "Mooring / Unmooring", unit: "fixed", usdBase: 1200 },
+        { cat: "Port", desc: "Towage", unit: "fixed", usdBase: 2800 },
+        { cat: "Government", desc: "Customs Declaration", unit: "fixed", usdBase: 480 },
+        { cat: "Sanitary", desc: "Port Health Authority", unit: "fixed", usdBase: 350 },
+        { cat: "Agency", desc: "Agency Fees", unit: "fixed", usdBase: 2500 },
+        { cat: "Agency", desc: "Comm. & Petties", unit: "fixed", usdBase: 320 }
+      ]},
+      dubai: { name: "Dubai, UAE", refMT: 15000, refCrew: 25, refGRT: 21000, lines: [
+        { cat: "Port", desc: "PCFC Port Dues", unit: "per GRT", usdBase: 8400 },
+        { cat: "Navigation", desc: "Pilotage In/Out", unit: "fixed", usdBase: 4200 },
+        { cat: "Navigation", desc: "Towage In/Out", unit: "fixed", usdBase: 3600 },
+        { cat: "Port", desc: "Mooring / Unmooring", unit: "fixed", usdBase: 1800 },
+        { cat: "Government", desc: "Dubai Customs", unit: "fixed", usdBase: 2100 },
+        { cat: "Sanitary", desc: "Port Health Clearance", unit: "fixed", usdBase: 650 },
+        { cat: "Port", desc: "ISPS Security Fee", unit: "fixed", usdBase: 420 },
+        { cat: "Agency", desc: "Agency Fees", unit: "fixed", usdBase: 3500 },
+        { cat: "Bank", desc: "Bank Charges", unit: "fixed", usdBase: 280 }
+      ]}
     };
 
-    const MOCK_CONTEXT = {
-      vessel: "MV ATLANTIC STAR",
-      imo: "9512847",
-      port: "Port of Tema, Ghana",
-      eta: "2025-06-14",
-      agent: "WESTAF MARITIME SERVICES LTD",
-      currency: "USD",
-      pdaReference: "PDA-2025-0614-TEM-001",
-      fdaReference: "FDA-2025-0721-TEM-001",
-      date: "2025-05-20",
-      operationDate: "2025-06-14 to 2025-06-17"
-    };
-
-    const EMPTY_CONTEXT = {
-      vessel: "",
-      imo: "",
-      port: "",
-      eta: "",
-      agent: "",
-      currency: "USD",
-      pdaReference: "",
-      fdaReference: "",
-      date: "",
-      operationDate: ""
-    };
-
-    const MOCK_PDA_ITEMS = [
-      ["Port Dues (GRT based)", "Port Dues", 12450, ""],
-      ["Pilotage Inward", "Pilotage", 4200, ""],
-      ["Pilotage Outward", "Pilotage", 4200, ""],
-      ["Towage Inward (2 tugs)", "Towage", 9800, ""],
-      ["Towage Outward (2 tugs)", "Towage", 9800, ""],
-      ["Mooring / Unmooring", "Port Dues", 1850, ""],
-      ["Ship's Agent Fee", "Agency Fee", 3500, ""],
-      ["Launch Services", "Husbandry", 620, ""],
-      ["Garbage Disposal (MARPOL)", "Husbandry", 480, ""],
-      ["Crew Provisions", "Husbandry", 2100, ""],
-      ["Fresh Water Supply", "Husbandry", 750, ""],
-      ["Communication / Port Authority", "Other", 380, ""]
+    const recentActivity = [
+      { accent: "var(--blue)", en: "MT DIDDI — PDA generated automatically for Ango Ango port call", es: "MT DIDDI — PDA generado automáticamente para recalada en Ango Ango", timeEn: "2 min ago", timeEs: "hace 2 min" },
+      { accent: "var(--green)", en: "MT AFRICAN RUBY — FDA closed. Balance: $3,801.66 USD", es: "MT AFRICAN RUBY — FDA cerrada. Balance: $3,801.66 USD", timeEn: "1 hr ago", timeEs: "hace 1 h" },
+      { accent: "var(--teal)", en: "MT NORDIC STAR — ETA updated: 25/06/2026 Matadi", es: "MT NORDIC STAR — ETA actualizada: 25/06/2026 Matadi", timeEn: "3 hr ago", timeEs: "hace 3 h" },
+      { accent: "var(--amber)", en: "MT DUBAI PEARL — Waiting berth notification sent to owner", es: "MT DUBAI PEARL — Notificación de espera de atraque enviada al armador", timeEn: "5 hr ago", timeEs: "hace 5 h" },
+      { accent: "var(--green)", en: "MT BUENOS AIRES — Agency fees confirmed: $5,000 USD", es: "MT BUENOS AIRES — Honorarios de agencia confirmados: $5,000 USD", timeEn: "8 hr ago", timeEs: "hace 8 h" }
     ];
 
-    const MOCK_FDA_ITEMS = [
-      ["Port Dues (GRT based)", "Port Dues", 12450, "Exact match"],
-      ["Pilotage In", "Pilotage", 4200, "Exact match (normalized name)"],
-      ["Pilotage Out", "Pilotage", 4550, "+350 - overtime surcharge applied"],
-      ["Tug Services Inward", "Towage", 9800, "Exact match (normalized name)"],
-      ["Tug Services Outward", "Towage", 11200, "+1,400 - 3rd tug requested"],
-      ["Mooring / Unmooring", "Port Dues", 1850, "Exact match"],
-      ["Ship's Agent Fee", "Agency Fee", 3500, "Exact match"],
-      ["Launch Services", "Husbandry", 780, "+160 - extra trips"],
-      ["Garbage Disposal (MARPOL)", "Husbandry", 480, "Exact match"],
-      ["Crew Provisions", "Husbandry", 2100, "Exact match"],
-      ["Fresh Water", "Husbandry", 920, "+170 - additional quantity"],
-      ["Communication / Port Authority", "Other", 380, "Exact match"],
-      ["Immigration Fees", "Other", 540, "New item - not in PDA"]
+    const pendingActions = [
+      { accent: "var(--red)", priority: "urgent", en: "MT DIDDI — FDA review pending. Variance detected: +$2,400", es: "MT DIDDI — Revisión FDA pendiente. Varianza detectada: +$2,400", badgeEn: "Urgent", badgeEs: "Urgente" },
+      { accent: "var(--red)", priority: "urgent", en: "MT RIVER CONGO — Pilot gratification payment required", es: "MT RIVER CONGO — Pago de gratificación a prácticos requerido", badgeEn: "Urgent", badgeEs: "Urgente" },
+      { accent: "var(--amber)", priority: "attention", en: "MT VEGA STAR — OGEFREM certificate renewal due 30/06", es: "MT VEGA STAR — Renovación certificado OGEFREM vence 30/06", badgeEn: "Attention required", badgeEs: "Requiere atención" }
     ];
 
-    const REAL_EXAMPLES = {
-      diddi: {
-        label: "M/T DIDDI · ANGO-ANGO",
-        pdaPdf: "examples/pda-mt-diddi-calling-ango-ango.pdf",
-        fdaPdf: "examples/dxb-1577-25-ango-ango-fda.pdf",
-        context: {
-          vessel: "M/T DIDDI",
-          imo: "Sample vessel",
-          port: "ANGO-ANGO, DRC",
-          eta: "2025-11-22",
-          agent: "AMICONGO",
-          currency: "USD",
-          pdaReference: "PDA-SHACC-MAT-11-8121048-2025",
-          fdaReference: "FDA-DXB-1577-25",
-          date: "2025-11-20",
-          operationDate: "2025-11-23"
-        },
-        pdaItems: [
-          ["CVM / Pilot Bonus", "Pilotage", 7000, "From AMICONGO proforma invoice", 111271.44],
-          ["Harbour Master", "Port Dues", 5000, "Police, security visit, clearance and overtime"],
-          ["Quarantine", "Port Dues", 1000, "Sanitary control and overtime agent"],
-          ["Customs Office Overtime", "Other", 200, ""],
-          ["Matadi City Hall Pollution Tax", "Other", 250, ""],
-          ["Seamen's Pool Watchmen", "Husbandry", 3500, ""],
-          ["LMC Traffic Dues Gasoil", "Port Dues", 18634, "8,000 MT gasoil"],
-          ["LMC Traffic Dues Gasoline", "Port Dues", 6490, "2,400 MT gasoline"],
-          ["O.C.C Fees", "Port Dues", 52000, "5.00 USD / MT"],
-          ["Statistics Charges", "Port Dues", 10400, "1.00 USD / MT"],
-          ["Regulation Charges", "Port Dues", 10400, "1.00 USD / MT"],
-          ["OGEFREM Fees", "Other", 10207.60, "", 5200],
-          ["Agency Fees", "Agency Fee", 5000, ""]
-        ],
-        fdaItems: [
-          ["CVM / Pilot Bonus", "Pilotage", 8800, "Final pilot gratuifications", 111241.88],
-          ["Harbour Master", "Port Dues", 4400, "Final harbour master charges"],
-          ["Quarantine", "Port Dues", 250, "Final quarantine charges"],
-          ["Customs Office Overtime", "Other", 200, ""],
-          ["Matadi City Hall Pollution Tax", "Other", 250, ""],
-          ["Seamen's Pool Watchmen", "Husbandry", 3500, ""],
-          ["LMC Traffic Dues Gasoil", "Port Dues", 29121.67, "Final traffic right"],
-          ["O.C.C Fees", "Port Dues", 60717.37, "Final OCC fees"],
-          ["Statistics Charges", "Port Dues", 12159.85, ""],
-          ["Regulation Charges", "Port Dues", 12159.85, ""],
-          ["OGEFREM Fees", "Other", 15558.97, "", 6129.93],
-          ["Agency Fees", "Agency Fee", 5000, ""]
-        ]
+    const financialBreakdown = [
+      { labelEn: "OGEFREM / Freight Taxes", labelEs: "OGEFREM / Tasas de flete", percent: 26, value: "$487K", color: "#3b82f6" },
+      { labelEn: "OCC Fees / Port Dues", labelEs: "OCC Fees / Tasas portuarias", percent: 22, value: "$413K", color: "#14b8a6" },
+      { labelEn: "Navigation (CVM / Pilotage)", labelEs: "Navegación (CVM / Pilotaje)", percent: 17, value: "$319K", color: "#22c55e" },
+      { labelEn: "Agency Fees", labelEs: "Honorarios de agencia", percent: 13, value: "$243K", color: "#f59e0b" },
+      { labelEn: "Government (Customs/Taxes)", labelEs: "Gobierno (aduanas/impuestos)", percent: 11, value: "$206K", color: "#8b5cf6" },
+      { labelEn: "Sanitary / Health", labelEs: "Sanitario / Salud", percent: 6, value: "$112K", color: "#ec4899" },
+      { labelEn: "Other (ISPS/Bank/Petties)", labelEs: "Otros (ISPS/Banco/Petties)", percent: 3, value: "$61K", color: "#64748b" }
+    ];
+
+    const comparisonVariance = {
+      banana: 0.037,
+      ango: 0.037,
+      matadi: 0.037,
+      valencia: 0.024,
+      dubai: 0.018
+    };
+
+    const categoryFdaFactor = {
+      Navigation: 1.05,
+      "Port Authority": 0.98,
+      Government: 1.02,
+      Freight: 1.04,
+      Agency: 1.06,
+      Sanitary: 1.03,
+      Port: 1.01,
+      Bank: 1
+    };
+
+    const builderVesselIds = [0, 1, 2, 4];
+
+    const state = {
+      lang: "en",
+      page: "dashboard",
+      selectedVesselId: 0,
+      builder: {
+        vesselId: 0,
+        port: "banana",
+        operation: "Discharge",
+        cargoMT: 1600,
+        grt: 8251,
+        crew: 26,
+        loading: false,
+        generated: true
       },
-      ruby: {
-        label: "M/T AFRICAN RUBY · BANANA",
-        pdaPdf: "examples/pda-of-mt-african-ruby.pdf",
-        fdaPdf: "examples/dxb-1120-25-mt-african-ruby-banana-fda.pdf",
-        context: {
-          vessel: "M/T AFRICAN RUBY",
-          imo: "Sample vessel",
-          port: "BANANA BUOY #16, Congo River",
-          eta: "2025-08-28",
-          agent: "AMICONGO",
-          currency: "USD",
-          pdaReference: "PDA-BAN-FACT-4208031-2025",
-          fdaReference: "FDA-DXB-1120-25",
-          date: "2025-08-20",
-          operationDate: "2025-08-28 to 2025-08-31"
-        },
-        pdaItems: [
-          ["Pilotage", "Pilotage", 8500, "Pilot gratification and stay on board"],
-          ["Pilotine Hire", "Pilotage", 3085.60, ""],
-          ["Harbour Master Dues", "Port Dues", 4600, "Police and agent overtime"],
-          ["Sanitary Dues", "Port Dues", 1450, ""],
-          ["PTNTIC Tax", "Other", 800, ""],
-          ["Customs Overtime", "Other", 570, ""],
-          ["Pollution Tax", "Other", 475, ""],
-          ["A.N.R Intelligence Services", "Other", 200, ""],
-          ["OGEFREM", "Other", 1341.01, ""],
-          ["O.C.C Fees", "Port Dues", 8000, ""],
-          ["Agency Fees", "Agency Fee", 5000, ""],
-          ["Statistics Charges", "Port Dues", 1600, ""],
-          ["Regulation Charges", "Port Dues", 1600, ""],
-          ["LMC Traffic Right", "Port Dues", 3950.62, ""],
-          ["OGEFREM FERI", "Other", 0, "Amount shown in EUR on the PDA", 850]
-        ],
-        fdaItems: [
-          ["Pilotage", "Pilotage", 8500, ""],
-          ["Pilotine Hire", "Pilotage", 3085.60, ""],
-          ["Harbour Master Dues", "Port Dues", 4500, ""],
-          ["Sanitary Dues", "Port Dues", 1400, ""],
-          ["PTNTIC Tax", "Other", 800, ""],
-          ["Customs Overtime", "Other", 410, ""],
-          ["Pollution Tax", "Other", 475, ""],
-          ["A.N.R Intelligence Services", "Other", 200, ""],
-          ["OGEFREM", "Other", 925.10, ""],
-          ["O.C.C Fees", "Port Dues", 7992.20, ""],
-          ["State Agent Fees", "Agency Fee", 5000, "Final invoice wording"],
-          ["Statistics Charges", "Port Dues", 1600.57, ""],
-          ["Regulation Charges", "Port Dues", 1600.57, ""],
-          ["LMC Traffic Service", "Port Dues", 3952.03, ""],
-          ["Agency Fees", "Agency Fee", 2950, "Additional FDA agency fees"],
-          ["Clearance Charges", "Other", 267, "New item"],
-          ["ISPS", "Port Dues", 194, "New item"],
-          ["Communication & Petties", "Other", 157, "New item"],
-          ["Bank Charges", "Other", 188, "New item"]
-        ]
+      charts: {
+        bar: null,
+        trend: null
       }
     };
 
-    const app = document.getElementById("app");
-    const stepNav = document.getElementById("stepNav");
-    const progressCopy = document.getElementById("progressCopy");
-    const resetBtn = document.getElementById("resetBtn");
-    const toast = document.getElementById("toast");
+    function dual(en, es) {
+      return `<span class="en">${en}</span><span class="es">${es}</span>`;
+    }
 
-    let categoryChart = null;
-    let varianceChart = null;
-    let toastTimer = null;
+    function statusLabel(status) {
+      if (status === "in-port") return { en: "In Port", es: "En Puerto" };
+      if (status === "anchored") return { en: "Anchored", es: "Fondeado" };
+      return { en: "Underway", es: "En Ruta" };
+    }
 
-    const initialState = () => ({
-      step: 0,
-      context: { ...EMPTY_CONTEXT },
-      pdaLoaded: false,
-      fdaLoaded: false,
-      parsing: false,
-      parsingLabel: "",
-      droppedName: "",
-      docType: "PDA",
-      pdaItems: [],
-      fdaItems: [],
-      activeExample: "",
-      approvedEurAmounts: {},
-      comparisonFilter: "all",
-      editPdaDoc: true,
-      editFdaDoc: true,
-      showConversion: false,
-      conversionRate: 0.92,
-      approvedAmounts: {}
-    });
+    function statusClass(status) {
+      return status === "in-port" ? "in-port" : status === "anchored" ? "anchored" : "underway";
+    }
 
-    let state = initialState();
+    function statusColor(status) {
+      if (status === "in-port") return "var(--green)";
+      if (status === "anchored") return "var(--amber)";
+      return "var(--blue)";
+    }
 
-    function money(value, currency = "USD") {
-      const number = Number(value) || 0;
+    function money(value) {
       return new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency,
-        minimumFractionDigits: 2
-      }).format(number);
+        currency: "USD",
+        maximumFractionDigits: 0
+      }).format(Number(value) || 0);
     }
 
-    function eurMoney(value) {
-      return money(value, "EUR");
-    }
-
-    function numberFormat(value) {
+    function moneyPrecise(value) {
       return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       }).format(Number(value) || 0);
     }
 
-    function parseAmount(value) {
-      const parsed = Number(String(value).replace(/,/g, ""));
-      return Number.isFinite(parsed) ? parsed : 0;
+    function eurMoney(value) {
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "EUR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(Number(value) || 0);
     }
 
-    function cloneItems(items, currency = "USD") {
-      return items.map((row, index) => ({
-        id: `${Date.now()}-${index}-${row[0].replace(/\W+/g, "-")}`,
-        item: row[0],
-        category: row[1],
-        amount: row[2],
-        eurAmount: row[4] || 0,
-        currency,
-        notes: row[3] || ""
+    function compactMoney(value) {
+      return `$${Math.round((Number(value) || 0) / 1000)}K`;
+    }
+
+    function escapeAttr(value) {
+      return String(value).replace(/"/g, "&quot;");
+    }
+
+    function formatPercent(value) {
+      return `${(value * 100).toFixed(1)}%`;
+    }
+
+    function titleCase(value) {
+      return String(value)
+        .split(" ")
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
+    }
+
+    function getVessel(id) {
+      return vessels.find((vessel) => vessel.id === id) || vessels[0];
+    }
+
+    function extractCargoMT(cargo) {
+      const match = String(cargo).match(/([\d,]+)\s*MT/);
+      return match ? Number(match[1].replace(/,/g, "")) : 1600;
+    }
+
+    function syncBuilderFromVessel(vesselId) {
+      const vessel = getVessel(Number(vesselId));
+      const refPort = vessel.pdaPort;
+      state.builder.vesselId = vessel.id;
+      state.builder.port = refPort;
+      state.builder.operation = "Discharge";
+      state.builder.cargoMT = extractCargoMT(vessel.cargo);
+      state.builder.grt = vessel.grt;
+      state.builder.crew = pdaData[refPort].refCrew || 26;
+    }
+
+    function calcLine(line, portKey, inputMT, inputCrew, inputGRT) {
+      const port = pdaData[portKey];
+      if (line.unit === "fixed") return line.usdBase;
+      if (line.unit === "per MT") return Math.round(line.usdBase * (inputMT / port.refMT));
+      if (line.unit === "per crew") return Math.round(line.usdBase * (inputCrew / port.refCrew));
+      if (line.unit === "per GRT") return Math.round(line.usdBase * (inputGRT / port.refGRT));
+      return line.usdBase;
+    }
+
+    function computeBuilderPreview() {
+      const { vesselId, port, operation, cargoMT, grt, crew } = state.builder;
+      const vessel = getVessel(vesselId);
+      const portData = pdaData[port];
+      const lines = portData.lines.map((line) => ({
+        ...line,
+        amount: calcLine(line, port, cargoMT, crew, grt)
+      }));
+      const grouped = groupLinesByCategory(lines, "amount");
+      const total = lines.reduce((sum, line) => sum + line.amount, 0);
+      const ref = `PDA-2026-00${vessel.id + 1}`;
+      return {
+        vessel,
+        portData,
+        operation,
+        lines,
+        grouped,
+        total,
+        totalEur: Math.round(total * 0.924),
+        reference: ref
+      };
+    }
+
+    function groupLinesByCategory(lines, amountKey) {
+      const groups = {};
+      lines.forEach((line) => {
+        if (!groups[line.cat]) groups[line.cat] = [];
+        groups[line.cat].push(line);
+      });
+      return Object.entries(groups).map(([category, categoryLines]) => ({
+        category,
+        lines: categoryLines,
+        subtotal: categoryLines.reduce((sum, line) => sum + (Number(line[amountKey]) || 0), 0)
       }));
     }
 
-    function total(items, key = "amount") {
-      return items.reduce((sum, item) => sum + (Number(item[key]) || 0), 0);
-    }
-
-    function hasEur(items) {
-      return items.some(item => Number(item.eurAmount) > 0);
-    }
-
-    function sampleRowsToItems(rows) {
-      return rows.map(row => ({ amount: row[2] || 0, eurAmount: row[4] || 0 }));
-    }
-
-    function byCategory(items) {
-      return CATEGORIES.reduce((acc, category) => {
-        const amount = items
-          .filter(item => item.category === category)
-          .reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-        if (amount > 0) acc[category] = amount;
-        return acc;
-      }, {});
-    }
-
-    function normalizeName(name) {
-      return String(name)
-        .toLowerCase()
-        .replace(/\(.*?\)/g, "")
-        .replace(/&/g, "and")
-        .replace(/[^a-z0-9]+/g, " ")
-        .trim();
-    }
-
-    function canonicalName(name) {
-      const normalized = normalizeName(name);
-      for (const pdaName in ITEM_ALIASES) {
-        const fdaName = ITEM_ALIASES[pdaName];
-        if (normalized === normalizeName(pdaName) || normalized === normalizeName(fdaName)) {
-          return normalizeName(pdaName);
-        }
-      }
-      return normalized;
-    }
-
-    function compareItems() {
-      const pdaMap = new Map();
-      const fdaMap = new Map();
-      const order = [];
-
-      state.pdaItems.forEach(item => {
-        const key = canonicalName(item.item);
-        pdaMap.set(key, item);
-        order.push(key);
-      });
-
-      state.fdaItems.forEach(item => {
-        const key = canonicalName(item.item);
-        fdaMap.set(key, item);
-        if (!order.includes(key)) order.push(key);
-      });
-
-      return order.map(key => {
-        const pda = pdaMap.get(key) || null;
-        const fda = fdaMap.get(key) || null;
-        const pdaAmount = pda ? Number(pda.amount) || 0 : 0;
-        const fdaAmount = fda ? Number(fda.amount) || 0 : 0;
-        const pdaEur = pda ? Number(pda.eurAmount) || 0 : 0;
-        const fdaEur = fda ? Number(fda.eurAmount) || 0 : 0;
-        const deviation = fdaAmount - pdaAmount;
-        const eurDeviation = fdaEur - pdaEur;
-        const deviationPct = pdaAmount === 0 ? 100 : (deviation / pdaAmount) * 100;
-        const absPct = Math.abs(deviationPct);
-        let status = "success";
-        let statusLabel = "On Target";
-        let statusIcon = "🟢";
-        if (!pda || !fda || absPct > 15) {
-          status = "danger";
-          statusLabel = "Escalate";
-          statusIcon = "🔴";
-        } else if (absPct > 5) {
-          status = "warning";
-          statusLabel = "Review";
-          statusIcon = "🟡";
-        }
+    function computeComparison(vessel) {
+      const portKey = vessel.pdaPort;
+      const baseLines = pdaData[portKey].lines.map((line) => ({
+        ...line,
+        amount: line.usdBase
+      }));
+      const pdaTotal = baseLines.reduce((sum, line) => sum + line.amount, 0);
+      const variance = comparisonVariance[portKey] || 0.03;
+      const fdaTotal = Math.round(pdaTotal * (1 + variance));
+      const difference = fdaTotal - pdaTotal;
+      const groupedPda = groupLinesByCategory(baseLines, "amount");
+      const categoryRows = groupedPda.map((group) => {
+        const factor = categoryFdaFactor[group.category] || (1 + variance);
+        const fdaSubtotal = Math.round(group.subtotal * factor);
         return {
-          key,
-          item: pda ? pda.item : fda.item,
-          category: (fda || pda).category,
-          pda,
-          fda,
-          pdaAmount,
-          fdaAmount,
-          pdaEur,
-          fdaEur,
-          deviation,
-          eurDeviation,
-          deviationPct,
-          status,
-          statusLabel,
-          statusIcon,
-          note: !pda ? "New item - not in PDA" : (!fda ? "Missing in FDA" : "")
+          category: group.category,
+          pdaSubtotal: group.subtotal,
+          fdaSubtotal,
+          diff: fdaSubtotal - group.subtotal
         };
-      });
+      }).sort((a, b) => b.pdaSubtotal - a.pdaSubtotal).slice(0, 5);
+
+      return {
+        lines: groupedPda,
+        pdaTotal,
+        fdaTotal,
+        variance,
+        difference,
+        categoryRows
+      };
     }
 
-    function varianceLevel(percent) {
-      const abs = Math.abs(percent);
-      if (abs > 15) return "danger";
-      if (abs > 5) return "warning";
-      return "success";
+    function unitLabel(unit) {
+      const labels = {
+        fixed: { en: "Fixed", es: "Fijo" },
+        "per MT": { en: "Per MT", es: "Por MT" },
+        "per crew": { en: "Per crew", es: "Por tripulante" },
+        "per GRT": { en: "Per GRT", es: "Por GRT" }
+      };
+      const label = labels[unit] || { en: unit, es: unit };
+      return dual(label.en, label.es);
     }
 
-    function setStep(step) {
-      state.step = Math.max(0, Math.min(4, step));
-      render();
-    }
-
-    function showToast(title, message) {
-      clearTimeout(toastTimer);
-      toast.innerHTML = `<strong>${title}</strong><span>${message}</span>`;
-      toast.classList.add("show");
-      toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
-    }
-
-    function startParsing(type, done) {
-      state.parsing = true;
-      state.parsingLabel = type === "FDA" ? "Reconciling final invoices" : "Extracting PDA line items";
-      render();
-      setTimeout(() => {
-        state.parsing = false;
-        state.parsingLabel = "";
-        done();
-      }, 1500);
-    }
-
-    function loadPdaDemo() {
-      startParsing("PDA", () => {
-        state.context = { ...MOCK_CONTEXT };
-        state.pdaItems = cloneItems(MOCK_PDA_ITEMS, "USD");
-        state.fdaItems = [];
-        state.fdaLoaded = false;
-        state.activeExample = "";
-        state.approvedEurAmounts = {};
-        state.pdaLoaded = true;
-        showToast("PDA extracted", "12 disbursement lines structured for review.");
-        setStep(1);
-      });
-    }
-
-    function loadPdaExample(key) {
-      const sample = REAL_EXAMPLES[key];
-      if (!sample) return;
-      startParsing("PDA", () => {
-        state.context = { ...sample.context };
-        state.pdaItems = cloneItems(sample.pdaItems, "USD");
-        state.fdaItems = [];
-        state.fdaLoaded = false;
-        state.approvedAmounts = {};
-        state.approvedEurAmounts = {};
-        state.activeExample = key;
-        state.pdaLoaded = true;
-        showToast("Sample PDA loaded", `${sample.label} is ready for validation.`);
-        setStep(1);
-      });
-    }
-
-    function loadFdaDemo() {
-      startParsing("FDA", () => {
-        state.fdaItems = cloneItems(MOCK_FDA_ITEMS, "USD");
-        state.fdaLoaded = true;
-        state.activeExample = state.activeExample || "";
-        state.approvedAmounts = {};
-        state.approvedEurAmounts = {};
-        compareItems().forEach(row => {
-          state.approvedAmounts[row.key] = row.fdaAmount;
-          state.approvedEurAmounts[row.key] = row.fdaEur;
-        });
-        showToast("FDA compared", "Final DA matched against the active PDA.");
-        render();
-      });
-    }
-
-    function loadFdaExample(key) {
-      const sample = REAL_EXAMPLES[key];
-      if (!sample) return;
-      startParsing("FDA", () => {
-        if (!state.pdaLoaded || state.activeExample !== key) {
-          state.context = { ...sample.context };
-          state.pdaItems = cloneItems(sample.pdaItems, "USD");
-          state.pdaLoaded = true;
-        }
-        state.fdaItems = cloneItems(sample.fdaItems, "USD");
-        state.fdaLoaded = true;
-        state.activeExample = key;
-        state.approvedAmounts = {};
-        state.approvedEurAmounts = {};
-        compareItems().forEach(row => {
-          state.approvedAmounts[row.key] = row.fdaAmount;
-          state.approvedEurAmounts[row.key] = row.fdaEur;
-        });
-        showToast("Sample FDA compared", `${sample.label} final account matched to its PDA.`);
-        render();
-      });
-    }
-
-    function simulateDroppedFile(fileName, type) {
-      state.droppedName = fileName;
-      if (type === "FDA") {
-        loadFdaDemo();
-      } else {
-        loadPdaDemo();
-      }
-    }
-
-    function inputValue(value) {
-      return String(value ?? "").replace(/"/g, "&quot;");
-    }
-
-    function renderNav() {
-      stepNav.innerHTML = STEPS.map((label, index) => `
-        <button class="step-pill ${index === state.step ? "active" : ""}" type="button" data-step="${index}" ${canNavigate(index) ? "" : "disabled"}>
-          <span class="step-number">${String(index + 1).padStart(2, "0")}</span>
-          <span class="step-label">${label}</span>
-        </button>
-      `).join("");
-      progressCopy.textContent = `Step ${state.step + 1} of 5`;
-      stepNav.querySelectorAll("[data-step]").forEach(button => {
-        button.addEventListener("click", () => {
-          const next = Number(button.dataset.step);
-          if (canNavigate(next)) setStep(next);
-        });
-      });
-    }
-
-    function canNavigate(step) {
-      if (step === 0) return true;
-      if (step >= 1 && !state.pdaLoaded) return false;
-      if (step >= 4 && !state.fdaLoaded) return false;
-      return true;
-    }
-
-    function uploadZoneHTML(type) {
-      const title = type === "FDA" ? "Drop FDA document here" : "Drop PDA document here";
-      const subtitle = type === "FDA" ? "PDF, Excel, invoice pack, or paste email body" : "PDF, Excel, or paste email body";
-      const buttonText = type === "FDA" ? "Load Demo FDA" : "Load Demo Data";
-      return `
-        <div class="upload-zone ${state.parsing ? "parsing" : ""}" id="${type.toLowerCase()}Drop">
-          <div class="upload-inner">
-            <div class="doc-icon" aria-hidden="true"><span class="scan-line"></span></div>
-            <p class="upload-copy">${state.parsing ? state.parsingLabel : `${title} (${subtitle})`}</p>
-            <div class="badges" aria-label="Accepted formats">
-              <span class="badge">PDF</span>
-              <span class="badge">XLSX</span>
-              <span class="badge">TXT</span>
-              <span class="badge">EMAIL</span>
-            </div>
-            ${state.droppedName ? `<span class="muted mono">${state.droppedName}</span>` : ""}
-            <button class="btn primary" id="${type.toLowerCase()}DemoBtn" type="button" ${state.parsing ? "disabled" : ""}>${buttonText}</button>
-          </div>
-        </div>
-      `;
-    }
-
-    function exampleLibraryHTML(type) {
-      const isFda = type === "FDA";
-      return `
-        <div class="sample-library">
-          <div class="sample-library-head">
-            <span>${isFda ? "Real FDA examples" : "Real PDA examples"}</span>
-            <span>${Object.keys(REAL_EXAMPLES).length} sample pairs</span>
-          </div>
-          <div class="sample-grid">
-            ${Object.entries(REAL_EXAMPLES).map(([key, sample]) => {
-              const items = isFda ? sample.fdaItems : sample.pdaItems;
-              const pdf = isFda ? sample.fdaPdf : sample.pdaPdf;
-              const sampleItems = sampleRowsToItems(items);
-              const usdTotal = money(total(sampleItems));
-              const eurTotal = total(sampleItems, "eurAmount");
-              const totalLabel = eurTotal > 0 ? `${usdTotal} · ${eurMoney(eurTotal)}` : usdTotal;
-              const isActive = state.activeExample === key;
-              return `
-                <div class="sample-card">
-                  <h3>${sample.label}</h3>
-                  <div class="sample-meta">
-                    <span>${isFda ? sample.context.fdaReference : sample.context.pdaReference}</span>
-                    <span>${items.length} extracted lines · ${totalLabel}</span>
-                    <span>${sample.context.agent} · ${sample.context.port}</span>
-                  </div>
-                  <div class="sample-actions">
-                    <a class="btn small" href="${pdf}" target="_blank" rel="noopener">View PDF</a>
-                    <button class="btn small ${isActive ? "primary" : ""}" type="button" data-load-${type.toLowerCase()}-example="${key}">
-                      ${isFda ? "Load FDA sample" : "Load PDA sample"}
-                    </button>
-                  </div>
-                </div>
-              `;
-            }).join("")}
-          </div>
-        </div>
-      `;
-    }
-
-    function attachDrop(zoneId, type) {
-      const zone = document.getElementById(zoneId);
-      if (!zone) return;
-      ["dragenter", "dragover"].forEach(eventName => {
-        zone.addEventListener(eventName, event => {
-          event.preventDefault();
-          zone.classList.add("is-over");
-        });
-      });
-      ["dragleave", "drop"].forEach(eventName => {
-        zone.addEventListener(eventName, event => {
-          event.preventDefault();
-          zone.classList.remove("is-over");
-        });
-      });
-      zone.addEventListener("drop", event => {
-        const file = event.dataTransfer.files[0];
-        simulateDroppedFile(file ? file.name : `${type}_email_body.txt`, type);
-      });
-    }
-
-    function contextInputsHTML() {
-      return `
-        <div class="form-grid">
-          <div class="field">
-            <label for="vesselName">Vessel Name</label>
-            <input id="vesselName" value="${inputValue(state.context.vessel)}" data-context="vessel">
-          </div>
-          <div class="field">
-            <label for="imoNumber">IMO Number</label>
-            <input id="imoNumber" value="${inputValue(state.context.imo)}" data-context="imo">
-          </div>
-          <div class="field">
-            <label for="portCall">Port of Call</label>
-            <input id="portCall" value="${inputValue(state.context.port)}" data-context="port">
-          </div>
-          <div class="field">
-            <label for="etaDate">ETA</label>
-            <input id="etaDate" type="date" value="${inputValue(state.context.eta)}" data-context="eta">
-          </div>
-        </div>
-      `;
-    }
-
-    function screenUploadPda() {
-      app.innerHTML = `
-        <section class="screen">
-          <div class="page-head">
-            <div>
-              <span class="eyebrow">PDA Intake</span>
-              <h1>Disbursement account automation for West Africa port calls</h1>
-            </div>
-            <div class="segmented" aria-label="Document type">
-              <button type="button" class="${state.docType === "PDA" ? "active" : ""}" data-doc-type="PDA">Proforma DA (PDA)</button>
-              <button type="button" class="${state.docType === "FDA" ? "active" : ""}" data-doc-type="FDA">Final DA (FDA)</button>
-            </div>
-          </div>
-          <div class="panel panel-pad">
-            ${uploadZoneHTML("PDA")}
-            ${exampleLibraryHTML("PDA")}
-            ${contextInputsHTML()}
-          </div>
-        </section>
-      `;
-      document.getElementById("pdaDemoBtn").addEventListener("click", loadPdaDemo);
-      document.querySelectorAll("[data-load-pda-example]").forEach(button => {
-        button.addEventListener("click", () => loadPdaExample(button.dataset.loadPdaExample));
-      });
-      document.querySelectorAll("[data-doc-type]").forEach(button => {
-        button.addEventListener("click", () => {
-          state.docType = button.dataset.docType;
-          render();
-        });
-      });
-      document.querySelectorAll("[data-context]").forEach(input => {
-        input.addEventListener("input", () => {
-          state.context[input.dataset.context] = input.value;
-        });
-      });
-      attachDrop("pdaDrop", "PDA");
-    }
-
-    function contextStripHTML() {
-      const entries = [
-        ["Vessel", state.context.vessel],
-        ["IMO", state.context.imo],
-        ["Port", state.context.port],
-        ["Date", state.context.date],
-        ["Agent", state.context.agent],
-        ["Currency", state.context.currency]
+    function timelineForStatus(status) {
+      const steps = [
+        { labelEn: "Nomination", labelEs: "Nominación", copyEn: "Commercial confirmation received", copyEs: "Confirmación comercial recibida" },
+        { labelEn: "PDA Issued", labelEs: "PDA Emitida", copyEn: "Port cost forecast sent to owner", copyEs: "Pronóstico de costos enviado al armador" },
+        { labelEn: "Port Operations", labelEs: "Operación Portuaria", copyEn: "Live execution window for the call", copyEs: "Ventana operativa en ejecución" },
+        { labelEn: "FDA Final", labelEs: "FDA Final", copyEn: "Final account and invoices under closure", copyEs: "Cuenta final e invoices en cierre" },
+        { labelEn: "Settlement", labelEs: "Liquidación", copyEn: "Post-call balance and reconciliation", copyEs: "Balance y conciliación post escala" }
       ];
-      return `
-        <div class="context-strip">
-          ${entries.map(([label, value]) => `
-            <div class="context-item"><span>${label}</span><strong>${value}</strong></div>
-          `).join("")}
-        </div>
-      `;
-    }
 
-    function optionsHTML(options, selected) {
-      return options.map(option => `<option value="${option}" ${option === selected ? "selected" : ""}>${option}</option>`).join("");
-    }
-
-    function renderPdaTableRows() {
-      return state.pdaItems.map((item, index) => `
-        <tr>
-          <td>${index + 1}</td>
-          <td><input value="${inputValue(item.item)}" data-pda-field="item" data-id="${item.id}"></td>
-          <td><select data-pda-field="category" data-id="${item.id}">${optionsHTML(CATEGORIES, item.category)}</select></td>
-          <td class="amount"><input value="${numberFormat(item.amount)}" data-pda-field="amount" data-id="${item.id}"></td>
-          <td class="amount"><input value="${Number(item.eurAmount) ? numberFormat(item.eurAmount) : ""}" data-pda-field="eurAmount" data-id="${item.id}" placeholder="—"></td>
-          <td><select data-pda-field="currency" data-id="${item.id}">${optionsHTML(CURRENCIES, item.currency)}</select></td>
-          <td><input value="${inputValue(item.notes)}" data-pda-field="notes" data-id="${item.id}" placeholder="Optional"></td>
-          <td class="row-actions"><button class="trash" type="button" title="Delete row" data-delete-pda="${item.id}">×</button></td>
-        </tr>
-      `).join("");
-    }
-
-    function screenReviewPda() {
-      app.innerHTML = `
-        <section class="screen">
-          <div class="page-head">
-            <div>
-              <span class="eyebrow">PDA Review & Validation</span>
-              <h1>Validate extracted port disbursement lines</h1>
-            </div>
-            <button class="btn" id="addRowBtn" type="button">Add Row</button>
-          </div>
-          ${contextStripHTML()}
-          <div class="grid-two">
-            <div>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Item / Service</th>
-                      <th>Category</th>
-                      <th class="amount">Amount USD</th>
-                      <th class="amount">Amount EUR</th>
-                      <th>Currency</th>
-                      <th>Notes</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${renderPdaTableRows()}
-                    <tr class="grand-row">
-                      <td colspan="3">Grand Total</td>
-                      <td class="amount">${money(total(state.pdaItems))}</td>
-                      <td class="amount">${hasEur(state.pdaItems) ? eurMoney(total(state.pdaItems, "eurAmount")) : "—"}</td>
-                      <td colspan="3"></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="footer-actions">
-                <button class="btn" type="button" id="backUpload">← Back</button>
-                <button class="btn primary" type="button" id="goPdaDoc">Generate Client PDA →</button>
-              </div>
-            </div>
-            <aside class="panel">
-              <div class="panel-title">
-                <h3>Total by Category</h3>
-                <span class="badge">${money(total(state.pdaItems))}</span>
-              </div>
-              <div class="chart-box">
-                <canvas id="categoryChart" height="220"></canvas>
-                <div id="categoryFallback"></div>
-                <div class="side-list" id="categoryTotals"></div>
-              </div>
-            </aside>
-          </div>
-        </section>
-      `;
-      attachPdaTableEvents();
-      document.getElementById("addRowBtn").addEventListener("click", () => {
-        state.pdaItems.push({
-          id: `${Date.now()}-new-row`,
-          item: "New Disbursement Item",
-          category: "Other",
-          amount: 0,
-          eurAmount: 0,
-          currency: "USD",
-          notes: ""
-        });
-        render();
-      });
-      document.getElementById("backUpload").addEventListener("click", () => setStep(0));
-      document.getElementById("goPdaDoc").addEventListener("click", () => setStep(2));
-      renderCategoryChart();
-    }
-
-    function attachPdaTableEvents() {
-      document.querySelectorAll("[data-pda-field]").forEach(input => {
-        input.addEventListener("change", () => {
-          const item = state.pdaItems.find(row => row.id === input.dataset.id);
-          if (!item) return;
-          const field = input.dataset.pdaField;
-          item[field] = field === "amount" || field === "eurAmount" ? parseAmount(input.value) : input.value;
-          render();
-        });
-      });
-      document.querySelectorAll("[data-delete-pda]").forEach(button => {
-        button.addEventListener("click", () => {
-          state.pdaItems = state.pdaItems.filter(row => row.id !== button.dataset.deletePda);
-          render();
-        });
-      });
-    }
-
-    function renderCategoryChart() {
-      const data = byCategory(state.pdaItems);
-      const labels = Object.keys(data);
-      const values = Object.values(data);
-      const totals = document.getElementById("categoryTotals");
-      if (totals) {
-        totals.innerHTML = labels.map((label, index) => `
-          <div class="side-list-row"><span>${label}</span><strong>${money(values[index])}</strong></div>
-        `).join("");
-      }
-      const canvas = document.getElementById("categoryChart");
-      const fallback = document.getElementById("categoryFallback");
-      if (!canvas) return;
-      if (!window.Chart) {
-        canvas.style.display = "none";
-        renderFallbackBars(fallback, labels, values);
-        return;
-      }
-      if (categoryChart) categoryChart.destroy();
-      categoryChart = new Chart(canvas, {
-        type: "doughnut",
-        data: {
-          labels,
-          datasets: [{
-            data: values,
-            backgroundColor: ["#c9a84c", "#2ecc71", "#f39c12", "#e74c3c", "#6aa9ff", "#8a9ab8"],
-            borderColor: "#0f1829",
-            borderWidth: 3
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { labels: { color: "#e8edf5", font: { family: "Inter" } } }
+      return steps.map((step, index) => {
+        let stateLabel = { en: "Pending", es: "Pendiente" };
+        let cls = "";
+        if (status === "in-port") {
+          if (index < 2) {
+            cls = "done";
+            stateLabel = { en: "✓ Complete", es: "✓ Completo" };
+          } else if (index === 2) {
+            cls = "active";
+            stateLabel = { en: "🔵 Active", es: "🔵 Activo" };
+          }
+        } else if (status === "underway") {
+          if (index < 2) {
+            cls = "done";
+            stateLabel = { en: "✓ Complete", es: "✓ Completo" };
+          }
+        } else if (status === "anchored") {
+          if (index < 3) {
+            cls = index < 2 ? "done" : "active";
+            stateLabel = index < 2 ? { en: "✓ Complete", es: "✓ Completo" } : { en: "🔵 Active", es: "🔵 Activo" };
           }
         }
+        return { ...step, cls, stateLabel };
       });
     }
 
-    function renderFallbackBars(container, labels, values) {
-      if (!container) return;
-      const max = Math.max(...values, 1);
-      container.innerHTML = `
-        <div class="fallback-chart">
-          ${labels.map((label, index) => `
-            <div class="fallback-bar">
-              <span>${label} · ${money(values[index])}</span>
-              <div class="fallback-meter"><span style="width:${Math.max(4, values[index] / max * 100)}%"></span></div>
-            </div>
-          `).join("")}
-        </div>
-      `;
+    function destroyCharts() {
+      if (state.charts.bar) {
+        state.charts.bar.destroy();
+        state.charts.bar = null;
+      }
+      if (state.charts.trend) {
+        state.charts.trend.destroy();
+        state.charts.trend = null;
+      }
     }
 
-    function documentDetailsHTML() {
-      const entries = [
-        ["Vessel", state.context.vessel],
-        ["IMO", state.context.imo],
-        ["Port of Call", state.context.port],
-        ["ETA", state.context.eta]
-      ];
-      return `
-        <div class="doc-details">
-          ${entries.map(([label, value]) => `
-            <div class="doc-detail"><span>${label}</span><strong>${value}</strong></div>
-          `).join("")}
-        </div>
-      `;
-    }
-
-    function letterheadHTML(title, reference) {
-      return `
-        <div class="doc-letterhead">
-          <div>
-            <strong>NEW MARITIME</strong>
-            <span>Marine Disbursement Accounts</span>
-          </div>
-          <div class="doc-ref">
-            <div>Reference: ${reference}</div>
-            <div>Date: ${state.context.date}</div>
-            <div>Currency: ${state.context.currency}</div>
-          </div>
-        </div>
-        <div class="doc-title">${title}</div>
-      `;
-    }
-
-    function screenPdaDocument() {
-      const showEur = hasEur(state.pdaItems);
-      app.innerHTML = `
-        <section class="screen">
-          <div class="page-head">
+    function renderDashboard() {
+      const selectedVessel = getVessel(state.selectedVesselId);
+      const dashboardEl = document.getElementById("page-dashboard");
+      dashboardEl.innerHTML = `
+        <section class="intro-card">
+          <div class="intro-grid">
             <div>
-              <span class="eyebrow">Client PDA Output</span>
-              <h1>Client-ready proforma disbursement account</h1>
+              <span class="eyebrow">${dual("Global Maritime Control Layer", "Capa Global de Control Marítimo")}</span>
+              <h1 class="intro-title">${dual("Fleet visibility, PDA automation and voyage-level financial control.", "Visibilidad de flota, automatización de PDA y control financiero por voyage.")}</h1>
+              <p class="intro-copy">${dual("This interactive demo shows how New Maritime can replace fragmented spreadsheets, email chains and manual disbursement workflows with one operational surface for directors, team leads and operators.", "Esta demo interactiva muestra cómo New Maritime puede reemplazar planillas fragmentadas, cadenas de correo y flujos manuales de desembolso con una sola superficie operativa para directores, team leads y operadores.")}</p>
             </div>
-          </div>
-          <div class="document-grid">
-            <article class="document-preview" id="printArea">
-              ${letterheadHTML("Proforma Disbursement Account", state.context.pdaReference)}
-              ${documentDetailsHTML()}
-              <div class="doc-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Item / Service</th>
-                      <th>Category</th>
-                      <th class="amount">Amount USD</th>
-                      ${showEur ? `<th class="amount">Amount EUR</th>` : ""}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${state.pdaItems.map((item, index) => `
-                      <tr>
-                        <td>${index + 1}</td>
-                        <td>${item.item}</td>
-                        <td>${item.category}</td>
-                        <td class="amount"><input ${state.editPdaDoc ? "" : "disabled"} value="${numberFormat(item.amount)}" data-doc-pda-amount="${item.id}"></td>
-                        ${showEur ? `<td class="amount"><input ${state.editPdaDoc ? "" : "disabled"} value="${Number(item.eurAmount) ? numberFormat(item.eurAmount) : ""}" data-doc-pda-eur="${item.id}" placeholder="—"></td>` : ""}
-                      </tr>
-                    `).join("")}
-                  </tbody>
-                </table>
+            <div class="intro-stats">
+              <div class="intro-stat">
+                <strong>${dual("10 operators", "10 operadores")}</strong>
+                <span>${dual("Spain, Dubai and Argentina coordinated from a single live board.", "España, Dubái y Argentina coordinados desde un solo tablero en vivo.")}</span>
               </div>
-              <div class="doc-total">
-                <span>Grand Total USD</span><span>${money(total(state.pdaItems))}</span>
-                ${showEur ? `<span>Grand Total EUR</span><span>${eurMoney(total(state.pdaItems, "eurAmount"))}</span>` : ""}
+              <div class="intro-stat">
+                <strong>${dual("DRC focus", "Foco DRC")}</strong>
+                <span>${dual("Real Banana and Ango Ango cost structures seeded from client documentation.", "Estructuras reales de costos de Banana y Ango Ango sembradas desde documentación del cliente.")}</span>
               </div>
-              <div class="doc-note">This Proforma DA is subject to final reconciliation. All figures in USD unless otherwise stated.</div>
-            </article>
-            ${documentControlsHTML("PDA")}
-          </div>
-          <div class="footer-actions">
-            <button class="btn" type="button" id="backReview">← Back to Review</button>
-            <button class="btn primary" type="button" id="goFdaCompare">Upload FDA & Compare →</button>
+              <div class="intro-stat">
+                <strong>${dual("One-click detail", "Detalle en un click")}</strong>
+                <span>${dual("Map or fleet list interactions open the active voyage cost picture instantly.", "Las interacciones en mapa o lista abren instantáneamente la foto de costos del voyage activo.")}</span>
+              </div>
+              <div class="intro-stat">
+                <strong>${dual("No backend", "Sin backend")}</strong>
+                <span>${dual("Single-file demo ready for GitHub Pages, boardroom walkthroughs and portable sharing.", "Demo single-file lista para GitHub Pages, walkthroughs de directorio y distribución portátil.")}</span>
+              </div>
+            </div>
           </div>
         </section>
-      `;
-      attachPdaDocumentEvents();
-      document.getElementById("backReview").addEventListener("click", () => setStep(1));
-      document.getElementById("goFdaCompare").addEventListener("click", () => setStep(3));
-    }
 
-    function documentControlsHTML(kind) {
-      return `
-        <aside class="controls-stack">
-          <div class="control-card">
-            <div class="toggle-row">
-              <span>Edit amounts</span>
-              <label class="switch">
-                <input type="checkbox" id="${kind.toLowerCase()}EditToggle" ${kind === "PDA" ? (state.editPdaDoc ? "checked" : "") : (state.editFdaDoc ? "checked" : "")}>
-                <span class="slider"></span>
-              </label>
-            </div>
+        <section class="kpi-grid">
+          <div class="card kpi-card kpi-blue">
+            <div class="label">${dual("Active Vessels", "Naves Activas")}</div>
+            <div class="value" data-counter data-format="int" data-target="9">0</div>
+            <div class="subcopy">${dual("Global operational surface with real seed vessels", "Superficie operativa global con naves semilla reales")}</div>
           </div>
-          <div class="control-card">
-            <div class="toggle-row">
-              <span>Currency converter</span>
-              <label class="switch">
-                <input type="checkbox" id="conversionToggle" ${state.showConversion ? "checked" : ""}>
-                <span class="slider"></span>
-              </label>
-            </div>
-            ${state.showConversion ? `
-              <div class="field" style="margin-top:12px">
-                <label for="conversionRate">USD to EUR rate</label>
-                <input id="conversionRate" type="number" step="0.01" value="${state.conversionRate}">
-              </div>
-            ` : ""}
+          <div class="card kpi-card kpi-teal">
+            <div class="label">${dual("Month Disbursements", "Desembolsos del Mes")}</div>
+            <div class="value" data-counter data-format="moneyk" data-target="1840">0</div>
+            <div class="subcopy">${dual("Estimated total monthly exposure across active voyages", "Exposición mensual estimada a través de voyages activos")}</div>
           </div>
-          <div class="control-card controls-stack">
-            <button class="btn primary" type="button" id="exportPdfBtn">📄 Export PDF</button>
-            <button class="btn" type="button" id="exportExcelBtn">📊 Export Excel</button>
+          <div class="card kpi-card kpi-green">
+            <div class="label">${dual("PDAs Generated", "PDAs Generadas")}</div>
+            <div class="value" data-counter data-format="int" data-target="47">0</div>
+            <div class="subcopy">${dual("Automated cost forecasts without manual template copying", "Pronósticos automáticos de costos sin copiar plantillas manualmente")}</div>
           </div>
-        </aside>
-      `;
-    }
+          <div class="card kpi-card kpi-amber">
+            <div class="label">${dual("Ports Active", "Puertos Activos")}</div>
+            <div class="value" data-counter data-format="int" data-target="12">0</div>
+            <div class="subcopy">DRC · Spain · UAE · Argentina</div>
+          </div>
+        </section>
 
-    function attachPdaDocumentEvents() {
-      document.querySelectorAll("[data-doc-pda-amount]").forEach(input => {
-        input.addEventListener("change", () => {
-          const item = state.pdaItems.find(row => row.id === input.dataset.docPdaAmount);
-          if (item) item.amount = parseAmount(input.value);
-          render();
-        });
-      });
-      document.querySelectorAll("[data-doc-pda-eur]").forEach(input => {
-        input.addEventListener("change", () => {
-          const item = state.pdaItems.find(row => row.id === input.dataset.docPdaEur);
-          if (item) item.eurAmount = parseAmount(input.value);
-          render();
-        });
-      });
-      const editToggle = document.getElementById("pdaEditToggle");
-      if (editToggle) editToggle.addEventListener("change", () => {
-        state.editPdaDoc = editToggle.checked;
-        render();
-      });
-      attachDocumentControls("PDA");
-    }
-
-    function attachDocumentControls(kind) {
-      const conversionToggle = document.getElementById("conversionToggle");
-      if (conversionToggle) conversionToggle.addEventListener("change", () => {
-        state.showConversion = conversionToggle.checked;
-        render();
-      });
-      const conversionRate = document.getElementById("conversionRate");
-      if (conversionRate) conversionRate.addEventListener("input", () => {
-        state.conversionRate = Number(conversionRate.value) || 0;
-      });
-      document.getElementById("exportPdfBtn").addEventListener("click", () => window.print());
-      document.getElementById("exportExcelBtn").addEventListener("click", () => {
-        if (kind === "PDA") exportPdaExcel();
-        else exportFdaExcel();
-      });
-    }
-
-    function exportPdaExcel() {
-      if (!window.XLSX) {
-        showToast("Excel export unavailable", "SheetJS CDN is not loaded in this browser session.");
-        return;
-      }
-      const rows = [
-        ["Reference", state.context.pdaReference],
-        ["Vessel", state.context.vessel],
-        ["IMO", state.context.imo],
-        ["Port of Call", state.context.port],
-        [],
-        ["#", "Item / Service", "Category", "Amount USD", "Amount EUR", "Currency", "Notes"],
-        ...state.pdaItems.map((item, index) => [index + 1, item.item, item.category, item.amount, item.eurAmount || "", item.currency, item.notes]),
-        [],
-        ["Grand Total", "", "", total(state.pdaItems), total(state.pdaItems, "eurAmount") || "", "USD / EUR", ""]
-      ];
-      const wb = XLSX.utils.book_new();
-      const ws = XLSX.utils.aoa_to_sheet(rows);
-      XLSX.utils.book_append_sheet(wb, ws, "PDA Items");
-      XLSX.writeFile(wb, `${state.context.pdaReference}.xlsx`);
-      showToast("Excel exported", "PDA workbook generated.");
-    }
-
-    function screenFdaComparison() {
-      if (!state.fdaLoaded) {
-        app.innerHTML = `
-          <section class="screen">
-            <div class="page-head">
+        <section class="dashboard-grid">
+          <article class="card map-card">
+            <div class="card-header">
               <div>
-                <span class="eyebrow">FDA Intake</span>
-                <h1>Upload final disbursement account for variance review</h1>
+                <h3>${dual("Global Tracking Map", "Mapa Global de Seguimiento")}</h3>
+                <p>${dual("Static SVG with animated routes and live fleet pulses.", "SVG estático con rutas animadas y pulsos activos de flota.")}</p>
               </div>
             </div>
-            <div class="panel panel-pad">
-              ${uploadZoneHTML("FDA")}
-              ${exampleLibraryHTML("FDA")}
+            <div class="map-frame">
+              <div class="map-overlay-title">${dual("Global Vessel Tracking", "Seguimiento Global de Naves")}</div>
+              <svg class="world-map" viewBox="0 0 900 400" aria-label="Global vessel tracking map">
+                <defs>
+                  <linearGradient id="routeGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="rgba(59,130,246,0.05)"></stop>
+                    <stop offset="50%" stop-color="rgba(59,130,246,0.5)"></stop>
+                    <stop offset="100%" stop-color="rgba(20,184,166,0.45)"></stop>
+                  </linearGradient>
+                </defs>
+                <rect width="900" height="400" fill="#0d1526"></rect>
+                <line x1="0" y1="200" x2="900" y2="200" stroke="rgba(59,130,246,0.05)" stroke-width="1"></line>
+                <line x1="450" y1="0" x2="450" y2="400" stroke="rgba(59,130,246,0.05)" stroke-width="1"></line>
+
+                <path d="M65 120 C90 86 165 66 238 82 C286 92 322 122 344 160 C350 176 342 190 310 196 C272 202 246 208 224 232 C198 258 142 270 92 252 C62 238 50 204 48 168 C48 150 54 136 65 120Z" fill="#1a2a40" stroke="rgba(59,130,246,0.2)"></path>
+                <path d="M364 88 C388 58 452 42 520 52 C572 58 634 78 660 112 C672 128 670 154 638 170 C608 186 572 188 560 210 C548 234 510 246 470 238 C436 232 414 214 392 214 C372 214 356 198 356 172 C356 148 352 114 364 88Z" fill="#1a2a40" stroke="rgba(59,130,246,0.2)"></path>
+                <path d="M470 216 C498 210 530 218 552 236 C574 254 594 282 586 318 C580 344 554 360 520 358 C492 356 464 336 456 306 C450 282 446 248 470 216Z" fill="#1a2a40" stroke="rgba(59,130,246,0.2)"></path>
+                <path d="M690 108 C724 92 788 96 830 118 C862 136 874 166 862 194 C850 222 818 232 786 224 C756 216 736 198 718 198 C698 198 682 180 680 160 C678 140 676 116 690 108Z" fill="#1a2a40" stroke="rgba(59,130,246,0.2)"></path>
+                <path d="M180 282 C210 264 244 268 270 290 C294 310 304 336 286 354 C270 370 240 374 212 362 C184 350 166 326 162 304 C160 294 168 286 180 282Z" fill="#1a2a40" stroke="rgba(59,130,246,0.2)"></path>
+
+                <path d="M425 118 Q 460 160 444 312" fill="none" stroke="url(#routeGlow)" stroke-width="2" stroke-dasharray="4 4">
+                  <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2s" repeatCount="indefinite"></animate>
+                </path>
+                <path d="M596 158 Q 520 150 444 312" fill="none" stroke="url(#routeGlow)" stroke-width="2" stroke-dasharray="4 4">
+                  <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.2s" repeatCount="indefinite"></animate>
+                </path>
+                <path d="M205 315 Q 310 340 444 312" fill="none" stroke="url(#routeGlow)" stroke-width="2" stroke-dasharray="4 4">
+                  <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.4s" repeatCount="indefinite"></animate>
+                </path>
+                <path d="M150 200 Q 256 186 360 240" fill="none" stroke="url(#routeGlow)" stroke-width="2" stroke-dasharray="4 4">
+                  <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.9s" repeatCount="indefinite"></animate>
+                </path>
+                <path d="M360 240 Q 402 246 430 278" fill="none" stroke="url(#routeGlow)" stroke-width="2" stroke-dasharray="4 4">
+                  <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.1s" repeatCount="indefinite"></animate>
+                </path>
+
+                ${vessels.map((vessel, index) => `
+                  <g class="vessel-node" data-vessel-node="${vessel.id}">
+                    <circle cx="${vessel.mapX}" cy="${vessel.mapY}" r="5" fill="${statusColor(vessel.status)}"></circle>
+                    <circle cx="${vessel.mapX}" cy="${vessel.mapY}" r="5" fill="none" stroke="${statusColor(vessel.status)}" stroke-width="2" opacity="0.8">
+                      <animate attributeName="r" values="5;14;5" dur="${1.8 + (index * 0.12)}s" repeatCount="indefinite"></animate>
+                      <animate attributeName="opacity" values="0.8;0;0.8" dur="${1.8 + (index * 0.12)}s" repeatCount="indefinite"></animate>
+                    </circle>
+                    <text x="${vessel.mapX + 10}" y="${vessel.mapY - 4}" class="vessel-label">${vessel.name}</text>
+                    <text x="${vessel.mapX + 10}" y="${vessel.mapY + 10}" class="vessel-sub">${vessel.port}</text>
+                  </g>
+                `).join("")}
+              </svg>
             </div>
-            <div class="footer-actions">
-              <button class="btn" type="button" id="backPdaDoc">← Back</button>
-              <span class="muted mono">Active PDA: ${state.context.pdaReference}</span>
+            <div class="map-legend">
+              <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>${dual("In Port", "En Puerto")}</span>
+              <span class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>${dual("Underway", "En Ruta")}</span>
+              <span class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span>${dual("Anchored", "Fondeado")}</span>
+            </div>
+          </article>
+
+          <aside class="card fleet-card">
+            <div class="card-header">
+              <div>
+                <h3>${dual("Active Fleet", "Flota Activa")}</h3>
+                <p>${dual("Operators can drill down from map or list in one click.", "Los operadores pueden entrar al detalle desde mapa o lista en un click.")}</p>
+              </div>
+              <div class="badge">${dual("9 vessels", "9 buques")}</div>
+            </div>
+            <div class="fleet-list" id="fleetList">
+              ${vessels.map((vessel) => {
+                const label = statusLabel(vessel.status);
+                return `
+                  <button class="fleet-item ${selectedVessel.id === vessel.id ? "selected" : ""}" type="button" data-vessel-select="${vessel.id}">
+                    <span class="fleet-icon">${vessel.icon}</span>
+                    <span class="fleet-main">
+                      <strong>${vessel.name} ${vessel.flag}</strong>
+                      <span>${vessel.port}</span>
+                    </span>
+                    <span class="fleet-status">
+                      <span class="status-dot status-${vessel.status}"></span>
+                      <span>${dual(label.en, label.es)}</span>
+                    </span>
+                  </button>
+                `;
+              }).join("")}
+            </div>
+          </aside>
+        </section>
+
+        <section class="dashboard-lower">
+          <article class="card list-card">
+            <div class="card-header">
+              <div>
+                <h3>${dual("Recent Activity", "Actividad Reciente")}</h3>
+                <p>${dual("Operational pulse across vessel, PDA and FDA workflows.", "Pulso operativo entre workflows de vessel, PDA y FDA.")}</p>
+              </div>
+            </div>
+            <div class="feed-list">
+              ${recentActivity.map((item) => `
+                <div class="feed-item">
+                  <span class="feed-accent" style="background:${item.accent}"></span>
+                  <div>
+                    <strong>${dual(item.en, item.es)}</strong>
+                  </div>
+                  <span class="time-pill">${dual(item.timeEn, item.timeEs)}</span>
+                </div>
+              `).join("")}
+            </div>
+          </article>
+
+          <article class="card list-card">
+            <div class="card-header">
+              <div>
+                <h3>${dual("Pending Actions", "Acciones Pendientes")}</h3>
+                <p>${dual("Variance and compliance alerts that need human action.", "Alertas de varianza y cumplimiento que requieren acción humana.")}</p>
+              </div>
+              <div class="badge">3</div>
+            </div>
+            <div class="feed-list">
+              ${pendingActions.map((item) => `
+                <div class="feed-item">
+                  <span class="feed-accent" style="background:${item.accent}"></span>
+                  <div>
+                    <strong>${dual(item.en, item.es)}</strong>
+                  </div>
+                  <span class="priority-pill priority-${item.priority}">${dual(item.badgeEn, item.badgeEs)}</span>
+                </div>
+              `).join("")}
+            </div>
+          </article>
+        </section>
+      `;
+
+      dashboardEl.querySelectorAll("[data-vessel-select], [data-vessel-node]").forEach((element) => {
+        element.addEventListener("click", () => selectVessel(Number(element.dataset.vesselSelect || element.dataset.vesselNode)));
+      });
+
+      animateCounters();
+    }
+
+    function renderVesselDetail() {
+      const vessel = getVessel(state.selectedVesselId);
+      const comparison = computeComparison(vessel);
+      const timeline = timelineForStatus(vessel.status);
+      const label = statusLabel(vessel.status);
+      const vesselEl = document.getElementById("page-vessel");
+
+      vesselEl.innerHTML = `
+        <div class="section-stack">
+          <button class="back-button" type="button" id="backDashboard">
+            <i class="ti ti-arrow-left"></i>
+            <span>${dual("Back to Dashboard", "Volver al Panel")}</span>
+          </button>
+
+          <section class="card vessel-hero">
+            <div class="vessel-head">
+              <div>
+                <span class="eyebrow">${dual("Selected Voyage", "Voyage Seleccionado")}</span>
+                <h2>${vessel.name} ${vessel.flag}</h2>
+                <p class="vessel-meta">${vessel.imo} · GRT ${vessel.grt.toLocaleString("en-US")} · ${vessel.operator}</p>
+              </div>
+              <div class="status-pill ${statusClass(vessel.status)}">${dual(label.en, label.es)}</div>
+            </div>
+
+            <div class="vessel-data-grid">
+              <div class="data-block">
+                <span>${dual("Voyage", "Voyage")}</span>
+                <strong>${vessel.voyage}</strong>
+              </div>
+              <div class="data-block">
+                <span>${dual("Port", "Puerto")}</span>
+                <strong>${vessel.port}</strong>
+              </div>
+              <div class="data-block">
+                <span>${dual("Cargo", "Carga")}</span>
+                <strong>${vessel.cargo}</strong>
+              </div>
+              <div class="data-block">
+                <span>${dual("ETA / Status", "ETA / Estado")}</span>
+                <strong>${vessel.eta}</strong>
+              </div>
             </div>
           </section>
-        `;
-        document.getElementById("fdaDemoBtn").addEventListener("click", loadFdaDemo);
-        document.querySelectorAll("[data-load-fda-example]").forEach(button => {
-          button.addEventListener("click", () => loadFdaExample(button.dataset.loadFdaExample));
-        });
-        document.getElementById("backPdaDoc").addEventListener("click", () => setStep(2));
-        attachDrop("fdaDrop", "FDA");
-        return;
-      }
 
-      const rows = compareItems();
-      const filteredRows = rows.filter(row => state.comparisonFilter === "all" || row.status === state.comparisonFilter);
-      const pdaTotal = total(state.pdaItems);
-      const fdaTotal = total(state.fdaItems);
-      const showEur = hasEur(state.pdaItems) || hasEur(state.fdaItems);
-      const netVariance = fdaTotal - pdaTotal;
-      const netPct = pdaTotal ? (netVariance / pdaTotal) * 100 : 0;
-      const level = varianceLevel(netPct);
-
-      app.innerHTML = `
-        <section class="screen">
-          <div class="page-head">
-            <div>
-              <span class="eyebrow">FDA Comparison</span>
-              <h1>Automatic variance control against the original PDA</h1>
-            </div>
-          </div>
-          <div class="kpi-row">
-            <div class="kpi"><span>Total PDA</span><strong>${money(pdaTotal)}${showEur ? `<br>${eurMoney(total(state.pdaItems, "eurAmount"))}` : ""}</strong></div>
-            <div class="kpi"><span>Total FDA</span><strong>${money(fdaTotal)}${showEur ? `<br>${eurMoney(total(state.fdaItems, "eurAmount"))}` : ""}</strong></div>
-            <div class="kpi ${level}"><span>Net Variance</span><strong>${netVariance >= 0 ? "+" : ""}${money(netVariance)}</strong></div>
-            <div class="kpi ${level}"><span>Variance %</span><strong>${netPct >= 0 ? "+" : ""}${numberFormat(netPct)}%</strong></div>
-          </div>
-          <div class="filters">
-            ${[
-              ["all", "Show All"],
-              ["danger", "🔴 Escalate only"],
-              ["warning", "🟡 Review only"],
-              ["success", "🟢 On Target"]
-            ].map(([value, label]) => `<button class="filter-btn ${state.comparisonFilter === value ? "active" : ""}" type="button" data-filter="${value}">${label}</button>`).join("")}
-          </div>
-          <div class="grid-two">
-            <div>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Item / Service</th>
-                      <th>Category</th>
-                      <th class="amount">PDA USD</th>
-                      ${showEur ? `<th class="amount">PDA EUR</th>` : ""}
-                      <th class="amount">FDA USD</th>
-                      ${showEur ? `<th class="amount">FDA EUR</th>` : ""}
-                      <th class="amount">Deviation (USD)</th>
-                      ${showEur ? `<th class="amount">Deviation (EUR)</th>` : ""}
-                      <th class="amount">Deviation (%)</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${filteredRows.map(row => `
-                      <tr>
-                        <td>
-                          ${row.item}
-                          ${row.note ? `<span class="row-note ${row.note.includes("Missing") ? "missing" : ""}">${row.note}</span>` : ""}
-                        </td>
-                        <td>${row.category}</td>
-                        <td class="amount">${row.pda ? money(row.pdaAmount) : "—"}</td>
-                        ${showEur ? `<td class="amount">${row.pda && row.pdaEur ? eurMoney(row.pdaEur) : "—"}</td>` : ""}
-                        <td class="amount"><input value="${numberFormat(row.fdaAmount)}" data-fda-amount="${row.key}" ${row.fda ? "" : "disabled"}></td>
-                        ${showEur ? `<td class="amount"><input value="${row.fdaEur ? numberFormat(row.fdaEur) : ""}" data-fda-eur="${row.key}" ${row.fda ? "" : "disabled"} placeholder="—"></td>` : ""}
-                        <td class="amount">${row.deviation >= 0 ? "+" : ""}${money(row.deviation)}</td>
-                        ${showEur ? `<td class="amount">${row.eurDeviation ? `${row.eurDeviation >= 0 ? "+" : ""}${eurMoney(row.eurDeviation)}` : "—"}</td>` : ""}
-                        <td class="amount">${row.deviationPct >= 0 ? "+" : ""}${numberFormat(row.deviationPct)}%</td>
-                        <td><span class="status-badge ${row.status}">${row.statusIcon} · ${row.statusLabel}</span></td>
-                      </tr>
-                    `).join("")}
-                  </tbody>
-                </table>
-              </div>
-              <div class="footer-actions">
-                <button class="btn" type="button" id="backPdaFromCompare">← Back</button>
-                <button class="btn primary" type="button" id="goFdaDoc">Generate Client FDA →</button>
+          <section class="card timeline-card">
+            <div class="card-header" style="padding:0">
+              <div>
+                <h3>${dual("Voyage Timeline", "Timeline del Voyage")}</h3>
+                <p>${dual("Operational handoff state based on current vessel progress.", "Estado operativo de handoff según progreso actual del buque.")}</p>
               </div>
             </div>
-            <aside class="panel">
-              <div class="panel-title">
-                <h3>Variance Analysis</h3>
-                <span class="badge">${rows.length} lines</span>
-              </div>
-              <div class="chart-box">
-                <canvas id="varianceChart" height="220"></canvas>
-                <div id="varianceFallback"></div>
-                <div class="attention-list">
-                  ${attentionItemsHTML(rows)}
+            <div class="timeline-row">
+              ${timeline.map((step, index) => `
+                <div class="timeline-step ${step.cls}">
+                  <small>0${index + 1}</small>
+                  <strong>${dual(step.labelEn, step.labelEs)}</strong>
+                  <span>${dual(step.stateLabel.en, step.stateLabel.es)}</span>
+                  <span class="unit-note">${dual(step.copyEn, step.copyEs)}</span>
                 </div>
-              </div>
-            </aside>
-          </div>
-        </section>
-      `;
-      attachComparisonEvents();
-      renderVarianceChart();
-    }
-
-    function attentionItemsHTML(rows) {
-      return rows
-        .slice()
-        .sort((a, b) => Math.abs(b.deviation) - Math.abs(a.deviation))
-        .slice(0, 3)
-        .map(row => `
-          <div class="attention-item">
-            <strong>${row.item}</strong>
-            <span>${row.deviation >= 0 ? "+" : ""}${money(row.deviation)} · ${row.deviationPct >= 0 ? "+" : ""}${numberFormat(row.deviationPct)}%</span>
-          </div>
-        `).join("");
-    }
-
-    function attachComparisonEvents() {
-      document.querySelectorAll("[data-filter]").forEach(button => {
-        button.addEventListener("click", () => {
-          state.comparisonFilter = button.dataset.filter;
-          render();
-        });
-      });
-      document.querySelectorAll("[data-fda-amount]").forEach(input => {
-        input.addEventListener("change", () => {
-          const row = compareItems().find(item => item.key === input.dataset.fdaAmount);
-          if (row && row.fda) {
-            row.fda.amount = parseAmount(input.value);
-            state.approvedAmounts[row.key] = row.fda.amount;
-          }
-          render();
-        });
-      });
-      document.querySelectorAll("[data-fda-eur]").forEach(input => {
-        input.addEventListener("change", () => {
-          const row = compareItems().find(item => item.key === input.dataset.fdaEur);
-          if (row && row.fda) {
-            row.fda.eurAmount = parseAmount(input.value);
-            state.approvedEurAmounts[row.key] = row.fda.eurAmount;
-          }
-          render();
-        });
-      });
-      document.getElementById("backPdaFromCompare").addEventListener("click", () => setStep(2));
-      document.getElementById("goFdaDoc").addEventListener("click", () => setStep(4));
-    }
-
-    function renderVarianceChart() {
-      const pdaByCat = byCategory(state.pdaItems);
-      const fdaByCat = byCategory(state.fdaItems);
-      const labels = Array.from(new Set([...Object.keys(pdaByCat), ...Object.keys(fdaByCat)]));
-      const pdaValues = labels.map(label => pdaByCat[label] || 0);
-      const fdaValues = labels.map(label => fdaByCat[label] || 0);
-      const canvas = document.getElementById("varianceChart");
-      const fallback = document.getElementById("varianceFallback");
-      if (!canvas) return;
-      if (!window.Chart) {
-        canvas.style.display = "none";
-        renderFallbackBars(fallback, labels.map(label => `${label} FDA`), fdaValues);
-        return;
-      }
-      if (varianceChart) varianceChart.destroy();
-      varianceChart = new Chart(canvas, {
-        type: "bar",
-        data: {
-          labels,
-          datasets: [
-            { label: "PDA", data: pdaValues, backgroundColor: "rgba(138,154,184,0.7)" },
-            { label: "FDA", data: fdaValues, backgroundColor: "rgba(201,168,76,0.88)" }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { ticks: { color: "#8a9ab8" }, grid: { color: "rgba(30,45,74,0.5)" } },
-            y: { ticks: { color: "#8a9ab8" }, grid: { color: "rgba(30,45,74,0.5)" } }
-          },
-          plugins: {
-            legend: { labels: { color: "#e8edf5", font: { family: "Inter" } } }
-          }
-        }
-      });
-    }
-
-    function screenFdaDocument() {
-      const rows = compareItems();
-      const showEur = hasEur(state.pdaItems) || hasEur(state.fdaItems);
-      app.innerHTML = `
-        <section class="screen">
-          <div class="page-head">
-            <div>
-              <span class="eyebrow">Client FDA Output</span>
-              <h1>Final reconciled disbursement account cover sheet</h1>
+              `).join("")}
             </div>
-          </div>
-          <div class="document-grid">
-            <article class="document-preview" id="printArea">
-              ${letterheadHTML("Final Disbursement Account", state.context.fdaReference)}
-              ${documentDetailsHTML()}
-              <div class="doc-table">
+          </section>
+
+          <section class="detail-grid">
+            <article class="card table-card">
+              <div class="card-header" style="padding:0">
+                <div>
+                  <h3>${dual("PDA Proforma Disbursement", "Desembolso Proforma PDA")}</h3>
+                  <p>${dual("Real line items seeded from the selected port structure.", "Líneas reales sembradas desde la estructura del puerto seleccionado.")}</p>
+                </div>
+                <div class="badge">${pdaData[vessel.pdaPort].name}</div>
+              </div>
+
+              <div class="table-scroll">
                 <table>
                   <thead>
                     <tr>
-                      <th>Item</th>
-                      <th class="amount">PDA USD</th>
-                      ${showEur ? `<th class="amount">PDA EUR</th>` : ""}
-                      <th class="amount">FDA USD</th>
-                      ${showEur ? `<th class="amount">FDA EUR</th>` : ""}
-                      <th class="amount">Variance USD</th>
-                      ${showEur ? `<th class="amount">Variance EUR</th>` : ""}
-                      <th class="amount">Approved USD</th>
-                      ${showEur ? `<th class="amount">Approved EUR</th>` : ""}
+                      <th>${dual("Description", "Descripción")}</th>
+                      <th class="amount">${dual("Amount USD", "Monto USD")}</th>
                     </tr>
                   </thead>
                   <tbody>
-                    ${rows.map(row => `
-                      <tr>
-                        <td>${row.item}</td>
-                        <td class="amount">${row.pda ? money(row.pdaAmount) : "—"}</td>
-                        ${showEur ? `<td class="amount">${row.pda && row.pdaEur ? eurMoney(row.pdaEur) : "—"}</td>` : ""}
-                        <td class="amount">${row.fda ? money(row.fdaAmount) : "—"}</td>
-                        ${showEur ? `<td class="amount">${row.fda && row.fdaEur ? eurMoney(row.fdaEur) : "—"}</td>` : ""}
-                        <td class="amount">${row.deviation >= 0 ? "+" : ""}${money(row.deviation)}</td>
-                        ${showEur ? `<td class="amount">${row.eurDeviation ? `${row.eurDeviation >= 0 ? "+" : ""}${eurMoney(row.eurDeviation)}` : "—"}</td>` : ""}
-                        <td class="amount"><input ${state.editFdaDoc ? "" : "disabled"} value="${numberFormat(state.approvedAmounts[row.key] ?? row.fdaAmount)}" data-approved="${row.key}"></td>
-                        ${showEur ? `<td class="amount"><input ${state.editFdaDoc ? "" : "disabled"} value="${Number(state.approvedEurAmounts[row.key] ?? row.fdaEur) ? numberFormat(state.approvedEurAmounts[row.key] ?? row.fdaEur) : ""}" data-approved-eur="${row.key}" placeholder="—"></td>` : ""}
-                      </tr>
+                    ${comparison.lines.map((group) => `
+                      <tr class="group-row"><td colspan="2">${group.category}</td></tr>
+                      ${group.lines.map((line) => `
+                        <tr>
+                          <td>${line.desc}</td>
+                          <td class="amount">${money(line.amount)}</td>
+                        </tr>
+                      `).join("")}
                     `).join("")}
+                    <tr class="total-row">
+                      <td>${dual("Total Reference", "Total Referencia")}</td>
+                      <td class="amount">${money(comparison.pdaTotal)}</td>
+                    </tr>
                   </tbody>
                 </table>
-              </div>
-              <div class="doc-total">
-                <span>Grand Total Approved USD</span><span>${money(approvedTotal(rows))}</span>
-                ${showEur ? `<span>Grand Total Approved EUR</span><span>${eurMoney(approvedEurTotal(rows))}</span>` : ""}
-              </div>
-              <div class="doc-note">This Final DA reflects all third-party invoices received. Variances are detailed above.</div>
-              <div class="signature-grid">
-                <div class="signature-line">Prepared by</div>
-                <div class="signature-line">Approved by</div>
-                <div class="signature-line">Date</div>
               </div>
             </article>
-            ${documentControlsHTML("FDA")}
-          </div>
-          <div class="footer-actions">
-            <button class="btn" type="button" id="backComparison">← Back to Comparison</button>
-            <button class="btn primary" type="button" id="completeReset">✅ Complete & Reset Demo</button>
-          </div>
-        </section>
+
+            <aside class="card comparison-card">
+              <div class="card-header" style="padding:0">
+                <div>
+                  <h3>${dual("PDA vs FDA Comparison", "Comparativa PDA vs FDA")}</h3>
+                  <p>${dual("Expected variance profile for the active port call.", "Perfil esperado de varianza para la escala activa.")}</p>
+                </div>
+              </div>
+
+              <div class="metric-grid">
+                <div class="metric-card">
+                  <span>${dual("PDA Total", "Total PDA")}</span>
+                  <strong>${money(comparison.pdaTotal)}</strong>
+                </div>
+                <div class="metric-card gold">
+                  <span>${dual("FDA Total", "Total FDA")}</span>
+                  <strong>${money(comparison.fdaTotal)}</strong>
+                </div>
+                <div class="metric-card red">
+                  <span>${dual("Variance", "Varianza")}</span>
+                  <strong>+${formatPercent(comparison.variance)}</strong>
+                </div>
+              </div>
+
+              <div class="progress-panel">
+                <div class="muted">${dual("PDA coverage against expected FDA finalization", "Cobertura PDA frente a final esperado FDA")}</div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width:${Math.round((comparison.pdaTotal / comparison.fdaTotal) * 100)}%"></div>
+                </div>
+                <p>${dual(`Difference: ${money(comparison.difference)} · Typical variance for ${pdaData[vessel.pdaPort].name}`, `Diferencia: ${money(comparison.difference)} · Varianza típica para ${pdaData[vessel.pdaPort].name}`)}</p>
+              </div>
+
+              <div class="table-scroll" style="margin-top:16px">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>${dual("Category", "Categoría")}</th>
+                      <th class="amount">${dual("PDA", "PDA")}</th>
+                      <th class="amount">${dual("FDA", "FDA")}</th>
+                      <th class="amount">${dual("Diff.", "Dif.")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${comparison.categoryRows.map((row) => `
+                      <tr>
+                        <td>${row.category}</td>
+                        <td class="amount">${money(row.pdaSubtotal)}</td>
+                        <td class="amount">${money(row.fdaSubtotal)}</td>
+                        <td class="amount">${money(row.diff)}</td>
+                      </tr>
+                    `).join("")}
+                  </tbody>
+                </table>
+              </div>
+            </aside>
+          </section>
+        </div>
       `;
-      attachFdaDocumentEvents();
-      document.getElementById("backComparison").addEventListener("click", () => setStep(3));
-      document.getElementById("completeReset").addEventListener("click", () => {
-        showToast("Demo complete", "FDA workflow reset will start in two seconds.");
-        setTimeout(resetState, 2000);
+
+      document.getElementById("backDashboard").addEventListener("click", () => setPage("dashboard"));
+    }
+
+    function renderBuilder() {
+      const preview = computeBuilderPreview();
+      const builderEl = document.getElementById("page-builder");
+      const previewBody = state.builder.loading ? `
+        <div class="spinner-wrap">
+          <div class="spinner-panel">
+            <div class="spinner"></div>
+            <h3>${dual("Generating proforma disbursement account...", "Generando cuenta de desembolso proforma...")}</h3>
+            <p>${dual("Recalculating fixed, per-MT, per-crew and GRT-driven lines for the selected vessel and port call.", "Recalculando líneas fijas, por MT, por tripulación y por GRT para el buque y la escala seleccionados.")}</p>
+          </div>
+        </div>
+      ` : `
+        <div class="preview-head">
+          <div>
+            <span class="eyebrow">${dual("Automation Output", "Salida de Automatización")}</span>
+            <h3>${preview.vessel.name}</h3>
+            <div class="preview-meta">${dual(`PDA · ${preview.portData.name} · ${preview.operation} · Ref: ${preview.reference}`, `PDA · ${preview.portData.name} · ${preview.operation} · Ref: ${preview.reference}`)}</div>
+          </div>
+          <div class="total-box">
+            <span>${dual("Total Disbursement", "Desembolso Total")}</span>
+            <strong>${money(preview.total)}</strong>
+            <em>${dual(`EUR equivalent ${eurMoney(preview.totalEur)}`, `Equivalente EUR ${eurMoney(preview.totalEur)}`)}</em>
+          </div>
+        </div>
+        <div class="table-scroll" style="margin:20px 24px 24px">
+          <table>
+            <thead>
+              <tr>
+                <th>${dual("Description", "Descripción")}</th>
+                <th class="amount">${dual("Amount USD", "Monto USD")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${preview.grouped.map((group) => `
+                <tr class="group-row"><td colspan="2">${group.category}</td></tr>
+                ${group.lines.map((line) => `
+                  <tr>
+                    <td>${line.desc}<span class="unit-note">${unitLabel(line.unit)}</span></td>
+                    <td class="amount">${money(line.amount)}</td>
+                  </tr>
+                `).join("")}
+                <tr class="subtotal-row">
+                  <td>${dual(`${group.category} subtotal`, `Subtotal ${group.category}`)}</td>
+                  <td class="amount">${money(group.subtotal)}</td>
+                </tr>
+              `).join("")}
+              <tr class="total-row">
+                <td>${dual("Total Disbursement", "Desembolso Total")}</td>
+                <td class="amount">${money(preview.total)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      builderEl.innerHTML = `
+        <div class="section-stack">
+          <section class="intro-card">
+            <div class="intro-grid">
+              <div>
+                <span class="eyebrow">${dual("PDA Builder", "Generador PDA")}</span>
+                <h1 class="intro-title">${dual("Replace manual template copying with dynamic disbursement generation.", "Reemplaza la copia manual de plantillas con generación dinámica de desembolsos.")}</h1>
+                <p class="intro-copy">${dual("This is the wow moment of the demo: cost lines recalculate instantly from cargo, crew and GRT inputs, while the interface simulates a live proforma generation workflow for decision-makers.", "Este es el momento wow de la demo: las líneas de costo se recalculan instantáneamente desde inputs de carga, tripulación y GRT, mientras la interfaz simula un workflow vivo de generación de proforma para decisores.")}</p>
+              </div>
+              <div class="intro-stats">
+                <div class="intro-stat">
+                  <strong>${dual("5 ports", "5 puertos")}</strong>
+                  <span>${dual("Banana, Ango Ango, Matadi, Valencia and Dubai available in the calculator.", "Banana, Ango Ango, Matadi, Valencia y Dubái disponibles en el calculador.")}</span>
+                </div>
+                <div class="intro-stat">
+                  <strong>${dual("Real seed data", "Datos reales semilla")}</strong>
+                  <span>${dual("Banana and Ango Ango preserve client reference totals and structure.", "Banana y Ango Ango preservan totales y estructura de referencia del cliente.")}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="builder-layout">
+            <aside class="card builder-panel">
+              <span class="eyebrow">${dual("Inputs", "Parámetros")}</span>
+              <h3>${dual("Generate PDA", "Generar PDA")}</h3>
+              <p class="muted" style="margin-top:10px; line-height:1.6">${dual("Every input updates the preview in real time. The button only triggers the generation animation.", "Cada input actualiza el preview en tiempo real. El botón solo dispara la animación de generación.")}</p>
+
+              <div class="field-stack">
+                <div class="field">
+                  <label for="builderVessel">${dual("Vessel", "Buque")}</label>
+                  <select id="builderVessel">
+                    ${builderVesselIds.map((id) => {
+                      const vessel = getVessel(id);
+                      return `<option value="${vessel.id}" ${state.builder.vesselId === vessel.id ? "selected" : ""}>${vessel.name}</option>`;
+                    }).join("")}
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="builderPort">${dual("Port of Call", "Puerto de Escala")}</label>
+                  <select id="builderPort">
+                    ${Object.entries(pdaData).map(([key, port]) => `<option value="${key}" ${state.builder.port === key ? "selected" : ""}>${port.name}</option>`).join("")}
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="builderOperation">${dual("Operation", "Operación")}</label>
+                  <select id="builderOperation">
+                    ${["Discharge", "Load", "Transit"].map((option) => `<option value="${option}" ${state.builder.operation === option ? "selected" : ""}>${option}</option>`).join("")}
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="builderCargo">${dual("Cargo (MT)", "Carga (MT)")}</label>
+                  <input id="builderCargo" type="number" min="100" max="50000" value="${state.builder.cargoMT}">
+                </div>
+                <div class="field">
+                  <label for="builderGRT">${dual("GRT", "GRT")}</label>
+                  <input id="builderGRT" type="number" min="1000" max="100000" value="${state.builder.grt}">
+                </div>
+                <div class="field">
+                  <label for="builderCrew">${dual("Crew", "Tripulación")}</label>
+                  <input id="builderCrew" type="number" min="10" max="50" value="${state.builder.crew}">
+                </div>
+                <button class="generate-btn" id="generatePda" type="button">${dual("⚡ Generate PDA", "⚡ Generar PDA")}</button>
+              </div>
+            </aside>
+
+            <article class="card preview-card">
+              ${previewBody}
+            </article>
+          </section>
+        </div>
+      `;
+
+      document.getElementById("builderVessel").addEventListener("change", (event) => {
+        syncBuilderFromVessel(Number(event.target.value));
+        renderBuilder();
+      });
+      document.getElementById("builderPort").addEventListener("change", (event) => {
+        state.builder.port = event.target.value;
+        state.builder.crew = pdaData[state.builder.port].refCrew || state.builder.crew;
+        renderBuilder();
+      });
+      document.getElementById("builderOperation").addEventListener("change", (event) => {
+        state.builder.operation = event.target.value;
+        renderBuilder();
+      });
+      document.getElementById("builderCargo").addEventListener("input", (event) => {
+        state.builder.cargoMT = Number(event.target.value) || 0;
+        renderBuilder();
+      });
+      document.getElementById("builderGRT").addEventListener("input", (event) => {
+        state.builder.grt = Number(event.target.value) || 0;
+        renderBuilder();
+      });
+      document.getElementById("builderCrew").addEventListener("input", (event) => {
+        state.builder.crew = Number(event.target.value) || 0;
+        renderBuilder();
+      });
+      document.getElementById("generatePda").addEventListener("click", () => {
+        state.builder.loading = true;
+        renderBuilder();
+        window.setTimeout(() => {
+          state.builder.loading = false;
+          state.builder.generated = true;
+          renderBuilder();
+        }, 2200);
       });
     }
 
-    function approvedTotal(rows) {
-      return rows.reduce((sum, row) => sum + (Number(state.approvedAmounts[row.key] ?? row.fdaAmount) || 0), 0);
+    function renderFinancial() {
+      const financialEl = document.getElementById("page-financial");
+      financialEl.innerHTML = `
+        <div class="section-stack">
+          <section class="intro-card">
+            <div class="intro-grid">
+              <div>
+                <span class="eyebrow">${dual("Financial Control", "Control Financiero")}</span>
+                <h1 class="intro-title">${dual("Decision-ready visibility over disbursements, variance and category exposure.", "Visibilidad lista para decisión sobre desembolsos, varianza y exposición por categoría.")}</h1>
+                <p class="intro-copy">${dual("This view gives directors a compact read on where cash goes, how vessel cost profiles compare and how 2026 momentum is trending against the previous year.", "Esta vista le da a dirección una lectura compacta de hacia dónde va la caja, cómo se comparan los perfiles de costos por buque y cómo la tendencia 2026 se mueve frente al año anterior.")}</p>
+              </div>
+              <div class="intro-stats">
+                <div class="intro-stat">
+                  <strong>${dual("Board-ready", "Listo para directorio")}</strong>
+                  <span>${dual("Charts use concise labels and high-contrast surfaces for presentation settings.", "Los gráficos usan etiquetas concisas y superficies de alto contraste para contextos de presentación.")}</span>
+                </div>
+                <div class="intro-stat">
+                  <strong>${dual("Voyage aware", "Consciente del voyage")}</strong>
+                  <span>${dual("Disbursement totals stay connected to actual vessel names used in operations.", "Los totales de desembolso siguen conectados a nombres reales de buques usados en operación.")}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="financial-grid">
+            <div class="card financial-card financial-kpi blue">
+              <span>${dual("Total Disbursements YTD", "Desembolsos Totales YTD")}</span>
+              <strong>$1.84M</strong>
+            </div>
+            <div class="card financial-card financial-kpi green">
+              <span>${dual("Agency Fees Collected", "Honorarios de Agencia Cobrados")}</span>
+              <strong>$127K</strong>
+            </div>
+            <div class="card financial-card financial-kpi amber">
+              <span>${dual("PDA vs FDA Variance", "Varianza PDA vs FDA")}</span>
+              <strong>+3.7%</strong>
+            </div>
+          </section>
+
+          <section class="chart-grid">
+            <article class="card chart-shell">
+              <div class="card-header" style="padding:0">
+                <div>
+                  <h3>${dual("Disbursements by Vessel", "Desembolsos por Buque")}</h3>
+                  <p>${dual("Active fleet comparison using current disbursement exposure.", "Comparativa de flota activa usando exposición actual de desembolsos.")}</p>
+                </div>
+              </div>
+              <canvas id="disbursementsChart" aria-label="Disbursements by vessel"></canvas>
+            </article>
+
+            <article class="card chart-shell">
+              <div class="card-header" style="padding:0">
+                <div>
+                  <h3>${dual("Monthly Trend 2026", "Tendencia Mensual 2026")}</h3>
+                  <p>${dual("2026 run-rate compared against 2025 baseline.", "Ritmo 2026 comparado contra la base 2025.")}</p>
+                </div>
+              </div>
+              <div class="legend-inline">
+                <span><span class="trend-line" style="background:#3b82f6"></span>2026</span>
+                <span><span class="trend-line" style="background:#94a3b8; border-top:2px dashed #94a3b8; background:transparent"></span>2025</span>
+              </div>
+              <canvas id="trendChart" aria-label="Monthly trend"></canvas>
+            </article>
+          </section>
+
+          <section class="card financial-card">
+            <div class="card-header" style="padding:0">
+              <div>
+                <h3>${dual("Cost Breakdown by Category", "Desglose de Costos por Categoría")}</h3>
+                <p>${dual("Where disbursement value concentrates across the platform portfolio.", "Dónde se concentra el valor de desembolso a través del portafolio de la plataforma.")}</p>
+              </div>
+            </div>
+            <div class="breakdown-list">
+              ${financialBreakdown.map((item) => `
+                <div class="breakdown-row">
+                  <strong>${dual(item.labelEn, item.labelEs)}</strong>
+                  <div class="breakdown-track"><span style="width:${item.percent}%; background:${item.color}"></span></div>
+                  <div class="breakdown-value">${item.percent}% · ${item.value}</div>
+                </div>
+              `).join("")}
+            </div>
+            <div class="footer-note">${dual("Illustrative board view. Charts are static for demo purposes and designed for boardroom storytelling, not accounting close.", "Vista ilustrativa para directorio. Los gráficos son estáticos para efectos de demo y están diseñados para storytelling ejecutivo, no para cierre contable.")}</div>
+          </section>
+        </div>
+      `;
+
+      renderFinancialCharts();
     }
 
-    function approvedEurTotal(rows) {
-      return rows.reduce((sum, row) => sum + (Number(state.approvedEurAmounts[row.key] ?? row.fdaEur) || 0), 0);
-    }
+    function renderFinancialCharts() {
+      destroyCharts();
 
-    function attachFdaDocumentEvents() {
-      document.querySelectorAll("[data-approved]").forEach(input => {
-        input.addEventListener("change", () => {
-          state.approvedAmounts[input.dataset.approved] = parseAmount(input.value);
-          render();
+      if (!window.Chart) return;
+
+      const axisColor = "#94a3b8";
+      const gridColor = "rgba(148,163,184,0.08)";
+      const font = { family: "Inter", size: 11 };
+
+      const barCanvas = document.getElementById("disbursementsChart");
+      if (barCanvas) {
+        state.charts.bar = new Chart(barCanvas, {
+          type: "bar",
+          data: {
+            labels: ["AFRICAN RUBY", "DIDDI", "NORDIC STAR", "CAPE VERDE", "VEGA STAR", "DUBAI PEARL", "RIVER CONGO", "BUENOS AIRES", "PACIFIC WAVE"],
+            datasets: [{
+              data: vessels.map((vessel) => vessel.disb),
+              backgroundColor: "rgba(59,130,246,0.7)",
+              borderColor: "#3b82f6",
+              borderWidth: 1.5,
+              borderRadius: 4
+            }]
+          },
+          options: {
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: (context) => moneyPrecise(context.raw)
+                }
+              }
+            },
+            scales: {
+              x: {
+                ticks: { color: axisColor, font, maxRotation: 40, minRotation: 40 },
+                grid: { display: false }
+              },
+              y: {
+                ticks: {
+                  color: axisColor,
+                  font,
+                  callback: (value) => `$${Math.round(value / 1000)}K`
+                },
+                grid: { color: gridColor }
+              }
+            }
+          }
         });
-      });
-      document.querySelectorAll("[data-approved-eur]").forEach(input => {
-        input.addEventListener("change", () => {
-          state.approvedEurAmounts[input.dataset.approvedEur] = parseAmount(input.value);
-          render();
+      }
+
+      const trendCanvas = document.getElementById("trendChart");
+      if (trendCanvas) {
+        state.charts.trend = new Chart(trendCanvas, {
+          type: "line",
+          data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            datasets: [
+              {
+                label: "2026",
+                data: [280000, 310000, 295000, 340000, 318000, 389000],
+                borderColor: "#3b82f6",
+                backgroundColor: "rgba(59,130,246,0.08)",
+                tension: 0.4,
+                fill: true,
+                borderWidth: 2.5,
+                pointBackgroundColor: "#60a5fa",
+                pointRadius: 3
+              },
+              {
+                label: "2025",
+                data: [240000, 255000, 270000, 260000, 290000, 310000],
+                borderColor: "#94a3b8",
+                tension: 0.35,
+                fill: false,
+                borderWidth: 2,
+                borderDash: [4, 4],
+                pointRadius: 0
+              }
+            ]
+          },
+          options: {
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: (context) => `${context.dataset.label}: ${moneyPrecise(context.raw)}`
+                }
+              }
+            },
+            scales: {
+              x: {
+                ticks: { color: axisColor, font },
+                grid: { display: false }
+              },
+              y: {
+                ticks: {
+                  color: axisColor,
+                  font,
+                  callback: (value) => `$${Math.round(value / 1000)}K`
+                },
+                grid: { color: gridColor }
+              }
+            }
+          }
         });
+      }
+    }
+
+    function animateCounters() {
+      document.querySelectorAll("[data-counter]").forEach((element) => {
+        const target = Number(element.dataset.target);
+        const format = element.dataset.format;
+        const start = performance.now();
+        const duration = 800;
+
+        function formatter(value) {
+          if (format === "moneyk") return `$${Math.round(value)}K`;
+          return Math.round(value).toLocaleString("en-US");
+        }
+
+        function tick(now) {
+          const progress = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          element.textContent = formatter(target * eased);
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          }
+        }
+
+        requestAnimationFrame(tick);
       });
-      const editToggle = document.getElementById("fdaEditToggle");
-      if (editToggle) editToggle.addEventListener("change", () => {
-        state.editFdaDoc = editToggle.checked;
-        render();
+    }
+
+    function setLanguage(lang) {
+      state.lang = lang;
+      document.body.dataset.lang = lang;
+      document.documentElement.lang = lang === "en" ? "en" : "es";
+    }
+
+    function updateNav() {
+      document.querySelectorAll("[data-page-link]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.pageLink === state.page);
       });
-      attachDocumentControls("FDA");
+      document.querySelectorAll(".page").forEach((page) => {
+        page.classList.toggle("active", page.id === `page-${state.page}`);
+      });
     }
 
-    function exportFdaExcel() {
-      if (!window.XLSX) {
-        showToast("Excel export unavailable", "SheetJS CDN is not loaded in this browser session.");
-        return;
-      }
-      const rows = compareItems();
-      const pdaTotal = total(state.pdaItems);
-      const fdaTotal = total(state.fdaItems);
-      const approved = approvedTotal(rows);
-      const approvedEur = approvedEurTotal(rows);
-      const wb = XLSX.utils.book_new();
-      const summary = [
-        ["Reference", state.context.fdaReference],
-        ["Vessel", state.context.vessel],
-        ["IMO", state.context.imo],
-        ["Port of Call", state.context.port],
-        ["Operation Date", state.context.operationDate],
-        [],
-        ["Total PDA USD", pdaTotal],
-        ["Total PDA EUR", total(state.pdaItems, "eurAmount") || ""],
-        ["Total FDA USD", fdaTotal],
-        ["Total FDA EUR", total(state.fdaItems, "eurAmount") || ""],
-        ["Net Variance", fdaTotal - pdaTotal],
-        ["Variance %", pdaTotal ? (fdaTotal - pdaTotal) / pdaTotal : 0],
-        ["Grand Total Approved USD", approved],
-        ["Grand Total Approved EUR", approvedEur || ""]
-      ];
-      const detail = [
-        ["Item", "Category", "PDA USD", "PDA EUR", "FDA USD", "FDA EUR", "Variance USD", "Variance EUR", "Variance %", "Status", "Approved USD", "Approved EUR"],
-        ...rows.map(row => [
-          row.item,
-          row.category,
-          row.pdaAmount,
-          row.pdaEur || "",
-          row.fdaAmount,
-          row.fdaEur || "",
-          row.deviation,
-          row.eurDeviation || "",
-          row.deviationPct / 100,
-          row.statusLabel,
-          state.approvedAmounts[row.key] ?? row.fdaAmount,
-          (state.approvedEurAmounts[row.key] ?? row.fdaEur) || ""
-        ])
-      ];
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(summary), "Summary");
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(detail), "Items Detail");
-      XLSX.writeFile(wb, `${state.context.fdaReference}.xlsx`);
-      showToast("Excel exported", "FDA workbook generated with Summary and Items Detail.");
+    function setPage(page) {
+      state.page = page;
+      updateNav();
+      if (page === "vessel") renderVesselDetail();
+      if (page === "builder") renderBuilder();
+      if (page === "financial") renderFinancial();
+      if (page === "dashboard") renderDashboard();
     }
 
-    function resetState() {
-      if (categoryChart) {
-        categoryChart.destroy();
-        categoryChart = null;
-      }
-      if (varianceChart) {
-        varianceChart.destroy();
-        varianceChart = null;
-      }
-      state = initialState();
-      showToast("Demo reset", "Ready for a new PDA intake.");
-      render();
+    function selectVessel(id) {
+      state.selectedVesselId = id;
+      setPage("vessel");
     }
 
-    function render() {
-      renderNav();
-      if (state.step === 0) screenUploadPda();
-      if (state.step === 1) screenReviewPda();
-      if (state.step === 2) screenPdaDocument();
-      if (state.step === 3) screenFdaComparison();
-      if (state.step === 4) screenFdaDocument();
+    function startFleetFlash() {
+      window.setInterval(() => {
+        const items = Array.from(document.querySelectorAll(".fleet-item"));
+        if (!items.length) return;
+        const item = items[Math.floor(Math.random() * items.length)];
+        item.classList.remove("flash");
+        void item.offsetWidth;
+        item.classList.add("flash");
+      }, 3000);
     }
 
-    resetBtn.addEventListener("click", resetState);
-    render();
+    function bindStaticEvents() {
+      document.getElementById("langToggle").addEventListener("click", () => {
+        setLanguage(state.lang === "en" ? "es" : "en");
+      });
+      document.querySelectorAll("[data-page-link]").forEach((button) => {
+        button.addEventListener("click", () => setPage(button.dataset.pageLink));
+      });
+    }
+
+    function init() {
+      syncBuilderFromVessel(state.builder.vesselId);
+      bindStaticEvents();
+      renderDashboard();
+      renderVesselDetail();
+      renderBuilder();
+      renderFinancial();
+      setPage("dashboard");
+      startFleetFlash();
+    }
+
+    init();
   </script>
 </body>
 </html>
