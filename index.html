@@ -3,64 +3,67 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NEW MARITIME · Operations Platform Demo</title>
+  <title>NEW MARITIME HUB OS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
   <style>
     :root {
-      --bg: #0a0e1a;
-      --bg2: #111827;
-      --bg3: #1a2235;
-      --bg4: #1e2d45;
-      --border: rgba(59,130,246,0.15);
-      --border2: rgba(59,130,246,0.3);
-      --blue: #3b82f6;
-      --blue2: #60a5fa;
-      --teal: #14b8a6;
-      --green: #22c55e;
-      --amber: #f59e0b;
-      --red: #ef4444;
-      --text: #f1f5f9;
-      --text2: #94a3b8;
-      --text3: #64748b;
-      --gold: #fbbf24;
-      --purple: #8b5cf6;
-      --pink: #ec4899;
-      --shadow: 0 28px 80px rgba(3, 7, 18, 0.45);
-      --radius: 16px;
+      --bg: #07121d;
+      --bg2: #0d1a28;
+      --bg3: #122334;
+      --bg4: #183049;
+      --panel: rgba(13, 26, 40, 0.88);
+      --panel-strong: rgba(18, 35, 52, 0.96);
+      --line: rgba(122, 171, 197, 0.14);
+      --line-strong: rgba(122, 171, 197, 0.28);
+      --text: #f4f7fb;
+      --text2: #a8bdcc;
+      --text3: #6d8798;
+      --sea: #44d4c8;
+      --sea2: #1db7aa;
+      --sky: #6daafc;
+      --gold: #ffbc54;
+      --red: #ff6e6e;
+      --green: #42d68b;
+      --orange: #ff8a53;
+      --purple: #8f7dff;
+      --shadow: 0 30px 90px rgba(2, 9, 16, 0.45);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      --body: "IBM Plex Sans", system-ui, sans-serif;
+      --display: "Sora", system-ui, sans-serif;
     }
 
     * {
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
+      min-width: 1240px;
       min-height: 100%;
-      min-width: 1200px;
       background:
-        radial-gradient(circle at top left, rgba(20,184,166,0.14), transparent 28%),
-        radial-gradient(circle at 85% 10%, rgba(59,130,246,0.16), transparent 34%),
-        linear-gradient(180deg, #09101f 0%, var(--bg) 52%, #08101d 100%);
+        radial-gradient(circle at 10% 0%, rgba(68,212,200,0.14), transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(109,170,252,0.14), transparent 34%),
+        linear-gradient(180deg, #08121d 0%, #06101a 60%, #050d14 100%);
       color: var(--text);
-      font-family: "Inter", system-ui, sans-serif;
+      font-family: var(--body);
     }
 
     body {
       overflow-x: auto;
     }
 
-    body[data-lang="en"] .es,
-    body[data-lang="es"] .en {
-      display: none !important;
-    }
-
     button,
     input,
-    select {
+    select,
+    textarea {
       font: inherit;
     }
 
@@ -70,9 +73,13 @@
       color: inherit;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    p {
+      margin: 0;
     }
 
     .app-shell {
@@ -82,53 +89,55 @@
     .topbar {
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 60;
       display: grid;
       grid-template-columns: auto 1fr auto;
-      gap: 24px;
+      gap: 20px;
       align-items: center;
       padding: 18px 28px;
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(10px);
-      background: rgba(8, 13, 24, 0.82);
+      backdrop-filter: blur(18px);
+      background: rgba(7, 18, 29, 0.8);
+      border-bottom: 1px solid var(--line);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 0;
-      background: none;
+      gap: 16px;
     }
 
     .brand-mark {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
       display: grid;
       place-items: center;
-      color: var(--blue2);
-      font-size: 20px;
-      background: linear-gradient(145deg, rgba(59,130,246,0.18), rgba(20,184,166,0.14));
-      border: 1px solid var(--border2);
+      background:
+        linear-gradient(145deg, rgba(109,170,252,0.24), rgba(68,212,200,0.22)),
+        rgba(255,255,255,0.03);
+      border: 1px solid rgba(109,170,252,0.2);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+      color: var(--sky);
+      font-size: 22px;
     }
 
     .brand-copy {
       display: grid;
-      gap: 2px;
-      text-align: left;
+      gap: 3px;
     }
 
     .brand-copy strong {
-      font-size: 17px;
-      letter-spacing: 0.12em;
+      font-family: var(--display);
+      font-size: 18px;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
     }
 
     .brand-copy span {
       color: var(--text2);
       font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     .nav-tabs {
@@ -143,23 +152,22 @@
       min-height: 42px;
       padding: 0 16px;
       border-radius: 999px;
-      background: rgba(15, 23, 42, 0.5);
       color: var(--text2);
       border: 1px solid transparent;
-      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      background: rgba(255,255,255,0.02);
+      transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
     }
 
     .nav-tab:hover {
-      background: rgba(26, 34, 53, 0.9);
-      color: var(--text);
       transform: translateY(-1px);
+      background: rgba(24,48,73,0.56);
+      color: var(--text);
     }
 
     .nav-tab.active {
-      background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(20,184,166,0.18));
-      border-color: var(--border2);
-      color: var(--blue2);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+      background: linear-gradient(135deg, rgba(109,170,252,0.18), rgba(68,212,200,0.16));
+      border-color: var(--line-strong);
+      color: var(--sky);
     }
 
     .topbar-tools {
@@ -168,22 +176,18 @@
       gap: 12px;
     }
 
-    .lang-toggle,
-    .live-pill {
-      min-height: 40px;
+    .live-pill,
+    .date-pill {
+      min-height: 38px;
       padding: 0 14px;
       border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
       display: inline-flex;
       align-items: center;
       gap: 10px;
       color: var(--text2);
-    }
-
-    .lang-toggle:hover {
-      background: var(--bg3);
-      color: var(--text);
+      font-size: 13px;
     }
 
     .live-dot {
@@ -191,67 +195,60 @@
       height: 8px;
       border-radius: 50%;
       background: var(--green);
-      box-shadow: 0 0 0 0 rgba(34,197,94,0.6);
-      animation: pulseDot 1.8s infinite;
+      box-shadow: 0 0 0 0 rgba(66,214,139,0.6);
+      animation: pulseLive 1.9s infinite;
     }
 
-    @keyframes pulseDot {
-      0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.55); }
-      70% { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
-      100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+    @keyframes pulseLive {
+      0% { box-shadow: 0 0 0 0 rgba(66,214,139,0.5); }
+      75% { box-shadow: 0 0 0 10px rgba(66,214,139,0); }
+      100% { box-shadow: 0 0 0 0 rgba(66,214,139,0); }
     }
 
     .shell-main {
-      max-width: 1480px;
+      max-width: 1540px;
       margin: 0 auto;
       padding: 28px;
     }
 
     .page {
       display: none;
-      animation: fadeIn 0.28s ease both;
+      animation: fadePage 0.26s ease both;
     }
 
     .page.active {
       display: block;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+    @keyframes fadePage {
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .intro-card,
-    .card {
-      background: linear-gradient(180deg, rgba(17,24,39,0.96), rgba(11,18,31,0.96));
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+    .card,
+    .hero-card {
+      background: linear-gradient(180deg, rgba(13,26,40,0.97), rgba(10,20,31,0.97));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
       box-shadow: var(--shadow);
       overflow: hidden;
     }
 
-    .intro-card {
+    .hero-card {
       position: relative;
       padding: 28px;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
-    .intro-card::before,
-    .kpi-card::before {
+    .hero-card::before,
+    .metric-card::before {
       content: "";
       position: absolute;
       left: 0;
       top: 0;
       width: 100%;
       height: 2px;
-      background: linear-gradient(90deg, var(--blue), transparent 72%);
-    }
-
-    .intro-grid {
-      display: grid;
-      grid-template-columns: 1.35fr 0.85fr;
-      gap: 28px;
-      align-items: center;
+      background: linear-gradient(90deg, var(--sea), rgba(109,170,252,0.65), transparent 80%);
     }
 
     .eyebrow {
@@ -259,281 +256,295 @@
       align-items: center;
       gap: 8px;
       margin-bottom: 12px;
-      color: var(--teal);
+      color: var(--sea);
       font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
+      font-weight: 700;
     }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    p {
-      margin: 0;
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 28px;
+      align-items: center;
     }
 
-    .intro-title {
-      font-size: 44px;
-      line-height: 1;
+    .hero-title {
+      font-family: var(--display);
+      font-size: 42px;
+      line-height: 1.05;
       letter-spacing: -0.04em;
-      max-width: 800px;
+      max-width: 860px;
     }
 
-    .intro-copy {
-      margin-top: 16px;
-      max-width: 740px;
+    .hero-copy {
+      margin-top: 14px;
       color: var(--text2);
-      line-height: 1.7;
+      line-height: 1.75;
+      max-width: 800px;
       font-size: 15px;
     }
 
-    .intro-stats {
+    .hero-insight-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
     }
 
-    .intro-stat {
-      padding: 18px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(26, 34, 53, 0.55);
+    .insight-card {
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: rgba(24,48,73,0.32);
     }
 
-    .intro-stat strong {
+    .insight-card strong {
       display: block;
-      font-size: 24px;
       margin-bottom: 8px;
-      color: var(--text);
+      font-size: 22px;
+      font-family: var(--display);
+      letter-spacing: -0.03em;
     }
 
-    .intro-stat span {
+    .insight-card span {
       color: var(--text2);
       font-size: 13px;
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
-    .kpi-grid {
+    .metric-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 18px;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
-    .kpi-card {
+    .metric-card {
       position: relative;
       padding: 22px;
       min-height: 150px;
     }
 
-    .kpi-card .label {
+    .metric-label {
       color: var(--text2);
       font-size: 13px;
       line-height: 1.5;
     }
 
-    .kpi-card .value {
+    .metric-value {
       margin-top: 18px;
-      font-size: 40px;
-      font-weight: 800;
+      font-size: 36px;
+      line-height: 1;
+      font-family: var(--display);
       letter-spacing: -0.04em;
     }
 
-    .kpi-card .subcopy {
+    .metric-subcopy {
       margin-top: 14px;
       color: var(--text3);
       font-size: 12px;
       line-height: 1.5;
     }
 
-    .kpi-blue::before { background: linear-gradient(90deg, var(--blue), transparent 72%); }
-    .kpi-teal::before { background: linear-gradient(90deg, var(--teal), transparent 72%); }
-    .kpi-green::before { background: linear-gradient(90deg, var(--green), transparent 72%); }
-    .kpi-amber::before { background: linear-gradient(90deg, var(--amber), transparent 72%); }
-    .kpi-blue .value { color: var(--blue2); }
-    .kpi-teal .value { color: #59e3d1; }
-    .kpi-green .value { color: #59de7b; }
-    .kpi-amber .value { color: var(--gold); }
+    .metric-sea .metric-value { color: var(--sea); }
+    .metric-sky .metric-value { color: var(--sky); }
+    .metric-gold .metric-value { color: var(--gold); }
+    .metric-green .metric-value { color: var(--green); }
 
-    .dashboard-grid {
+    .content-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.9fr) minmax(340px, 1fr);
       gap: 18px;
-      margin-bottom: 18px;
     }
 
-    .card-header {
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-main-aside {
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(320px, 0.85fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .grid-wide {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(420px, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .card-head {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 16px;
-      padding: 20px 22px 0;
+      padding: 22px 22px 0;
     }
 
-    .card-header h3 {
-      font-size: 20px;
+    .card-head h3,
+    .card-head h4 {
+      font-family: var(--display);
       letter-spacing: -0.03em;
     }
 
-    .card-header p,
-    .badge,
+    .card-head h3 {
+      font-size: 24px;
+    }
+
+    .card-head h4 {
+      font-size: 18px;
+    }
+
+    .card-head p,
     .muted {
       color: var(--text2);
       font-size: 13px;
+      line-height: 1.55;
     }
 
-    .badge {
-      padding: 7px 10px;
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      padding: 0 10px;
       border-radius: 999px;
-      background: rgba(59,130,246,0.12);
-      border: 1px solid rgba(59,130,246,0.18);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: var(--text2);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       white-space: nowrap;
     }
 
-    .map-card {
-      position: relative;
-      padding: 16px;
-      min-height: 560px;
+    .pill.current { color: var(--sea); border-color: rgba(68,212,200,0.24); background: rgba(68,212,200,0.08); }
+    .pill.arrived { color: var(--gold); border-color: rgba(255,188,84,0.24); background: rgba(255,188,84,0.08); }
+    .pill.sailed { color: var(--sky); border-color: rgba(109,170,252,0.24); background: rgba(109,170,252,0.08); }
+    .pill.closed { color: var(--text3); border-color: rgba(109,135,152,0.2); background: rgba(109,135,152,0.08); }
+    .pill.alert { color: #ffca89; border-color: rgba(255,138,83,0.28); background: rgba(255,138,83,0.08); }
+    .pill.issue { color: #ff9f9f; border-color: rgba(255,110,110,0.28); background: rgba(255,110,110,0.08); }
+
+    .segment-row,
+    .filter-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    .map-frame {
-      position: relative;
-      margin-top: 12px;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid rgba(59,130,246,0.12);
-      background: linear-gradient(180deg, #0d1526 0%, #0a1220 100%);
-    }
-
-    .map-overlay-title {
-      position: absolute;
-      left: 20px;
-      top: 18px;
-      z-index: 2;
+    .filter-btn,
+    .segment-btn,
+    .tab-btn,
+    .cta-btn,
+    .link-btn {
+      min-height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
       color: var(--text2);
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover,
+    .segment-btn:hover,
+    .tab-btn:hover,
+    .link-btn:hover {
+      color: var(--text);
+      background: rgba(24,48,73,0.5);
+      transform: translateY(-1px);
+    }
+
+    .filter-btn.active,
+    .segment-btn.active,
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(68,212,200,0.16), rgba(109,170,252,0.16));
+      color: var(--text);
+      border-color: var(--line-strong);
+    }
+
+    .cta-btn {
+      background: linear-gradient(135deg, var(--sea2), var(--sky));
+      color: white;
+      border-color: transparent;
+      font-weight: 700;
+      box-shadow: 0 20px 45px rgba(68,212,200,0.18);
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .card-body {
+      padding: 18px 22px 22px;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      margin-top: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(122,171,197,0.1);
+      background: rgba(7,18,29,0.45);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(122,171,197,0.08);
+      font-size: 13px;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: rgba(13,26,40,0.98);
+      color: var(--text3);
       font-size: 11px;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       font-weight: 700;
     }
 
-    .world-map {
-      display: block;
-      width: 100%;
-      height: auto;
+    tr:last-child td {
+      border-bottom: 0;
     }
 
-    .vessel-node {
+    .ops-row {
       cursor: pointer;
+      transition: background 0.18s ease;
     }
 
-    .vessel-label {
-      fill: var(--text2);
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
+    .ops-row:hover {
+      background: rgba(24,48,73,0.36);
     }
 
-    .vessel-sub {
-      fill: var(--text3);
-      font-size: 8px;
+    .ops-row.selected {
+      background: rgba(68,212,200,0.08);
+      box-shadow: inset 3px 0 0 var(--sea);
     }
 
-    .map-legend {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
-      padding: 16px 4px 4px;
-      color: var(--text2);
-      font-size: 12px;
+    .mono {
+      font-family: var(--mono);
     }
 
-    .legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .legend-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .fleet-card {
-      padding-bottom: 12px;
-    }
-
-    .fleet-list {
-      display: grid;
-      gap: 10px;
-      padding: 18px;
-    }
-
-    .fleet-item {
-      display: grid;
-      grid-template-columns: 44px 1fr auto;
-      gap: 14px;
-      align-items: center;
-      padding: 14px;
-      border-radius: 14px;
-      border: 1px solid transparent;
-      background: rgba(17,24,39,0.3);
-      transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-    }
-
-    .fleet-item:hover {
-      background: var(--bg3);
-      transform: translateY(-1px);
-    }
-
-    .fleet-item.selected {
-      border-color: rgba(59,130,246,0.28);
-      background: rgba(59,130,246,0.15);
-      box-shadow: inset 2px 0 0 var(--blue);
-    }
-
-    .fleet-item.flash {
-      animation: fleetFlash 0.8s ease;
-    }
-
-    @keyframes fleetFlash {
-      0% { background: rgba(10,26,46,0.2); }
-      35% { background: rgba(10,26,46,0.95); }
-      100% { background: rgba(17,24,39,0.3); }
-    }
-
-    .fleet-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      background: rgba(26,34,53,0.92);
-      border: 1px solid var(--border);
-      font-size: 22px;
-    }
-
-    .fleet-main strong,
-    .fleet-main span {
-      display: block;
-    }
-
-    .fleet-main strong {
-      font-size: 14px;
-      margin-bottom: 6px;
-    }
-
-    .fleet-main span {
-      color: var(--text2);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .fleet-status {
+    .status-chip {
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -545,560 +556,522 @@
     }
 
     .status-dot {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
+      display: inline-block;
     }
 
-    .status-in-port {
-      background: var(--green);
-      box-shadow: 0 0 10px rgba(34,197,94,0.75);
-    }
+    .status-current { background: var(--sea); box-shadow: 0 0 12px rgba(68,212,200,0.75); }
+    .status-arrived { background: var(--gold); box-shadow: 0 0 12px rgba(255,188,84,0.75); }
+    .status-sailed { background: var(--sky); box-shadow: 0 0 12px rgba(109,170,252,0.75); }
+    .status-closed { background: var(--text3); box-shadow: 0 0 12px rgba(109,135,152,0.55); }
 
-    .status-underway {
-      background: var(--blue);
-      box-shadow: 0 0 10px rgba(59,130,246,0.75);
-    }
-
-    .status-anchored {
-      background: var(--amber);
-      box-shadow: 0 0 10px rgba(245,158,11,0.75);
-    }
-
-    .dashboard-lower {
+    .create-case-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: 1fr 1fr;
       gap: 18px;
-    }
-
-    .list-card {
-      padding-bottom: 16px;
-    }
-
-    .feed-list {
-      display: grid;
-      gap: 12px;
-      padding: 18px 22px 6px;
-    }
-
-    .feed-item {
-      display: grid;
-      grid-template-columns: 12px 1fr auto;
-      gap: 14px;
       align-items: start;
-      padding: 14px;
-      border-radius: 14px;
-      background: rgba(26,34,53,0.38);
-      border: 1px solid rgba(59,130,246,0.08);
     }
 
-    .feed-item strong {
+    .stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: rgba(24,48,73,0.28);
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .mini-card p,
+    .mini-card span {
+      color: var(--text2);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .field-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text3);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(122,171,197,0.14);
+      background: rgba(7,18,29,0.6);
+      color: var(--text);
+      padding: 12px 14px;
+      outline: none;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: rgba(109,170,252,0.42);
+      box-shadow: 0 0 0 3px rgba(109,170,252,0.1);
+    }
+
+    .generated-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .generated-item {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(7,18,29,0.7);
+      border: 1px solid var(--line);
+    }
+
+    .generated-item span {
+      display: block;
+      color: var(--text3);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .generated-item strong {
       display: block;
       font-size: 14px;
-      margin-bottom: 6px;
       line-height: 1.45;
     }
 
-    .feed-item span {
-      color: var(--text3);
-      font-size: 12px;
+    .case-hero {
+      padding: 24px;
     }
 
-    .feed-accent {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      margin-top: 4px;
-    }
-
-    .time-pill,
-    .priority-pill,
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      color: var(--text2);
-      font-size: 11px;
-      white-space: nowrap;
-    }
-
-    .priority-urgent {
-      color: #ffb4b4;
-      background: rgba(239,68,68,0.1);
-      border-color: rgba(239,68,68,0.18);
-    }
-
-    .priority-attention {
-      color: #ffd98a;
-      background: rgba(245,158,11,0.1);
-      border-color: rgba(245,158,11,0.18);
-    }
-
-    .section-stack {
-      display: grid;
-      gap: 18px;
-    }
-
-    .back-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0;
-      background: none;
-      color: var(--text2);
-      font-weight: 600;
-      margin-bottom: 16px;
-    }
-
-    .back-button:hover {
-      color: var(--text);
-    }
-
-    .vessel-hero {
-      padding: 26px;
-    }
-
-    .vessel-head {
+    .case-top {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 18px;
+      margin-bottom: 20px;
     }
 
-    .vessel-head h2 {
+    .case-top h2 {
+      font-family: var(--display);
       font-size: 32px;
       letter-spacing: -0.04em;
       margin-bottom: 8px;
     }
 
-    .vessel-meta {
-      color: var(--text3);
+    .case-meta {
+      color: var(--text2);
       font-size: 13px;
+      line-height: 1.65;
     }
 
-    .vessel-data-grid {
+    .summary-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 24px;
-    }
-
-    .data-block {
-      padding: 16px;
-      border-radius: 14px;
-      background: rgba(26,34,53,0.5);
-      border: 1px solid var(--border);
-    }
-
-    .data-block span {
-      display: block;
-      color: var(--text3);
-      font-size: 12px;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    .data-block strong {
-      display: block;
-      font-size: 15px;
-      line-height: 1.45;
-    }
-
-    .status-pill {
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 700;
-      padding: 9px 14px;
-    }
-
-    .status-pill.in-port {
-      color: #9ef5b2;
-      border-color: rgba(34,197,94,0.32);
-      background: rgba(34,197,94,0.1);
-    }
-
-    .status-pill.underway {
-      color: #9ac6ff;
-      border-color: rgba(59,130,246,0.32);
-      background: rgba(59,130,246,0.1);
-    }
-
-    .status-pill.anchored {
-      color: #ffd28a;
-      border-color: rgba(245,158,11,0.32);
-      background: rgba(245,158,11,0.1);
-    }
-
-    .timeline-card,
-    .comparison-card,
-    .table-card,
-    .builder-panel,
-    .financial-card {
-      padding: 22px;
-    }
-
-    .timeline-row {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 12px;
-      margin-top: 18px;
     }
 
-    .timeline-step {
-      min-height: 108px;
-      padding: 16px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: var(--bg3);
+    .summary-item {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(24,48,73,0.26);
     }
 
-    .timeline-step small {
+    .summary-item span {
       display: block;
       color: var(--text3);
-      margin-bottom: 10px;
       font-size: 11px;
-      letter-spacing: 0.1em;
       text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
     }
 
-    .timeline-step strong {
+    .summary-item strong {
       display: block;
       font-size: 14px;
-      margin-bottom: 12px;
       line-height: 1.45;
     }
 
-    .timeline-step span {
-      color: var(--text2);
-      font-size: 12px;
-      line-height: 1.5;
+    .workspace-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
     }
 
-    .timeline-step.done {
-      background: rgba(34,197,94,0.08);
-      border-color: rgba(34,197,94,0.18);
+    .workspace-panel {
+      display: none;
     }
 
-    .timeline-step.active {
-      background: rgba(59,130,246,0.1);
-      border-color: rgba(59,130,246,0.22);
+    .workspace-panel.active {
+      display: block;
+      animation: fadePage 0.24s ease both;
     }
 
-    .detail-grid {
+    .kv-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
-      gap: 18px;
+      gap: 12px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .table-scroll {
-      overflow: auto;
-      border-radius: 14px;
-      border: 1px solid rgba(59,130,246,0.1);
-      background: rgba(10,14,26,0.55);
-      margin-top: 18px;
+    .kv-card {
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: rgba(24,48,73,0.22);
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th,
-    td {
-      padding: 13px 16px;
-      border-bottom: 1px solid rgba(59,130,246,0.08);
-      text-align: left;
-      font-size: 13px;
-    }
-
-    th {
-      position: sticky;
-      top: 0;
-      background: rgba(12,19,33,0.98);
-      color: var(--text2);
-      font-size: 12px;
-      text-transform: uppercase;
+    .kv-card span {
+      display: block;
+      color: var(--text3);
+      font-size: 11px;
+      margin-bottom: 8px;
       letter-spacing: 0.1em;
-    }
-
-    td.amount,
-    th.amount {
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .group-row td {
-      background: rgba(59,130,246,0.08);
-      color: var(--blue2);
-      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+    }
+
+    .kv-card strong {
+      display: block;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .cargo-table td,
+    .cargo-table th {
+      padding: 12px 14px;
+    }
+
+    .vessel-finder {
+      padding: 18px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 30% 20%, rgba(68,212,200,0.12), transparent 24%),
+        linear-gradient(180deg, rgba(7,18,29,0.8), rgba(10,20,31,0.8));
+    }
+
+    .map-box {
+      position: relative;
+      min-height: 220px;
+      margin-top: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(122,171,197,0.14);
+      background:
+        linear-gradient(180deg, rgba(9,22,34,0.9), rgba(7,18,29,0.9)),
+        rgba(255,255,255,0.02);
+      overflow: hidden;
+    }
+
+    .map-box svg {
+      display: block;
+      width: 100%;
+      height: 220px;
+    }
+
+    .audit-list,
+    .timeline-list,
+    .report-list,
+    .alert-list,
+    .agent-list,
+    .ranking-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .list-row {
+      display: grid;
+      gap: 8px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(122,171,197,0.09);
+      background: rgba(24,48,73,0.22);
+    }
+
+    .list-row strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .list-row span,
+    .list-row small {
+      color: var(--text2);
+      line-height: 1.55;
       font-size: 12px;
     }
 
-    .total-row td {
-      color: var(--gold);
-      font-weight: 800;
-    }
-
-    .metric-grid {
+    .report-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
       margin-top: 18px;
     }
 
-    .metric-card {
+    .report-card {
       padding: 16px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(26,34,53,0.48);
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(24,48,73,0.26);
     }
 
-    .metric-card span {
+    .report-card strong {
       display: block;
-      color: var(--text3);
-      font-size: 11px;
       margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+      font-size: 16px;
     }
 
-    .metric-card strong {
-      display: block;
-      font-size: 20px;
-      letter-spacing: -0.03em;
-    }
-
-    .metric-card.gold strong { color: var(--gold); }
-    .metric-card.red strong { color: #ff9393; }
-
-    .progress-panel {
-      padding: 16px;
-      margin-top: 16px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(10,14,26,0.5);
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 12px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: rgba(148,163,184,0.12);
-      margin: 12px 0 10px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--blue), var(--teal));
-    }
-
-    .progress-panel p {
+    .report-card p {
       color: var(--text2);
       font-size: 13px;
       line-height: 1.55;
+      min-height: 60px;
+      margin-bottom: 12px;
     }
 
-    .builder-layout {
+    .funds-grid {
       display: grid;
-      grid-template-columns: 320px minmax(0, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .funds-box {
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(7,18,29,0.6);
+    }
+
+    .funds-box span {
+      display: block;
+      color: var(--text3);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+
+    .funds-box strong {
+      display: block;
+      font-family: var(--display);
+      font-size: 28px;
+      letter-spacing: -0.03em;
+    }
+
+    .swift-box {
+      padding: 18px;
+      margin-top: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(68,212,200,0.18);
+      background: linear-gradient(180deg, rgba(68,212,200,0.08), rgba(24,48,73,0.14));
+    }
+
+    .swift-fields {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .ocr-box,
+    .query-box,
+    .sof-box,
+    .intel-box {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px dashed rgba(68,212,200,0.34);
+      background: rgba(24,48,73,0.2);
+    }
+
+    .ocr-box strong,
+    .query-box strong,
+    .sof-box strong,
+    .intel-box strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .ocr-box p,
+    .query-box p,
+    .sof-box p,
+    .intel-box p {
+      color: var(--text2);
+      line-height: 1.6;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    .benchmark-table tbody tr.alert-row td {
+      color: #ffc288;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: rgba(109,170,252,0.08);
+      border: 1px solid rgba(109,170,252,0.18);
+      color: var(--sky);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+    }
+
+    .bl-preview {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(7,18,29,0.68);
+      border: 1px solid var(--line);
+    }
+
+    .bl-preview p {
+      color: var(--text2);
+      line-height: 1.7;
+      margin-top: 10px;
+    }
+
+    .email-preview {
+      padding: 18px;
+      margin-top: 18px;
+      border-radius: 18px;
+      background: rgba(7,18,29,0.68);
+      border: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--text2);
+      white-space: pre-wrap;
+    }
+
+    .crm-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .crm-card {
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: rgba(24,48,73,0.22);
+    }
+
+    .crm-card h4 {
+      font-family: var(--display);
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .crm-card p {
+      color: var(--text2);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .crm-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .crm-stats div {
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(7,18,29,0.58);
+      border: 1px solid rgba(122,171,197,0.08);
+    }
+
+    .crm-stats span {
+      display: block;
+      color: var(--text3);
+      font-size: 11px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .crm-stats strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .agent-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 380px;
       gap: 18px;
       align-items: start;
     }
 
-    .builder-panel {
-      position: sticky;
-      top: 106px;
-    }
-
-    .field-stack {
-      display: grid;
-      gap: 16px;
-      margin-top: 18px;
-    }
-
-    .field label {
-      display: block;
-      color: var(--text2);
-      font-size: 12px;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    .field input,
-    .field select {
+    .agent-item {
       width: 100%;
-      min-height: 44px;
-      padding: 0 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(59,130,246,0.12);
-      background: rgba(26,34,53,0.88);
-      color: var(--text);
-      outline: none;
-    }
-
-    .field input:focus,
-    .field select:focus {
-      border-color: rgba(96,165,250,0.55);
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.14);
-    }
-
-    .generate-btn {
-      width: 100%;
-      min-height: 50px;
-      border-radius: 14px;
-      margin-top: 8px;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--blue), var(--teal));
-      color: white;
-      box-shadow: 0 20px 50px rgba(20,184,166,0.2);
-    }
-
-    .generate-btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .preview-card {
-      min-height: 760px;
-    }
-
-    .preview-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 24px 24px 0;
-    }
-
-    .preview-head h3 {
-      font-size: 24px;
-      letter-spacing: -0.03em;
-      margin-bottom: 8px;
-    }
-
-    .preview-meta {
-      color: var(--text2);
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .total-box {
-      min-width: 260px;
-      padding: 18px;
+      padding: 14px 16px;
       border-radius: 16px;
-      background: linear-gradient(180deg, rgba(245,158,11,0.12), rgba(17,24,39,0.85));
-      border: 1px solid rgba(245,158,11,0.24);
-      text-align: right;
+      border: 1px solid transparent;
+      background: rgba(24,48,73,0.18);
+      text-align: left;
+      transition: all 0.18s ease;
     }
 
-    .total-box span {
+    .agent-item:hover {
+      background: rgba(24,48,73,0.34);
+    }
+
+    .agent-item.active {
+      background: rgba(68,212,200,0.08);
+      border-color: rgba(68,212,200,0.18);
+      box-shadow: inset 3px 0 0 var(--sea);
+    }
+
+    .agent-item strong {
       display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .agent-item span {
       color: var(--text2);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    .total-box strong {
-      display: block;
-      margin: 10px 0 8px;
-      color: var(--gold);
-      font-size: 28px;
-      letter-spacing: -0.04em;
-    }
-
-    .total-box em {
-      color: var(--text3);
-      font-size: 13px;
-      font-style: normal;
-    }
-
-    .spinner-wrap {
-      min-height: 620px;
-      display: grid;
-      place-items: center;
-      padding: 28px;
-    }
-
-    .spinner-panel {
-      text-align: center;
-      max-width: 420px;
-    }
-
-    .spinner {
-      width: 68px;
-      height: 68px;
-      margin: 0 auto 22px;
-      border-radius: 50%;
-      border: 4px solid rgba(59,130,246,0.14);
-      border-top-color: var(--blue);
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .spinner-panel h3 {
-      font-size: 26px;
-      margin-bottom: 12px;
-    }
-
-    .spinner-panel p {
-      color: var(--text2);
-      line-height: 1.7;
-    }
-
-    .unit-note {
-      display: block;
-      color: var(--text3);
-      font-size: 11px;
-      margin-top: 5px;
-    }
-
-    .subtotal-row td {
-      color: var(--text2);
-      font-weight: 700;
-      background: rgba(148,163,184,0.04);
-    }
-
-    .financial-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      margin-bottom: 18px;
-    }
-
-    .financial-kpi strong {
-      display: block;
-      margin-top: 16px;
-      font-size: 34px;
-      letter-spacing: -0.04em;
-    }
-
-    .financial-kpi span {
-      color: var(--text2);
-      font-size: 13px;
       line-height: 1.55;
+      font-size: 12px;
     }
 
-    .financial-kpi.blue strong { color: var(--blue2); }
-    .financial-kpi.green strong { color: #59de7b; }
-    .financial-kpi.amber strong { color: var(--gold); }
-
-    .chart-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-      margin-bottom: 18px;
+    .score {
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      font-size: 15px;
     }
 
     .chart-shell {
@@ -1107,1300 +1080,1535 @@
 
     .chart-shell canvas {
       width: 100% !important;
-      height: 240px !important;
+      height: 250px !important;
       margin-top: 16px;
     }
 
-    .legend-inline {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      color: var(--text2);
-      font-size: 12px;
-      margin-top: 10px;
-    }
-
-    .legend-swatch {
-      width: 10px;
-      height: 10px;
-      border-radius: 2px;
-      display: inline-block;
-      margin-right: 6px;
-    }
-
-    .trend-line {
-      display: inline-block;
-      width: 18px;
-      height: 2px;
-      border-radius: 999px;
-      margin-right: 6px;
-      transform: translateY(-3px);
-    }
-
-    .breakdown-list {
+    .benchmark-grid {
       display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .compare-card {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(24,48,73,0.24);
+    }
+
+    .compare-card strong {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+
+    .compare-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(122,171,197,0.08);
+      font-size: 13px;
+    }
+
+    .compare-row:last-child {
+      border-bottom: 0;
+    }
+
+    .bar-track {
+      width: 140px;
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(122,171,197,0.12);
+    }
+
+    .bar-track span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--sea), var(--sky));
+    }
+
+    .exec-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .exec-card {
+      padding: 20px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(13,26,40,0.94), rgba(8,18,28,0.94));
+    }
+
+    .exec-card span {
+      display: block;
+      color: var(--text3);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .exec-card strong {
+      display: block;
+      font-family: var(--display);
+      font-size: 28px;
+      letter-spacing: -0.04em;
+      margin-bottom: 10px;
+    }
+
+    .exec-card p {
+      color: var(--text2);
+      line-height: 1.5;
+      font-size: 12px;
+    }
+
+    .exec-card.sky strong { color: var(--sky); }
+    .exec-card.sea strong { color: var(--sea); }
+    .exec-card.gold strong { color: var(--gold); }
+    .exec-card.green strong { color: var(--green); }
+    .exec-card.orange strong { color: var(--orange); }
+
+    .rank-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 18px;
       margin-top: 18px;
     }
 
-    .breakdown-row {
+    .rank-card {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(24,48,73,0.22);
+    }
+
+    .rank-card h4 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      font-family: var(--display);
+    }
+
+    .rank-item {
       display: grid;
-      grid-template-columns: 220px 1fr 90px;
-      gap: 18px;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
       align-items: center;
-    }
-
-    .breakdown-row strong {
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .breakdown-track {
-      width: 100%;
-      height: 10px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: rgba(148,163,184,0.1);
-    }
-
-    .breakdown-track span {
-      display: block;
-      height: 100%;
-      border-radius: inherit;
-    }
-
-    .breakdown-value {
-      text-align: right;
-      color: var(--text2);
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(122,171,197,0.08);
       font-size: 13px;
-      white-space: nowrap;
+    }
+
+    .rank-item:last-child {
+      border-bottom: 0;
+    }
+
+    .rank-index {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(109,170,252,0.12);
+      color: var(--sky);
+      font-size: 11px;
+      font-weight: 700;
     }
 
     .footer-note {
-      margin-top: 20px;
+      margin-top: 18px;
       color: var(--text3);
       font-size: 12px;
       line-height: 1.6;
     }
   </style>
 </head>
-<body data-lang="en">
+<body>
   <div class="app-shell">
     <header class="topbar">
-      <button class="brand" type="button" data-page-link="dashboard" aria-label="New Maritime dashboard">
-        <span class="brand-mark">⚓</span>
-        <span class="brand-copy">
-          <strong>NEW MARITIME</strong>
-          <span><span class="en">Operations Platform</span><span class="es">Plataforma de Operaciones</span></span>
-        </span>
-      </button>
+      <div class="brand">
+        <div class="brand-mark">⚓</div>
+        <div class="brand-copy">
+          <strong>NEW MARITIME HUB OS</strong>
+          <span>The Digital Operating System for Hub Agency Operations</span>
+        </div>
+      </div>
       <nav class="nav-tabs" aria-label="Primary navigation">
-        <button class="nav-tab active" type="button" data-page-link="dashboard"><span class="en">Dashboard</span><span class="es">Panel</span></button>
-        <button class="nav-tab" type="button" data-page-link="vessel"><span class="en">Vessel Detail</span><span class="es">Detalle del Buque</span></button>
-        <button class="nav-tab" type="button" data-page-link="builder"><span class="en">PDA Builder</span><span class="es">Generador PDA</span></button>
-        <button class="nav-tab" type="button" data-page-link="financial"><span class="en">Financial</span><span class="es">Finanzas</span></button>
+        <button class="nav-tab active" type="button" data-page="operations">Operations</button>
+        <button class="nav-tab" type="button" data-page="workspace">Case Workspace</button>
+        <button class="nav-tab" type="button" data-page="database">Database</button>
+        <button class="nav-tab" type="button" data-page="intelligence">Market Intelligence</button>
+        <button class="nav-tab" type="button" data-page="management">Management Dashboard</button>
       </nav>
       <div class="topbar-tools">
-        <button class="lang-toggle" id="langToggle" type="button" aria-label="Toggle language">
-          <span><span class="en">🌐 EN / ES</span><span class="es">🌐 ES / EN</span></span>
-        </button>
-        <div class="live-pill">
-          <span class="live-dot" aria-hidden="true"></span>
-          <span><span class="en">LIVE</span><span class="es">EN VIVO</span></span>
-        </div>
+        <div class="date-pill"><i class="ti ti-calendar-event"></i><span>24 Jun 2026</span></div>
+        <div class="live-pill"><span class="live-dot"></span><span>LIVE DEMO</span></div>
       </div>
     </header>
 
     <main class="shell-main">
-      <div id="page-dashboard" class="page active"></div>
-      <div id="page-vessel" class="page"></div>
-      <div id="page-builder" class="page"></div>
-      <div id="page-financial" class="page"></div>
+      <section id="page-operations" class="page active"></section>
+      <section id="page-workspace" class="page"></section>
+      <section id="page-database" class="page"></section>
+      <section id="page-intelligence" class="page"></section>
+      <section id="page-management" class="page"></section>
     </main>
   </div>
 
   <script>
-    const vessels = [
-      { id: 0, name: "MT AFRICAN RUBY", flag: "🇵🇦", port: "Banana, DRC", status: "in-port", imo: "IMO 9123456", grt: 8251, voyage: "VOY-18", eta: "Departed 31/08/2025", cargo: "JET A1 · 1,600 MT", operator: "KEMEXON / NEW MARITIME", disb: 44197, currency: "USD", icon: "🚢", mapX: 444, mapY: 312, pdaPort: "banana" },
-      { id: 1, name: "MT DIDDI", flag: "🇱🇷", port: "Ango Ango, DRC", status: "in-port", imo: "IMO 9234567", grt: 25400, voyage: "VOY-56", eta: "Arrived 23/11/2025", cargo: "GASOIL 8,000 MT + GASOLINE 2,400 MT", operator: "TRAFIGURA / AMICONGO", disb: 152118, currency: "USD", icon: "⛽", mapX: 440, mapY: 295, pdaPort: "ango" },
-      { id: 2, name: "MT NORDIC STAR", flag: "🇳🇴", port: "Matadi, DRC", status: "underway", imo: "IMO 9345678", grt: 12400, voyage: "VOY-22", eta: "ETA: 25/06/2026", cargo: "CRUDE OIL · 8,500 MT", operator: "SHELL / NEW MARITIME", disb: 38500, currency: "USD", icon: "🚢", mapX: 430, mapY: 278, pdaPort: "matadi" },
-      { id: 3, name: "MV CAPE VERDE", flag: "🇵🇹", port: "Atlantic Ocean", status: "underway", imo: "IMO 9456789", grt: 18200, voyage: "VOY-07", eta: "ETA: 28/06/2026", cargo: "GENERAL CARGO · 12,000 MT", operator: "MSC / NEW MARITIME", disb: 29800, currency: "USD", icon: "📦", mapX: 360, mapY: 240, pdaPort: "banana" },
-      { id: 4, name: "MT VEGA STAR", flag: "🇲🇹", port: "Valencia, Spain", status: "in-port", imo: "IMO 9567890", grt: 9800, voyage: "VOY-33", eta: "Arrived 20/06/2026", cargo: "LPG · 4,200 MT", operator: "REPSOL / NEW MARITIME", disb: 31200, currency: "USD", icon: "⛽", mapX: 425, mapY: 118, pdaPort: "valencia" },
-      { id: 5, name: "MT DUBAI PEARL", flag: "🇦🇪", port: "Dubai, UAE", status: "anchored", imo: "IMO 9678901", grt: 21000, voyage: "VOY-11", eta: "Waiting berth", cargo: "FUEL OIL · 15,000 MT", operator: "ADNOC / NEW MARITIME", disb: 67400, currency: "USD", icon: "⛽", mapX: 596, mapY: 158, pdaPort: "dubai" },
-      { id: 6, name: "MT RIVER CONGO", flag: "🇨🇩", port: "En route to Banana", status: "underway", imo: "IMO 9789012", grt: 6800, voyage: "VOY-44", eta: "ETA: 26/06/2026", cargo: "JET A1 · 2,400 MT", operator: "SEP CONGO / AMICONGO", disb: 22100, currency: "USD", icon: "🚢", mapX: 400, mapY: 260, pdaPort: "banana" },
-      { id: 7, name: "MT BUENOS AIRES", flag: "🇦🇷", port: "Buenos Aires, Argentina", status: "in-port", imo: "IMO 9890123", grt: 14500, voyage: "VOY-19", eta: "Arrived 18/06/2026", cargo: "GASOIL · 9,800 MT", operator: "YPF / NEW MARITIME", disb: 45600, currency: "USD", icon: "⛽", mapX: 205, mapY: 315, pdaPort: "banana" },
-      { id: 8, name: "MT PACIFIC WAVE", flag: "🇵🇦", port: "Pacific Ocean", status: "underway", imo: "IMO 9901234", grt: 32000, voyage: "VOY-03", eta: "ETA: 15/07/2026", cargo: "CRUDE OIL · 28,000 MT", operator: "CHEVRON / NEW MARITIME", disb: 98200, currency: "USD", icon: "🚢", mapX: 150, mapY: 200, pdaPort: "banana" }
+    const cases = [
+      {
+        ref: "NM-24001",
+        vessel: "MT AFRICA STAR",
+        imo: "IMO 9374001",
+        eta: "12 Jul",
+        port: "Tema",
+        principal: "Trafigura",
+        client: "Dynacom",
+        team: "Blade Runner",
+        status: "Current",
+        operator: "New Maritime Hub Ghana",
+        owner: "Atlantic Marine Ltd",
+        voyage: "V-120A",
+        operationType: "Discharging",
+        terminal: "Tema Oil Jetty",
+        laycan: "11 Jul - 13 Jul",
+        earlyLoadingAllowed: "No",
+        dates: { etaAta: "12 Jul / Pending", etbAtb: "13 Jul / Pending", etcAtc: "15 Jul / Pending", etsAts: "16 Jul / Pending" },
+        cargo: [{ product: "Gasoline", quantity: "25,000 MT" }, { product: "Jet A1", quantity: "5,000 MT" }],
+        fundsRequired: 35000,
+        fundsReceived: 0,
+        pdaFile: "Tema_PDA_Africa_Star.pdf",
+        pdaBenchmark: [
+          { fee: "Launch", pda: 2500, average: 1900, alert: true },
+          { fee: "Agency Fee", pda: 6400, average: 6200, alert: false },
+          { fee: "Pilotage", pda: 5200, average: 5000, alert: false },
+          { fee: "Tug", pda: 8800, average: 7600, alert: true }
+        ],
+        pdaLines: [
+          { item: "Port Dues", amount: 11800 },
+          { item: "Agency Fee", amount: 6400 },
+          { item: "Launch", amount: 2500 },
+          { item: "Customs", amount: 980 },
+          { item: "Tug", amount: 8800 },
+          { item: "Pilotage", amount: 5200 }
+        ],
+        events: [
+          { user: "John", time: "12:30", change: "ETA updated from 13 Jul to 12 Jul" },
+          { user: "Maria", time: "11:15", change: "OCR voyage instructions reviewed" },
+          { user: "Omar", time: "09:05", change: "Sedna tag synced to live case" }
+        ],
+        reports: [
+          { title: "Pre Arrival", summary: "Generated from OCR voyage instructions, latest ETA and client notes.", status: "Ready" },
+          { title: "Arrival", summary: "Prepared from inbound updates and berth alignment milestones.", status: "Queued" },
+          { title: "Departure", summary: "Will auto-build from SOF events and final completion timestamps.", status: "Pending" }
+        ],
+        swift: { amount: "35,000 USD", currency: "USD", sender: "Trafigura Treasury", reference: "MT103-TEMA-24001" },
+        sof: [
+          { event: "Anchor Down", time: "12 Jul · 04:20 LT" },
+          { event: "POB", time: "12 Jul · 05:15 LT" },
+          { event: "First Line Ashore", time: "12 Jul · 07:10 LT" },
+          { event: "All Fast", time: "12 Jul · 07:45 LT" },
+          { event: "Ops Commenced", time: "12 Jul · 08:20 LT" },
+          { event: "Ops Completed", time: "14 Jul · 17:40 LT" },
+          { event: "COSP", time: "15 Jul · 02:30 LT" }
+        ],
+        fdaVariance: [
+          { item: "Pilotage", pda: 2000, fda: 2750, diff: 750 },
+          { item: "Launch", pda: 2500, fda: 2100, diff: -400 },
+          { item: "Tug", pda: 8800, fda: 9420, diff: 620 },
+          { item: "Customs", pda: 980, fda: 980, diff: 0 }
+        ]
+      },
+      {
+        ref: "NM-24002",
+        vessel: "MT LAGOON PRIME",
+        imo: "IMO 9482002",
+        eta: "14 Jul",
+        port: "Takoradi",
+        principal: "Vitol",
+        client: "Westport",
+        team: "Boss",
+        status: "Arrived",
+        operator: "New Maritime Hub Ghana",
+        owner: "Lakeshore Tankers",
+        voyage: "V-222K",
+        operationType: "Loading",
+        terminal: "Takoradi Main Berth",
+        laycan: "13 Jul - 15 Jul",
+        earlyLoadingAllowed: "Yes",
+        dates: { etaAta: "14 Jul / 14 Jul", etbAtb: "14 Jul / 14 Jul", etcAtc: "15 Jul / Pending", etsAts: "16 Jul / Pending" },
+        cargo: [{ product: "Gas Oil", quantity: "18,500 MT" }],
+        fundsRequired: 28000,
+        fundsReceived: 28000,
+        pdaFile: "Takoradi_PDA_Lagoon_Prime.pdf",
+        pdaBenchmark: [
+          { fee: "Launch", pda: 1800, average: 1700, alert: false },
+          { fee: "Agency Fee", pda: 5800, average: 5600, alert: false },
+          { fee: "Pilotage", pda: 4900, average: 4600, alert: false },
+          { fee: "Towage", pda: 6200, average: 5900, alert: false }
+        ],
+        pdaLines: [
+          { item: "Port Dues", amount: 9400 },
+          { item: "Agency Fee", amount: 5800 },
+          { item: "Launch", amount: 1800 },
+          { item: "Towage", amount: 6200 },
+          { item: "Pilotage", amount: 4900 }
+        ],
+        events: [
+          { user: "Pablo", time: "13:15", change: "Funds received auto-matched via MT103 OCR" },
+          { user: "Ines", time: "10:40", change: "ATA / ATB confirmed from master email" },
+          { user: "Boss team", time: "08:05", change: "Arrival report sent to client" }
+        ],
+        reports: [
+          { title: "Pre Arrival", summary: "Issued to owner and charterer with final ETA and berth readiness.", status: "Sent" },
+          { title: "Arrival", summary: "Generated from actual ATA and first boarding milestones.", status: "Ready" },
+          { title: "Departure", summary: "Will trigger automatically after ops completed and COSP update.", status: "Pending" }
+        ],
+        swift: { amount: "28,000 USD", currency: "USD", sender: "Vitol Operations", reference: "MT103-TAK-24002" },
+        sof: [
+          { event: "Anchor Down", time: "14 Jul · 02:45 LT" },
+          { event: "POB", time: "14 Jul · 03:30 LT" },
+          { event: "All Fast", time: "14 Jul · 05:55 LT" },
+          { event: "Ops Commenced", time: "14 Jul · 06:25 LT" }
+        ],
+        fdaVariance: [
+          { item: "Pilotage", pda: 1800, fda: 1825, diff: 25 },
+          { item: "Launch", pda: 1800, fda: 1710, diff: -90 },
+          { item: "Towage", pda: 6200, fda: 6400, diff: 200 }
+        ]
+      },
+      {
+        ref: "NM-24003",
+        vessel: "MV OCEAN QUILL",
+        imo: "IMO 9524003",
+        eta: "18 Jul",
+        port: "Conakry",
+        principal: "Glencore",
+        client: "Ridgeway",
+        team: "Brain",
+        status: "Sailed",
+        operator: "New Maritime West Africa",
+        owner: "Ocean Quill Shipping",
+        voyage: "V-903C",
+        operationType: "Discharging",
+        terminal: "Container Fuel Pier",
+        laycan: "17 Jul - 18 Jul",
+        earlyLoadingAllowed: "No",
+        dates: { etaAta: "18 Jul / 18 Jul", etbAtb: "18 Jul / 18 Jul", etcAtc: "19 Jul / 19 Jul", etsAts: "20 Jul / 20 Jul" },
+        cargo: [{ product: "Marine Gas Oil", quantity: "12,000 MT" }],
+        fundsRequired: 24000,
+        fundsReceived: 24000,
+        pdaFile: "Conakry_PDA_Ocean_Quill.pdf",
+        pdaBenchmark: [
+          { fee: "Launch", pda: 1650, average: 1550, alert: false },
+          { fee: "Agency Fee", pda: 5300, average: 5100, alert: false },
+          { fee: "Pilotage", pda: 4300, average: 4200, alert: false },
+          { fee: "Tug", pda: 5900, average: 5500, alert: false }
+        ],
+        pdaLines: [
+          { item: "Port Dues", amount: 8600 },
+          { item: "Agency Fee", amount: 5300 },
+          { item: "Launch", amount: 1650 },
+          { item: "Customs", amount: 1120 },
+          { item: "Tug", amount: 5900 },
+          { item: "Pilotage", amount: 4300 }
+        ],
+        events: [
+          { user: "Jose", time: "19:20", change: "Departure report generated and dispatched" },
+          { user: "Anita", time: "16:00", change: "Final SOF milestones OCR validated" },
+          { user: "Brain team", time: "12:30", change: "FDA requested from local agent" }
+        ],
+        reports: [
+          { title: "Pre Arrival", summary: "Completed from incoming instructions and final port readiness.", status: "Sent" },
+          { title: "Arrival", summary: "Completed with actual ATA, POB and all fast timeline.", status: "Sent" },
+          { title: "Departure", summary: "Completed with sailing and ops complete timestamps.", status: "Sent" }
+        ],
+        swift: { amount: "24,000 USD", currency: "USD", sender: "Glencore Settlements", reference: "MT103-CON-24003" },
+        sof: [
+          { event: "POB", time: "18 Jul · 06:20 LT" },
+          { event: "First Line Ashore", time: "18 Jul · 07:05 LT" },
+          { event: "All Fast", time: "18 Jul · 07:32 LT" },
+          { event: "Ops Commenced", time: "18 Jul · 08:10 LT" },
+          { event: "Ops Completed", time: "19 Jul · 18:10 LT" },
+          { event: "COSP", time: "20 Jul · 03:15 LT" }
+        ],
+        fdaVariance: [
+          { item: "Pilotage", pda: 1700, fda: 1700, diff: 0 },
+          { item: "Launch", pda: 1650, fda: 1580, diff: -70 },
+          { item: "Port Dues", pda: 8600, fda: 8730, diff: 130 }
+        ]
+      },
+      {
+        ref: "NM-24004",
+        vessel: "MT SILVER CROWN",
+        imo: "IMO 9641004",
+        eta: "21 Jul",
+        port: "Dakar",
+        principal: "Mercuria",
+        client: "Atlas Bunkering",
+        team: "Blade Runner",
+        status: "Closed",
+        operator: "New Maritime Senegal",
+        owner: "Silver Crown Marine",
+        voyage: "V-640X",
+        operationType: "Transit",
+        terminal: "Dakar Offshore Anchorage",
+        laycan: "20 Jul - 21 Jul",
+        earlyLoadingAllowed: "No",
+        dates: { etaAta: "21 Jul / 21 Jul", etbAtb: "21 Jul / 21 Jul", etcAtc: "21 Jul / 21 Jul", etsAts: "22 Jul / 22 Jul" },
+        cargo: [{ product: "Jet Fuel", quantity: "9,200 MT" }],
+        fundsRequired: 19800,
+        fundsReceived: 19800,
+        pdaFile: "Dakar_PDA_Silver_Crown.pdf",
+        pdaBenchmark: [
+          { fee: "Launch", pda: 1250, average: 1180, alert: false },
+          { fee: "Agency Fee", pda: 4800, average: 4500, alert: false },
+          { fee: "Pilotage", pda: 3400, average: 3250, alert: false },
+          { fee: "Towage", pda: 0, average: 0, alert: false }
+        ],
+        pdaLines: [
+          { item: "Port Dues", amount: 6400 },
+          { item: "Agency Fee", amount: 4800 },
+          { item: "Launch", amount: 1250 },
+          { item: "Pilotage", amount: 3400 },
+          { item: "Miscellaneous", amount: 3950 }
+        ],
+        events: [
+          { user: "Fatou", time: "09:12", change: "Case moved to Closed after FDA reconciliation" },
+          { user: "Ops Lead", time: "08:40", change: "Client version PDA archived in workspace" },
+          { user: "Finance", time: "07:25", change: "Open FDA exposure cleared" }
+        ],
+        reports: [
+          { title: "Pre Arrival", summary: "Archived in client reporting bundle.", status: "Archived" },
+          { title: "Arrival", summary: "Archived in client reporting bundle.", status: "Archived" },
+          { title: "Departure", summary: "Archived in client reporting bundle.", status: "Archived" }
+        ],
+        swift: { amount: "19,800 USD", currency: "USD", sender: "Mercuria Treasury", reference: "MT103-DAK-24004" },
+        sof: [
+          { event: "POB", time: "21 Jul · 05:10 LT" },
+          { event: "All Fast", time: "21 Jul · 06:12 LT" },
+          { event: "Ops Commenced", time: "21 Jul · 06:55 LT" },
+          { event: "Ops Completed", time: "21 Jul · 14:25 LT" },
+          { event: "COSP", time: "22 Jul · 01:40 LT" }
+        ],
+        fdaVariance: [
+          { item: "Pilotage", pda: 3400, fda: 3400, diff: 0 },
+          { item: "Agency Fee", pda: 4800, fda: 4750, diff: -50 },
+          { item: "Launch", pda: 1250, fda: 1310, diff: 60 }
+        ]
+      }
     ];
 
-    const pdaData = {
-      banana: { name: "Banana, DRC", refMT: 1600, refCrew: 27, refGRT: 8251, lines: [
-        { cat: "Navigation", desc: "Pilotage", unit: "fixed", usdBase: 8500 },
-        { cat: "Navigation", desc: "Pilotine Hire (MALU SERVICE)", unit: "fixed", usdBase: 3086 },
-        { cat: "Port Authority", desc: "Harbour Master Dues", unit: "fixed", usdBase: 4500 },
-        { cat: "Port Authority", desc: "Sanitary Dues", unit: "per crew", usdBase: 1400 },
-        { cat: "Government", desc: "PTNTIC Tax", unit: "fixed", usdBase: 800 },
-        { cat: "Government", desc: "Customs OVT", unit: "fixed", usdBase: 410 },
-        { cat: "Government", desc: "Pollution Tax", unit: "fixed", usdBase: 475 },
-        { cat: "Government", desc: "A.N.R. Intelligence Services", unit: "fixed", usdBase: 200 },
-        { cat: "Freight", desc: "OGEFREM Commission", unit: "per MT", usdBase: 925 },
-        { cat: "Freight", desc: "OCC Fees", unit: "per MT", usdBase: 7992 },
-        { cat: "Government", desc: "State Agent Fees", unit: "fixed", usdBase: 5000 },
-        { cat: "Freight", desc: "Statistics Charges", unit: "per MT", usdBase: 1601 },
-        { cat: "Freight", desc: "Regulation Charges", unit: "per MT", usdBase: 1601 },
-        { cat: "Port", desc: "LMC Trafic Service", unit: "per MT", usdBase: 3952 },
-        { cat: "Agency", desc: "AMICONGO Agency Fees", unit: "fixed", usdBase: 5000 },
-        { cat: "Agency", desc: "Clearance Charges", unit: "fixed", usdBase: 267 },
-        { cat: "Port", desc: "ISPS", unit: "fixed", usdBase: 194 },
-        { cat: "Agency", desc: "Comm. & Petties", unit: "fixed", usdBase: 157 },
-        { cat: "Bank", desc: "Bank Charges", unit: "fixed", usdBase: 188 }
-      ]},
-      ango: { name: "Ango Ango, DRC", refMT: 12159, refCrew: 30, refGRT: 25400, lines: [
-        { cat: "Navigation", desc: "CVM Pilots Gratification", unit: "per GRT", usdBase: 8800 },
-        { cat: "Port Authority", desc: "Harbour Master Police per vessel", unit: "fixed", usdBase: 600 },
-        { cat: "Port Authority", desc: "Police per crew", unit: "per crew", usdBase: 3000 },
-        { cat: "Port Authority", desc: "Security Visit", unit: "fixed", usdBase: 200 },
-        { cat: "Port Authority", desc: "Clearance In/Out", unit: "fixed", usdBase: 200 },
-        { cat: "Port Authority", desc: "Disbursements", unit: "fixed", usdBase: 100 },
-        { cat: "Port Authority", desc: "Technical Control", unit: "fixed", usdBase: 100 },
-        { cat: "Port Authority", desc: "Agents Overtime", unit: "fixed", usdBase: 400 },
-        { cat: "Sanitary", desc: "Sanitary Control", unit: "fixed", usdBase: 650 },
-        { cat: "Sanitary", desc: "Quarantine Overtime", unit: "fixed", usdBase: 350 },
-        { cat: "Government", desc: "Custom Overtime", unit: "fixed", usdBase: 200 },
-        { cat: "Government", desc: "Pollution Tax", unit: "fixed", usdBase: 250 },
-        { cat: "Port", desc: "Seamen's Pool Watchmen", unit: "fixed", usdBase: 3500 },
-        { cat: "Freight", desc: "LMC Trafic Right", unit: "per MT", usdBase: 29122 },
-        { cat: "Freight", desc: "OCC Fees 5% per MT", unit: "per MT", usdBase: 60717 },
-        { cat: "Freight", desc: "Statistics Charges", unit: "per MT", usdBase: 12160 },
-        { cat: "Freight", desc: "Regulation Charges", unit: "per MT", usdBase: 12160 },
-        { cat: "Freight", desc: "OGEFREM Commission FERI", unit: "per MT", usdBase: 15559 },
-        { cat: "Agency", desc: "AMICONGO Agency Commission", unit: "fixed", usdBase: 5000 }
-      ]},
-      matadi: { name: "Matadi, DRC", refMT: 12159, refCrew: 30, refGRT: 25400, lines: [
-        { cat: "Navigation", desc: "CVM Redevance Port (GRT based)", unit: "per GRT", usdBase: 9200 },
-        { cat: "Navigation", desc: "CVM Redevance Pilotage", unit: "fixed", usdBase: 5832 },
-        { cat: "Port Authority", desc: "Harbour Master (Note de Créance)", unit: "fixed", usdBase: 3800 },
-        { cat: "Sanitary", desc: "Sanitary Control", unit: "fixed", usdBase: 250 },
-        { cat: "Government", desc: "DGRAD Note de Perception", unit: "per GRT", usdBase: 3800 },
-        { cat: "Freight", desc: "OCC Fees", unit: "per MT", usdBase: 60717 },
-        { cat: "Freight", desc: "OGEFREM Commission", unit: "per MT", usdBase: 15559 },
-        { cat: "Port", desc: "Pool des Marins Mooring", unit: "fixed", usdBase: 3500 },
-        { cat: "Agency", desc: "AMICONGO Agency Fees", unit: "fixed", usdBase: 5000 },
-        { cat: "Agency", desc: "Administration Fee", unit: "fixed", usdBase: 267 }
-      ]},
-      valencia: { name: "Valencia, Spain", refMT: 4200, refCrew: 20, refGRT: 9800, lines: [
-        { cat: "Port", desc: "Port Dues (GT based)", unit: "per GRT", usdBase: 4200 },
-        { cat: "Navigation", desc: "Pilotage", unit: "fixed", usdBase: 3800 },
-        { cat: "Navigation", desc: "Mooring / Unmooring", unit: "fixed", usdBase: 1200 },
-        { cat: "Port", desc: "Towage", unit: "fixed", usdBase: 2800 },
-        { cat: "Government", desc: "Customs Declaration", unit: "fixed", usdBase: 480 },
-        { cat: "Sanitary", desc: "Port Health Authority", unit: "fixed", usdBase: 350 },
-        { cat: "Agency", desc: "Agency Fees", unit: "fixed", usdBase: 2500 },
-        { cat: "Agency", desc: "Comm. & Petties", unit: "fixed", usdBase: 320 }
-      ]},
-      dubai: { name: "Dubai, UAE", refMT: 15000, refCrew: 25, refGRT: 21000, lines: [
-        { cat: "Port", desc: "PCFC Port Dues", unit: "per GRT", usdBase: 8400 },
-        { cat: "Navigation", desc: "Pilotage In/Out", unit: "fixed", usdBase: 4200 },
-        { cat: "Navigation", desc: "Towage In/Out", unit: "fixed", usdBase: 3600 },
-        { cat: "Port", desc: "Mooring / Unmooring", unit: "fixed", usdBase: 1800 },
-        { cat: "Government", desc: "Dubai Customs", unit: "fixed", usdBase: 2100 },
-        { cat: "Sanitary", desc: "Port Health Clearance", unit: "fixed", usdBase: 650 },
-        { cat: "Port", desc: "ISPS Security Fee", unit: "fixed", usdBase: 420 },
-        { cat: "Agency", desc: "Agency Fees", unit: "fixed", usdBase: 3500 },
-        { cat: "Bank", desc: "Bank Charges", unit: "fixed", usdBase: 280 }
-      ]}
+    const clients = [
+      { name: "Trafigura", calls: 45, ports: 12, avgProfit: "$28.4K", preferredAgents: "Tema Maritime Services, BlueJet Agency", role: "Charterer / Trader", note: "High-volume fuel operations with strong demand for reporting speed." },
+      { name: "Vitol", calls: 33, ports: 8, avgProfit: "$24.9K", preferredAgents: "Takoradi Marine Desk, Portline Ghana", role: "Trader / Principal", note: "Favors fast funds monitoring and MT103 confirmation loops." },
+      { name: "Glencore", calls: 18, ports: 6, avgProfit: "$31.2K", preferredAgents: "Conakry Operations Desk, Alpha Guinea Hub", role: "Principal / Operator", note: "Sensitive to FDA accuracy and structured variance explanations." }
+    ];
+
+    const localAgents = [
+      { id: "tema-marine", country: "Ghana", port: "Tema", name: "Tema Maritime Services", contacts: "Harbour Desk, Ops Supervisor, Finance", banking: "Stanbic Ghana / USD + GHS", rating: "★★★★☆", issues: "Low discrepancy rate. Strong night ops support.", preferredBy: "Trafigura, Vitol", score: 92 },
+      { id: "takoradi-portline", country: "Ghana", port: "Takoradi", name: "Portline Takoradi", contacts: "Agency Manager, Boarding Team", banking: "Ecobank Ghana / USD", rating: "★★★★☆", issues: "Occasional delay in surveyor paperwork.", preferredBy: "Vitol", score: 87 },
+      { id: "conakry-alpha", country: "Guinea", port: "Conakry", name: "Alpha Guinea Hub", contacts: "Ops Director, Customs Focal Point", banking: "UBA Guinea / USD + EUR", rating: "★★★☆☆", issues: "Needs tighter PDA / FDA submission discipline.", preferredBy: "Glencore", score: 79 },
+      { id: "dakar-crest", country: "Senegal", port: "Dakar", name: "Crest Dakar Agency", contacts: "Port Captain, Documentation Lead", banking: "BNP Paribas Senegal / EUR", rating: "★★★★★", issues: "Very reliable reporting turnaround.", preferredBy: "Mercuria", score: 95 },
+      { id: "freetown-lantern", country: "Sierra Leone", port: "Freetown", name: "Lantern Shipping Freetown", contacts: "Marine Desk, Launch Coordination", banking: "Zenith Sierra Leone / USD", rating: "★★★☆☆", issues: "Variance comments need standardization.", preferredBy: "Dynacom", score: 74 }
+    ];
+
+    const lineupIntelligence = [
+      { vessel: "MT BLUE FALCON", eta: "26 Jul", cargo: "Gasoline", terminal: "Tema Oil Jetty", source: "Tema Line-Up 24/06" },
+      { vessel: "MV COAST HARBOR", eta: "27 Jul", cargo: "Base Oil", terminal: "Takoradi Main Berth", source: "Takoradi Weekly Line-Up" },
+      { vessel: "MT NOVA STREAM", eta: "28 Jul", cargo: "Jet A1", terminal: "Conakry Fuel Pier", source: "Conakry Agent Broadcast" },
+      { vessel: "MT DESERT WAVE", eta: "29 Jul", cargo: "Gas Oil", terminal: "Dakar Anchorage", source: "Dakar Offshore List" }
+    ];
+
+    const operationsStats = [
+      { label: "Arrival", range: "ETA → EOSP", value: "6h 20m", benchmark: "Best in class" },
+      { label: "Berthing", range: "POB → All Fast", value: "1h 34m", benchmark: "Stable" },
+      { label: "Terminal Efficiency", range: "All Fast → Ops Commenced", value: "48m", benchmark: "Improving" },
+      { label: "Cargo Performance", range: "Loading / Discharging Rate", value: "712 MT/hr", benchmark: "Competitive" },
+      { label: "Sailing", range: "Ops Complete → COSP", value: "7h 05m", benchmark: "Needs focus" }
+    ];
+
+    const managementRankings = {
+      ports: [
+        { name: "Tema", value: "$412K" },
+        { name: "Takoradi", value: "$296K" },
+        { name: "Conakry", value: "$244K" },
+        { name: "Dakar", value: "$191K" }
+      ],
+      clients: [
+        { name: "Trafigura", value: "$365K" },
+        { name: "Vitol", value: "$284K" },
+        { name: "Glencore", value: "$218K" },
+        { name: "Mercuria", value: "$176K" }
+      ],
+      teams: [
+        { name: "Blade Runner", value: "18 live cases" },
+        { name: "Boss", value: "12 live cases" },
+        { name: "Brain", value: "9 live cases" }
+      ],
+      agents: [
+        { name: "Tema Maritime Services", value: "3 incidents" },
+        { name: "Portline Takoradi", value: "5 incidents" },
+        { name: "Alpha Guinea Hub", value: "7 incidents" },
+        { name: "Crest Dakar Agency", value: "1 incident" }
+      ]
     };
-
-    const recentActivity = [
-      { accent: "var(--blue)", en: "MT DIDDI — PDA generated automatically for Ango Ango port call", es: "MT DIDDI — PDA generado automáticamente para recalada en Ango Ango", timeEn: "2 min ago", timeEs: "hace 2 min" },
-      { accent: "var(--green)", en: "MT AFRICAN RUBY — FDA closed. Balance: $3,801.66 USD", es: "MT AFRICAN RUBY — FDA cerrada. Balance: $3,801.66 USD", timeEn: "1 hr ago", timeEs: "hace 1 h" },
-      { accent: "var(--teal)", en: "MT NORDIC STAR — ETA updated: 25/06/2026 Matadi", es: "MT NORDIC STAR — ETA actualizada: 25/06/2026 Matadi", timeEn: "3 hr ago", timeEs: "hace 3 h" },
-      { accent: "var(--amber)", en: "MT DUBAI PEARL — Waiting berth notification sent to owner", es: "MT DUBAI PEARL — Notificación de espera de atraque enviada al armador", timeEn: "5 hr ago", timeEs: "hace 5 h" },
-      { accent: "var(--green)", en: "MT BUENOS AIRES — Agency fees confirmed: $5,000 USD", es: "MT BUENOS AIRES — Honorarios de agencia confirmados: $5,000 USD", timeEn: "8 hr ago", timeEs: "hace 8 h" }
-    ];
-
-    const pendingActions = [
-      { accent: "var(--red)", priority: "urgent", en: "MT DIDDI — FDA review pending. Variance detected: +$2,400", es: "MT DIDDI — Revisión FDA pendiente. Varianza detectada: +$2,400", badgeEn: "Urgent", badgeEs: "Urgente" },
-      { accent: "var(--red)", priority: "urgent", en: "MT RIVER CONGO — Pilot gratification payment required", es: "MT RIVER CONGO — Pago de gratificación a prácticos requerido", badgeEn: "Urgent", badgeEs: "Urgente" },
-      { accent: "var(--amber)", priority: "attention", en: "MT VEGA STAR — OGEFREM certificate renewal due 30/06", es: "MT VEGA STAR — Renovación certificado OGEFREM vence 30/06", badgeEn: "Attention required", badgeEs: "Requiere atención" }
-    ];
-
-    const financialBreakdown = [
-      { labelEn: "OGEFREM / Freight Taxes", labelEs: "OGEFREM / Tasas de flete", percent: 26, value: "$487K", color: "#3b82f6" },
-      { labelEn: "OCC Fees / Port Dues", labelEs: "OCC Fees / Tasas portuarias", percent: 22, value: "$413K", color: "#14b8a6" },
-      { labelEn: "Navigation (CVM / Pilotage)", labelEs: "Navegación (CVM / Pilotaje)", percent: 17, value: "$319K", color: "#22c55e" },
-      { labelEn: "Agency Fees", labelEs: "Honorarios de agencia", percent: 13, value: "$243K", color: "#f59e0b" },
-      { labelEn: "Government (Customs/Taxes)", labelEs: "Gobierno (aduanas/impuestos)", percent: 11, value: "$206K", color: "#8b5cf6" },
-      { labelEn: "Sanitary / Health", labelEs: "Sanitario / Salud", percent: 6, value: "$112K", color: "#ec4899" },
-      { labelEn: "Other (ISPS/Bank/Petties)", labelEs: "Otros (ISPS/Banco/Petties)", percent: 3, value: "$61K", color: "#64748b" }
-    ];
-
-    const comparisonVariance = {
-      banana: 0.037,
-      ango: 0.037,
-      matadi: 0.037,
-      valencia: 0.024,
-      dubai: 0.018
-    };
-
-    const categoryFdaFactor = {
-      Navigation: 1.05,
-      "Port Authority": 0.98,
-      Government: 1.02,
-      Freight: 1.04,
-      Agency: 1.06,
-      Sanitary: 1.03,
-      Port: 1.01,
-      Bank: 1
-    };
-
-    const builderVesselIds = [0, 1, 2, 4];
 
     const state = {
-      lang: "en",
-      page: "dashboard",
-      selectedVesselId: 0,
-      builder: {
-        vesselId: 0,
-        port: "banana",
-        operation: "Discharge",
-        cargoMT: 1600,
-        grt: 8251,
-        crew: 26,
-        loading: false,
-        generated: true
-      },
-      charts: {
-        bar: null,
-        trend: null
-      }
+      page: "operations",
+      selectedCaseRef: "NM-24001",
+      teamFilter: "All",
+      statusFilter: "All",
+      createMode: "OCR Voyage Instructions",
+      workspaceTab: "overview",
+      selectedAgentId: "tema-marine",
+      charts: { ops: null, exec: null }
     };
 
-    function dual(en, es) {
-      return `<span class="en">${en}</span><span class="es">${es}</span>`;
-    }
-
-    function statusLabel(status) {
-      if (status === "in-port") return { en: "In Port", es: "En Puerto" };
-      if (status === "anchored") return { en: "Anchored", es: "Fondeado" };
-      return { en: "Underway", es: "En Ruta" };
-    }
-
-    function statusClass(status) {
-      return status === "in-port" ? "in-port" : status === "anchored" ? "anchored" : "underway";
-    }
-
-    function statusColor(status) {
-      if (status === "in-port") return "var(--green)";
-      if (status === "anchored") return "var(--amber)";
-      return "var(--blue)";
-    }
-
-    function money(value) {
+    function formatMoney(value) {
       return new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
         maximumFractionDigits: 0
-      }).format(Number(value) || 0);
+      }).format(value);
     }
 
-    function moneyPrecise(value) {
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }).format(Number(value) || 0);
+    function currentCase() {
+      return cases.find((item) => item.ref === state.selectedCaseRef) || cases[0];
     }
 
-    function eurMoney(value) {
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "EUR",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-      }).format(Number(value) || 0);
+    function currentAgent() {
+      return localAgents.find((item) => item.id === state.selectedAgentId) || localAgents[0];
     }
 
-    function compactMoney(value) {
-      return `$${Math.round((Number(value) || 0) / 1000)}K`;
+    function caseStatusClass(status) {
+      return String(status).toLowerCase();
     }
 
-    function escapeAttr(value) {
-      return String(value).replace(/"/g, "&quot;");
-    }
-
-    function formatPercent(value) {
-      return `${(value * 100).toFixed(1)}%`;
-    }
-
-    function titleCase(value) {
-      return String(value)
-        .split(" ")
-        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-        .join(" ");
-    }
-
-    function getVessel(id) {
-      return vessels.find((vessel) => vessel.id === id) || vessels[0];
-    }
-
-    function extractCargoMT(cargo) {
-      const match = String(cargo).match(/([\d,]+)\s*MT/);
-      return match ? Number(match[1].replace(/,/g, "")) : 1600;
-    }
-
-    function syncBuilderFromVessel(vesselId) {
-      const vessel = getVessel(Number(vesselId));
-      const refPort = vessel.pdaPort;
-      state.builder.vesselId = vessel.id;
-      state.builder.port = refPort;
-      state.builder.operation = "Discharge";
-      state.builder.cargoMT = extractCargoMT(vessel.cargo);
-      state.builder.grt = vessel.grt;
-      state.builder.crew = pdaData[refPort].refCrew || 26;
-    }
-
-    function calcLine(line, portKey, inputMT, inputCrew, inputGRT) {
-      const port = pdaData[portKey];
-      if (line.unit === "fixed") return line.usdBase;
-      if (line.unit === "per MT") return Math.round(line.usdBase * (inputMT / port.refMT));
-      if (line.unit === "per crew") return Math.round(line.usdBase * (inputCrew / port.refCrew));
-      if (line.unit === "per GRT") return Math.round(line.usdBase * (inputGRT / port.refGRT));
-      return line.usdBase;
-    }
-
-    function computeBuilderPreview() {
-      const { vesselId, port, operation, cargoMT, grt, crew } = state.builder;
-      const vessel = getVessel(vesselId);
-      const portData = pdaData[port];
-      const lines = portData.lines.map((line) => ({
-        ...line,
-        amount: calcLine(line, port, cargoMT, crew, grt)
-      }));
-      const grouped = groupLinesByCategory(lines, "amount");
-      const total = lines.reduce((sum, line) => sum + line.amount, 0);
-      const ref = `PDA-2026-00${vessel.id + 1}`;
-      return {
-        vessel,
-        portData,
-        operation,
-        lines,
-        grouped,
-        total,
-        totalEur: Math.round(total * 0.924),
-        reference: ref
-      };
-    }
-
-    function groupLinesByCategory(lines, amountKey) {
-      const groups = {};
-      lines.forEach((line) => {
-        if (!groups[line.cat]) groups[line.cat] = [];
-        groups[line.cat].push(line);
-      });
-      return Object.entries(groups).map(([category, categoryLines]) => ({
-        category,
-        lines: categoryLines,
-        subtotal: categoryLines.reduce((sum, line) => sum + (Number(line[amountKey]) || 0), 0)
-      }));
-    }
-
-    function computeComparison(vessel) {
-      const portKey = vessel.pdaPort;
-      const baseLines = pdaData[portKey].lines.map((line) => ({
-        ...line,
-        amount: line.usdBase
-      }));
-      const pdaTotal = baseLines.reduce((sum, line) => sum + line.amount, 0);
-      const variance = comparisonVariance[portKey] || 0.03;
-      const fdaTotal = Math.round(pdaTotal * (1 + variance));
-      const difference = fdaTotal - pdaTotal;
-      const groupedPda = groupLinesByCategory(baseLines, "amount");
-      const categoryRows = groupedPda.map((group) => {
-        const factor = categoryFdaFactor[group.category] || (1 + variance);
-        const fdaSubtotal = Math.round(group.subtotal * factor);
-        return {
-          category: group.category,
-          pdaSubtotal: group.subtotal,
-          fdaSubtotal,
-          diff: fdaSubtotal - group.subtotal
-        };
-      }).sort((a, b) => b.pdaSubtotal - a.pdaSubtotal).slice(0, 5);
-
-      return {
-        lines: groupedPda,
-        pdaTotal,
-        fdaTotal,
-        variance,
-        difference,
-        categoryRows
-      };
-    }
-
-    function unitLabel(unit) {
-      const labels = {
-        fixed: { en: "Fixed", es: "Fijo" },
-        "per MT": { en: "Per MT", es: "Por MT" },
-        "per crew": { en: "Per crew", es: "Por tripulante" },
-        "per GRT": { en: "Per GRT", es: "Por GRT" }
-      };
-      const label = labels[unit] || { en: unit, es: unit };
-      return dual(label.en, label.es);
-    }
-
-    function timelineForStatus(status) {
-      const steps = [
-        { labelEn: "Nomination", labelEs: "Nominación", copyEn: "Commercial confirmation received", copyEs: "Confirmación comercial recibida" },
-        { labelEn: "PDA Issued", labelEs: "PDA Emitida", copyEn: "Port cost forecast sent to owner", copyEs: "Pronóstico de costos enviado al armador" },
-        { labelEn: "Port Operations", labelEs: "Operación Portuaria", copyEn: "Live execution window for the call", copyEs: "Ventana operativa en ejecución" },
-        { labelEn: "FDA Final", labelEs: "FDA Final", copyEn: "Final account and invoices under closure", copyEs: "Cuenta final e invoices en cierre" },
-        { labelEn: "Settlement", labelEs: "Liquidación", copyEn: "Post-call balance and reconciliation", copyEs: "Balance y conciliación post escala" }
-      ];
-
-      return steps.map((step, index) => {
-        let stateLabel = { en: "Pending", es: "Pendiente" };
-        let cls = "";
-        if (status === "in-port") {
-          if (index < 2) {
-            cls = "done";
-            stateLabel = { en: "✓ Complete", es: "✓ Completo" };
-          } else if (index === 2) {
-            cls = "active";
-            stateLabel = { en: "🔵 Active", es: "🔵 Activo" };
-          }
-        } else if (status === "underway") {
-          if (index < 2) {
-            cls = "done";
-            stateLabel = { en: "✓ Complete", es: "✓ Completo" };
-          }
-        } else if (status === "anchored") {
-          if (index < 3) {
-            cls = index < 2 ? "done" : "active";
-            stateLabel = index < 2 ? { en: "✓ Complete", es: "✓ Completo" } : { en: "🔵 Active", es: "🔵 Activo" };
-          }
-        }
-        return { ...step, cls, stateLabel };
+    function teamFilteredCases() {
+      return cases.filter((item) => {
+        const teamMatch = state.teamFilter === "All" || item.team === state.teamFilter;
+        const statusMatch = state.statusFilter === "All" || item.status === state.statusFilter;
+        return teamMatch && statusMatch;
       });
     }
 
-    function destroyCharts() {
-      if (state.charts.bar) {
-        state.charts.bar.destroy();
-        state.charts.bar = null;
-      }
-      if (state.charts.trend) {
-        state.charts.trend.destroy();
-        state.charts.trend = null;
-      }
+    function generatedCasePreview() {
+      const active = currentCase();
+      return {
+        ref: "NM-2026-0001",
+        vessel: active.vessel,
+        gatship: `${active.port.toUpperCase().slice(0, 3)}-${active.ref.slice(-4)}`,
+        sedna: `${active.principal.toUpperCase().replace(/\s+/g, "-")}-${active.port.toUpperCase()}`,
+        cargo: active.cargo.map((item) => `${item.product} ${item.quantity}`).join(" / ")
+      };
     }
 
-    function renderDashboard() {
-      const selectedVessel = getVessel(state.selectedVesselId);
-      const dashboardEl = document.getElementById("page-dashboard");
-      dashboardEl.innerHTML = `
-        <section class="intro-card">
-          <div class="intro-grid">
+    function renderOperations() {
+      const filtered = teamFilteredCases();
+      const preview = generatedCasePreview();
+      const operationsEl = document.getElementById("page-operations");
+      operationsEl.innerHTML = `
+        <section class="hero-card">
+          <div class="hero-grid">
             <div>
-              <span class="eyebrow">${dual("Global Maritime Control Layer", "Capa Global de Control Marítimo")}</span>
-              <h1 class="intro-title">${dual("Fleet visibility, PDA automation and voyage-level financial control.", "Visibilidad de flota, automatización de PDA y control financiero por voyage.")}</h1>
-              <p class="intro-copy">${dual("This interactive demo shows how New Maritime can replace fragmented spreadsheets, email chains and manual disbursement workflows with one operational surface for directors, team leads and operators.", "Esta demo interactiva muestra cómo New Maritime puede reemplazar planillas fragmentadas, cadenas de correo y flujos manuales de desembolso con una sola superficie operativa para directores, team leads y operadores.")}</p>
+              <span class="eyebrow"><i class="ti ti-radar-2"></i> Operations</span>
+              <h1 class="hero-title">The operator's command surface for live hub agency execution.</h1>
+              <p class="hero-copy">Operations is the front door of NEW MARITIME HUB OS. It keeps every active call sorted by ETA, exposes the team workload immediately and lets the operator create a new case from OCR voyage instructions or manual entry without bouncing across spreadsheets, Sedna and legacy tools.</p>
             </div>
-            <div class="intro-stats">
-              <div class="intro-stat">
-                <strong>${dual("10 operators", "10 operadores")}</strong>
-                <span>${dual("Spain, Dubai and Argentina coordinated from a single live board.", "España, Dubái y Argentina coordinados desde un solo tablero en vivo.")}</span>
-              </div>
-              <div class="intro-stat">
-                <strong>${dual("DRC focus", "Foco DRC")}</strong>
-                <span>${dual("Real Banana and Ango Ango cost structures seeded from client documentation.", "Estructuras reales de costos de Banana y Ango Ango sembradas desde documentación del cliente.")}</span>
-              </div>
-              <div class="intro-stat">
-                <strong>${dual("One-click detail", "Detalle en un click")}</strong>
-                <span>${dual("Map or fleet list interactions open the active voyage cost picture instantly.", "Las interacciones en mapa o lista abren instantáneamente la foto de costos del voyage activo.")}</span>
-              </div>
-              <div class="intro-stat">
-                <strong>${dual("No backend", "Sin backend")}</strong>
-                <span>${dual("Single-file demo ready for GitHub Pages, boardroom walkthroughs and portable sharing.", "Demo single-file lista para GitHub Pages, walkthroughs de directorio y distribución portátil.")}</span>
-              </div>
+            <div class="hero-insight-grid">
+              <div class="insight-card"><strong>4 live calls</strong><span>Sorted by ETA with one-click jump into the active case workspace.</span></div>
+              <div class="insight-card"><strong>3 team lanes</strong><span>Blade Runner, Boss and Brain filters mimic real operational distribution.</span></div>
+              <div class="insight-card"><strong>OCR-first intake</strong><span>Voyage instructions generate the case reference, GATSHIP reference and Sedna tag automatically.</span></div>
+              <div class="insight-card"><strong>Legacy replaced</strong><span>Manual email parsing and fragmented case creation are collapsed into one flow.</span></div>
             </div>
           </div>
         </section>
 
-        <section class="kpi-grid">
-          <div class="card kpi-card kpi-blue">
-            <div class="label">${dual("Active Vessels", "Naves Activas")}</div>
-            <div class="value" data-counter data-format="int" data-target="9">0</div>
-            <div class="subcopy">${dual("Global operational surface with real seed vessels", "Superficie operativa global con naves semilla reales")}</div>
-          </div>
-          <div class="card kpi-card kpi-teal">
-            <div class="label">${dual("Month Disbursements", "Desembolsos del Mes")}</div>
-            <div class="value" data-counter data-format="moneyk" data-target="1840">0</div>
-            <div class="subcopy">${dual("Estimated total monthly exposure across active voyages", "Exposición mensual estimada a través de voyages activos")}</div>
-          </div>
-          <div class="card kpi-card kpi-green">
-            <div class="label">${dual("PDAs Generated", "PDAs Generadas")}</div>
-            <div class="value" data-counter data-format="int" data-target="47">0</div>
-            <div class="subcopy">${dual("Automated cost forecasts without manual template copying", "Pronósticos automáticos de costos sin copiar plantillas manualmente")}</div>
-          </div>
-          <div class="card kpi-card kpi-amber">
-            <div class="label">${dual("Ports Active", "Puertos Activos")}</div>
-            <div class="value" data-counter data-format="int" data-target="12">0</div>
-            <div class="subcopy">DRC · Spain · UAE · Argentina</div>
-          </div>
-        </section>
-
-        <section class="dashboard-grid">
-          <article class="card map-card">
-            <div class="card-header">
-              <div>
-                <h3>${dual("Global Tracking Map", "Mapa Global de Seguimiento")}</h3>
-                <p>${dual("Static SVG with animated routes and live fleet pulses.", "SVG estático con rutas animadas y pulsos activos de flota.")}</p>
-              </div>
-            </div>
-            <div class="map-frame">
-              <div class="map-overlay-title">${dual("Global Vessel Tracking", "Seguimiento Global de Naves")}</div>
-              <svg class="world-map" viewBox="0 0 900 400" aria-label="Global vessel tracking map">
-                <defs>
-                  <linearGradient id="routeGlow" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="rgba(59,130,246,0.05)"></stop>
-                    <stop offset="50%" stop-color="rgba(59,130,246,0.5)"></stop>
-                    <stop offset="100%" stop-color="rgba(20,184,166,0.45)"></stop>
-                  </linearGradient>
-                </defs>
-                <rect width="900" height="400" fill="#0d1526"></rect>
-                <line x1="0" y1="200" x2="900" y2="200" stroke="rgba(59,130,246,0.05)" stroke-width="1"></line>
-                <line x1="450" y1="0" x2="450" y2="400" stroke="rgba(59,130,246,0.05)" stroke-width="1"></line>
-
-                <path d="M65 120 C90 86 165 66 238 82 C286 92 322 122 344 160 C350 176 342 190 310 196 C272 202 246 208 224 232 C198 258 142 270 92 252 C62 238 50 204 48 168 C48 150 54 136 65 120Z" fill="#1a2a40" stroke="rgba(59,130,246,0.2)"></path>
-                <path d="M364 88 C388 58 452 42 520 52 C572 58 634 78 660 112 C672 128 670 154 638 170 C608 186 572 188 560 210 C548 234 510 246 470 238 C436 232 414 214 392 214 C372 214 356 198 356 172 C356 148 352 114 364 88Z" fill="#1a2a40" stroke="rgba(59,130,246,0.2)"></path>
-                <path d="M470 216 C498 210 530 218 552 236 C574 254 594 282 586 318 C580 344 554 360 520 358 C492 356 464 336 456 306 C450 282 446 248 470 216Z" fill="#1a2a40" stroke="rgba(59,130,246,0.2)"></path>
-                <path d="M690 108 C724 92 788 96 830 118 C862 136 874 166 862 194 C850 222 818 232 786 224 C756 216 736 198 718 198 C698 198 682 180 680 160 C678 140 676 116 690 108Z" fill="#1a2a40" stroke="rgba(59,130,246,0.2)"></path>
-                <path d="M180 282 C210 264 244 268 270 290 C294 310 304 336 286 354 C270 370 240 374 212 362 C184 350 166 326 162 304 C160 294 168 286 180 282Z" fill="#1a2a40" stroke="rgba(59,130,246,0.2)"></path>
-
-                <path d="M425 118 Q 460 160 444 312" fill="none" stroke="url(#routeGlow)" stroke-width="2" stroke-dasharray="4 4">
-                  <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2s" repeatCount="indefinite"></animate>
-                </path>
-                <path d="M596 158 Q 520 150 444 312" fill="none" stroke="url(#routeGlow)" stroke-width="2" stroke-dasharray="4 4">
-                  <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.2s" repeatCount="indefinite"></animate>
-                </path>
-                <path d="M205 315 Q 310 340 444 312" fill="none" stroke="url(#routeGlow)" stroke-width="2" stroke-dasharray="4 4">
-                  <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.4s" repeatCount="indefinite"></animate>
-                </path>
-                <path d="M150 200 Q 256 186 360 240" fill="none" stroke="url(#routeGlow)" stroke-width="2" stroke-dasharray="4 4">
-                  <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.9s" repeatCount="indefinite"></animate>
-                </path>
-                <path d="M360 240 Q 402 246 430 278" fill="none" stroke="url(#routeGlow)" stroke-width="2" stroke-dasharray="4 4">
-                  <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2.1s" repeatCount="indefinite"></animate>
-                </path>
-
-                ${vessels.map((vessel, index) => `
-                  <g class="vessel-node" data-vessel-node="${vessel.id}">
-                    <circle cx="${vessel.mapX}" cy="${vessel.mapY}" r="5" fill="${statusColor(vessel.status)}"></circle>
-                    <circle cx="${vessel.mapX}" cy="${vessel.mapY}" r="5" fill="none" stroke="${statusColor(vessel.status)}" stroke-width="2" opacity="0.8">
-                      <animate attributeName="r" values="5;14;5" dur="${1.8 + (index * 0.12)}s" repeatCount="indefinite"></animate>
-                      <animate attributeName="opacity" values="0.8;0;0.8" dur="${1.8 + (index * 0.12)}s" repeatCount="indefinite"></animate>
-                    </circle>
-                    <text x="${vessel.mapX + 10}" y="${vessel.mapY - 4}" class="vessel-label">${vessel.name}</text>
-                    <text x="${vessel.mapX + 10}" y="${vessel.mapY + 10}" class="vessel-sub">${vessel.port}</text>
-                  </g>
-                `).join("")}
-              </svg>
-            </div>
-            <div class="map-legend">
-              <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>${dual("In Port", "En Puerto")}</span>
-              <span class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>${dual("Underway", "En Ruta")}</span>
-              <span class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span>${dual("Anchored", "Fondeado")}</span>
-            </div>
+        <section class="metric-grid">
+          <article class="card metric-card metric-sea">
+            <div class="metric-label">Open Cases</div>
+            <div class="metric-value">64</div>
+            <div class="metric-subcopy">Rolling queue across the hub, with live ownership by team lane.</div>
           </article>
-
-          <aside class="card fleet-card">
-            <div class="card-header">
-              <div>
-                <h3>${dual("Active Fleet", "Flota Activa")}</h3>
-                <p>${dual("Operators can drill down from map or list in one click.", "Los operadores pueden entrar al detalle desde mapa o lista en un click.")}</p>
-              </div>
-              <div class="badge">${dual("9 vessels", "9 buques")}</div>
-            </div>
-            <div class="fleet-list" id="fleetList">
-              ${vessels.map((vessel) => {
-                const label = statusLabel(vessel.status);
-                return `
-                  <button class="fleet-item ${selectedVessel.id === vessel.id ? "selected" : ""}" type="button" data-vessel-select="${vessel.id}">
-                    <span class="fleet-icon">${vessel.icon}</span>
-                    <span class="fleet-main">
-                      <strong>${vessel.name} ${vessel.flag}</strong>
-                      <span>${vessel.port}</span>
-                    </span>
-                    <span class="fleet-status">
-                      <span class="status-dot status-${vessel.status}"></span>
-                      <span>${dual(label.en, label.es)}</span>
-                    </span>
-                  </button>
-                `;
-              }).join("")}
-            </div>
-          </aside>
-        </section>
-
-        <section class="dashboard-lower">
-          <article class="card list-card">
-            <div class="card-header">
-              <div>
-                <h3>${dual("Recent Activity", "Actividad Reciente")}</h3>
-                <p>${dual("Operational pulse across vessel, PDA and FDA workflows.", "Pulso operativo entre workflows de vessel, PDA y FDA.")}</p>
-              </div>
-            </div>
-            <div class="feed-list">
-              ${recentActivity.map((item) => `
-                <div class="feed-item">
-                  <span class="feed-accent" style="background:${item.accent}"></span>
-                  <div>
-                    <strong>${dual(item.en, item.es)}</strong>
-                  </div>
-                  <span class="time-pill">${dual(item.timeEn, item.timeEs)}</span>
-                </div>
-              `).join("")}
-            </div>
+          <article class="card metric-card metric-sky">
+            <div class="metric-label">Today ETA Window</div>
+            <div class="metric-value">11</div>
+            <div class="metric-subcopy">Calls that need immediate focus across arrival, reporting and funds checks.</div>
           </article>
-
-          <article class="card list-card">
-            <div class="card-header">
-              <div>
-                <h3>${dual("Pending Actions", "Acciones Pendientes")}</h3>
-                <p>${dual("Variance and compliance alerts that need human action.", "Alertas de varianza y cumplimiento que requieren acción humana.")}</p>
-              </div>
-              <div class="badge">3</div>
-            </div>
-            <div class="feed-list">
-              ${pendingActions.map((item) => `
-                <div class="feed-item">
-                  <span class="feed-accent" style="background:${item.accent}"></span>
-                  <div>
-                    <strong>${dual(item.en, item.es)}</strong>
-                  </div>
-                  <span class="priority-pill priority-${item.priority}">${dual(item.badgeEn, item.badgeEs)}</span>
-                </div>
-              `).join("")}
-            </div>
+          <article class="card metric-card metric-gold">
+            <div class="metric-label">Unfunded PDAs</div>
+            <div class="metric-value">3</div>
+            <div class="metric-subcopy">Cases where treasury follow-up is still active before the port call.</div>
+          </article>
+          <article class="card metric-card metric-green">
+            <div class="metric-label">Auto-Created Cases</div>
+            <div class="metric-value">78%</div>
+            <div class="metric-subcopy">Share of new work opened from OCR voyage instructions instead of manual typing.</div>
           </article>
         </section>
-      `;
 
-      dashboardEl.querySelectorAll("[data-vessel-select], [data-vessel-node]").forEach((element) => {
-        element.addEventListener("click", () => selectVessel(Number(element.dataset.vesselSelect || element.dataset.vesselNode)));
-      });
-
-      animateCounters();
-    }
-
-    function renderVesselDetail() {
-      const vessel = getVessel(state.selectedVesselId);
-      const comparison = computeComparison(vessel);
-      const timeline = timelineForStatus(vessel.status);
-      const label = statusLabel(vessel.status);
-      const vesselEl = document.getElementById("page-vessel");
-
-      vesselEl.innerHTML = `
-        <div class="section-stack">
-          <button class="back-button" type="button" id="backDashboard">
-            <i class="ti ti-arrow-left"></i>
-            <span>${dual("Back to Dashboard", "Volver al Panel")}</span>
-          </button>
-
-          <section class="card vessel-hero">
-            <div class="vessel-head">
+        <section class="grid-main-aside">
+          <article class="card">
+            <div class="card-head">
               <div>
-                <span class="eyebrow">${dual("Selected Voyage", "Voyage Seleccionado")}</span>
-                <h2>${vessel.name} ${vessel.flag}</h2>
-                <p class="vessel-meta">${vessel.imo} · GRT ${vessel.grt.toLocaleString("en-US")} · ${vessel.operator}</p>
+                <h3>Operations Board</h3>
+                <p>The primary live table for the operator. Sorted by ETA, filterable by team and operational status.</p>
               </div>
-              <div class="status-pill ${statusClass(vessel.status)}">${dual(label.en, label.es)}</div>
+              <div class="pill">${filtered.length} visible cases</div>
             </div>
-
-            <div class="vessel-data-grid">
-              <div class="data-block">
-                <span>${dual("Voyage", "Voyage")}</span>
-                <strong>${vessel.voyage}</strong>
-              </div>
-              <div class="data-block">
-                <span>${dual("Port", "Puerto")}</span>
-                <strong>${vessel.port}</strong>
-              </div>
-              <div class="data-block">
-                <span>${dual("Cargo", "Carga")}</span>
-                <strong>${vessel.cargo}</strong>
-              </div>
-              <div class="data-block">
-                <span>${dual("ETA / Status", "ETA / Estado")}</span>
-                <strong>${vessel.eta}</strong>
-              </div>
-            </div>
-          </section>
-
-          <section class="card timeline-card">
-            <div class="card-header" style="padding:0">
-              <div>
-                <h3>${dual("Voyage Timeline", "Timeline del Voyage")}</h3>
-                <p>${dual("Operational handoff state based on current vessel progress.", "Estado operativo de handoff según progreso actual del buque.")}</p>
-              </div>
-            </div>
-            <div class="timeline-row">
-              ${timeline.map((step, index) => `
-                <div class="timeline-step ${step.cls}">
-                  <small>0${index + 1}</small>
-                  <strong>${dual(step.labelEn, step.labelEs)}</strong>
-                  <span>${dual(step.stateLabel.en, step.stateLabel.es)}</span>
-                  <span class="unit-note">${dual(step.copyEn, step.copyEs)}</span>
+            <div class="card-body">
+              <div class="stack">
+                <div class="filter-row">
+                  ${["All", "Blade Runner", "Boss", "Brain"].map((team) => `<button class="filter-btn ${state.teamFilter === team ? "active" : ""}" type="button" data-team-filter="${team}">${team}</button>`).join("")}
                 </div>
-              `).join("")}
-            </div>
-          </section>
-
-          <section class="detail-grid">
-            <article class="card table-card">
-              <div class="card-header" style="padding:0">
-                <div>
-                  <h3>${dual("PDA Proforma Disbursement", "Desembolso Proforma PDA")}</h3>
-                  <p>${dual("Real line items seeded from the selected port structure.", "Líneas reales sembradas desde la estructura del puerto seleccionado.")}</p>
+                <div class="filter-row">
+                  ${["All", "Current", "Arrived", "Sailed", "Closed"].map((status) => `<button class="filter-btn ${state.statusFilter === status ? "active" : ""}" type="button" data-status-filter="${status}">${status}</button>`).join("")}
                 </div>
-                <div class="badge">${pdaData[vessel.pdaPort].name}</div>
               </div>
-
-              <div class="table-scroll">
+              <div class="table-wrap">
                 <table>
                   <thead>
                     <tr>
-                      <th>${dual("Description", "Descripción")}</th>
-                      <th class="amount">${dual("Amount USD", "Monto USD")}</th>
+                      <th>Ref</th>
+                      <th>Vessel</th>
+                      <th>ETA</th>
+                      <th>Port</th>
+                      <th>Principal</th>
+                      <th>Client</th>
+                      <th>Team</th>
+                      <th>Status</th>
                     </tr>
                   </thead>
                   <tbody>
-                    ${comparison.lines.map((group) => `
-                      <tr class="group-row"><td colspan="2">${group.category}</td></tr>
-                      ${group.lines.map((line) => `
-                        <tr>
-                          <td>${line.desc}</td>
-                          <td class="amount">${money(line.amount)}</td>
-                        </tr>
-                      `).join("")}
-                    `).join("")}
-                    <tr class="total-row">
-                      <td>${dual("Total Reference", "Total Referencia")}</td>
-                      <td class="amount">${money(comparison.pdaTotal)}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </article>
-
-            <aside class="card comparison-card">
-              <div class="card-header" style="padding:0">
-                <div>
-                  <h3>${dual("PDA vs FDA Comparison", "Comparativa PDA vs FDA")}</h3>
-                  <p>${dual("Expected variance profile for the active port call.", "Perfil esperado de varianza para la escala activa.")}</p>
-                </div>
-              </div>
-
-              <div class="metric-grid">
-                <div class="metric-card">
-                  <span>${dual("PDA Total", "Total PDA")}</span>
-                  <strong>${money(comparison.pdaTotal)}</strong>
-                </div>
-                <div class="metric-card gold">
-                  <span>${dual("FDA Total", "Total FDA")}</span>
-                  <strong>${money(comparison.fdaTotal)}</strong>
-                </div>
-                <div class="metric-card red">
-                  <span>${dual("Variance", "Varianza")}</span>
-                  <strong>+${formatPercent(comparison.variance)}</strong>
-                </div>
-              </div>
-
-              <div class="progress-panel">
-                <div class="muted">${dual("PDA coverage against expected FDA finalization", "Cobertura PDA frente a final esperado FDA")}</div>
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width:${Math.round((comparison.pdaTotal / comparison.fdaTotal) * 100)}%"></div>
-                </div>
-                <p>${dual(`Difference: ${money(comparison.difference)} · Typical variance for ${pdaData[vessel.pdaPort].name}`, `Diferencia: ${money(comparison.difference)} · Varianza típica para ${pdaData[vessel.pdaPort].name}`)}</p>
-              </div>
-
-              <div class="table-scroll" style="margin-top:16px">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>${dual("Category", "Categoría")}</th>
-                      <th class="amount">${dual("PDA", "PDA")}</th>
-                      <th class="amount">${dual("FDA", "FDA")}</th>
-                      <th class="amount">${dual("Diff.", "Dif.")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${comparison.categoryRows.map((row) => `
-                      <tr>
-                        <td>${row.category}</td>
-                        <td class="amount">${money(row.pdaSubtotal)}</td>
-                        <td class="amount">${money(row.fdaSubtotal)}</td>
-                        <td class="amount">${money(row.diff)}</td>
+                    ${filtered.map((item) => `
+                      <tr class="ops-row ${item.ref === state.selectedCaseRef ? "selected" : ""}" data-case-select="${item.ref}">
+                        <td class="mono">${item.ref}</td>
+                        <td>${item.vessel}</td>
+                        <td>${item.eta}</td>
+                        <td>${item.port}</td>
+                        <td>${item.principal}</td>
+                        <td>${item.client}</td>
+                        <td>${item.team}</td>
+                        <td>
+                          <span class="status-chip">
+                            <span class="status-dot status-${caseStatusClass(item.status)}"></span>
+                            <span>${item.status}</span>
+                          </span>
+                        </td>
                       </tr>
                     `).join("")}
                   </tbody>
                 </table>
               </div>
-            </aside>
-          </section>
-        </div>
-      `;
+            </div>
+          </article>
 
-      document.getElementById("backDashboard").addEventListener("click", () => setPage("dashboard"));
-    }
-
-    function renderBuilder() {
-      const preview = computeBuilderPreview();
-      const builderEl = document.getElementById("page-builder");
-      const previewBody = state.builder.loading ? `
-        <div class="spinner-wrap">
-          <div class="spinner-panel">
-            <div class="spinner"></div>
-            <h3>${dual("Generating proforma disbursement account...", "Generando cuenta de desembolso proforma...")}</h3>
-            <p>${dual("Recalculating fixed, per-MT, per-crew and GRT-driven lines for the selected vessel and port call.", "Recalculando líneas fijas, por MT, por tripulación y por GRT para el buque y la escala seleccionados.")}</p>
-          </div>
-        </div>
-      ` : `
-        <div class="preview-head">
-          <div>
-            <span class="eyebrow">${dual("Automation Output", "Salida de Automatización")}</span>
-            <h3>${preview.vessel.name}</h3>
-            <div class="preview-meta">${dual(`PDA · ${preview.portData.name} · ${preview.operation} · Ref: ${preview.reference}`, `PDA · ${preview.portData.name} · ${preview.operation} · Ref: ${preview.reference}`)}</div>
-          </div>
-          <div class="total-box">
-            <span>${dual("Total Disbursement", "Desembolso Total")}</span>
-            <strong>${money(preview.total)}</strong>
-            <em>${dual(`EUR equivalent ${eurMoney(preview.totalEur)}`, `Equivalente EUR ${eurMoney(preview.totalEur)}`)}</em>
-          </div>
-        </div>
-        <div class="table-scroll" style="margin:20px 24px 24px">
-          <table>
-            <thead>
-              <tr>
-                <th>${dual("Description", "Descripción")}</th>
-                <th class="amount">${dual("Amount USD", "Monto USD")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${preview.grouped.map((group) => `
-                <tr class="group-row"><td colspan="2">${group.category}</td></tr>
-                ${group.lines.map((line) => `
-                  <tr>
-                    <td>${line.desc}<span class="unit-note">${unitLabel(line.unit)}</span></td>
-                    <td class="amount">${money(line.amount)}</td>
-                  </tr>
-                `).join("")}
-                <tr class="subtotal-row">
-                  <td>${dual(`${group.category} subtotal`, `Subtotal ${group.category}`)}</td>
-                  <td class="amount">${money(group.subtotal)}</td>
-                </tr>
-              `).join("")}
-              <tr class="total-row">
-                <td>${dual("Total Disbursement", "Desembolso Total")}</td>
-                <td class="amount">${money(preview.total)}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      `;
-
-      builderEl.innerHTML = `
-        <div class="section-stack">
-          <section class="intro-card">
-            <div class="intro-grid">
+          <aside class="card">
+            <div class="card-head">
               <div>
-                <span class="eyebrow">${dual("PDA Builder", "Generador PDA")}</span>
-                <h1 class="intro-title">${dual("Replace manual template copying with dynamic disbursement generation.", "Reemplaza la copia manual de plantillas con generación dinámica de desembolsos.")}</h1>
-                <p class="intro-copy">${dual("This is the wow moment of the demo: cost lines recalculate instantly from cargo, crew and GRT inputs, while the interface simulates a live proforma generation workflow for decision-makers.", "Este es el momento wow de la demo: las líneas de costo se recalculan instantáneamente desde inputs de carga, tripulación y GRT, mientras la interfaz simula un workflow vivo de generación de proforma para decisores.")}</p>
-              </div>
-              <div class="intro-stats">
-                <div class="intro-stat">
-                  <strong>${dual("5 ports", "5 puertos")}</strong>
-                  <span>${dual("Banana, Ango Ango, Matadi, Valencia and Dubai available in the calculator.", "Banana, Ango Ango, Matadi, Valencia y Dubái disponibles en el calculador.")}</span>
-                </div>
-                <div class="intro-stat">
-                  <strong>${dual("Real seed data", "Datos reales semilla")}</strong>
-                  <span>${dual("Banana and Ango Ango preserve client reference totals and structure.", "Banana y Ango Ango preservan totales y estructura de referencia del cliente.")}</span>
-                </div>
+                <h3>Create Case</h3>
+                <p>Open a new file from OCR voyage instructions or manual entry.</p>
               </div>
             </div>
-          </section>
-
-          <section class="builder-layout">
-            <aside class="card builder-panel">
-              <span class="eyebrow">${dual("Inputs", "Parámetros")}</span>
-              <h3>${dual("Generate PDA", "Generar PDA")}</h3>
-              <p class="muted" style="margin-top:10px; line-height:1.6">${dual("Every input updates the preview in real time. The button only triggers the generation animation.", "Cada input actualiza el preview en tiempo real. El botón solo dispara la animación de generación.")}</p>
-
-              <div class="field-stack">
-                <div class="field">
-                  <label for="builderVessel">${dual("Vessel", "Buque")}</label>
-                  <select id="builderVessel">
-                    ${builderVesselIds.map((id) => {
-                      const vessel = getVessel(id);
-                      return `<option value="${vessel.id}" ${state.builder.vesselId === vessel.id ? "selected" : ""}>${vessel.name}</option>`;
-                    }).join("")}
-                  </select>
-                </div>
-                <div class="field">
-                  <label for="builderPort">${dual("Port of Call", "Puerto de Escala")}</label>
-                  <select id="builderPort">
-                    ${Object.entries(pdaData).map(([key, port]) => `<option value="${key}" ${state.builder.port === key ? "selected" : ""}>${port.name}</option>`).join("")}
-                  </select>
-                </div>
-                <div class="field">
-                  <label for="builderOperation">${dual("Operation", "Operación")}</label>
-                  <select id="builderOperation">
-                    ${["Discharge", "Load", "Transit"].map((option) => `<option value="${option}" ${state.builder.operation === option ? "selected" : ""}>${option}</option>`).join("")}
-                  </select>
-                </div>
-                <div class="field">
-                  <label for="builderCargo">${dual("Cargo (MT)", "Carga (MT)")}</label>
-                  <input id="builderCargo" type="number" min="100" max="50000" value="${state.builder.cargoMT}">
-                </div>
-                <div class="field">
-                  <label for="builderGRT">${dual("GRT", "GRT")}</label>
-                  <input id="builderGRT" type="number" min="1000" max="100000" value="${state.builder.grt}">
-                </div>
-                <div class="field">
-                  <label for="builderCrew">${dual("Crew", "Tripulación")}</label>
-                  <input id="builderCrew" type="number" min="10" max="50" value="${state.builder.crew}">
-                </div>
-                <button class="generate-btn" id="generatePda" type="button">${dual("⚡ Generate PDA", "⚡ Generar PDA")}</button>
+            <div class="card-body stack">
+              <div class="segment-row">
+                ${["OCR Voyage Instructions", "Manual Entry"].map((mode) => `<button class="segment-btn ${state.createMode === mode ? "active" : ""}" type="button" data-create-mode="${mode}">${mode}</button>`).join("")}
               </div>
-            </aside>
-
-            <article class="card preview-card">
-              ${previewBody}
-            </article>
-          </section>
-        </div>
+              <div class="ocr-box">
+                <strong>${state.createMode}</strong>
+                <p>${state.createMode === "OCR Voyage Instructions" ? "The OCR reads Vessel, IMO, Principal, Client, Cargo, Quantity, Port and ETA, then builds the case shell automatically." : "For exceptional cases, the operator can key in the same operational fields manually and keep the same reference conventions."}</p>
+                <div class="badge-row">
+                  <span class="badge">Vessel</span>
+                  <span class="badge">IMO</span>
+                  <span class="badge">Principal</span>
+                  <span class="badge">Client</span>
+                  <span class="badge">Cargo</span>
+                  <span class="badge">Quantity</span>
+                  <span class="badge">Port</span>
+                  <span class="badge">ETA</span>
+                </div>
+              </div>
+              <div class="generated-grid">
+                <div class="generated-item"><span>Generated Case</span><strong class="mono">${preview.ref}</strong></div>
+                <div class="generated-item"><span>GATSHIP Reference</span><strong class="mono">${preview.gatship}</strong></div>
+                <div class="generated-item"><span>Sedna Tag</span><strong class="mono">${preview.sedna}</strong></div>
+              </div>
+              <div class="mini-card">
+                <strong>Current extraction preview</strong>
+                <span>${preview.vessel} · ${preview.cargo}</span>
+              </div>
+              <button class="cta-btn" type="button" id="jumpToWorkspace">Open Active Case Workspace</button>
+            </div>
+          </aside>
+        </section>
       `;
 
-      document.getElementById("builderVessel").addEventListener("change", (event) => {
-        syncBuilderFromVessel(Number(event.target.value));
-        renderBuilder();
+      operationsEl.querySelectorAll("[data-team-filter]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.teamFilter = button.dataset.teamFilter;
+          renderOperations();
+        });
       });
-      document.getElementById("builderPort").addEventListener("change", (event) => {
-        state.builder.port = event.target.value;
-        state.builder.crew = pdaData[state.builder.port].refCrew || state.builder.crew;
-        renderBuilder();
+      operationsEl.querySelectorAll("[data-status-filter]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.statusFilter = button.dataset.statusFilter;
+          renderOperations();
+        });
       });
-      document.getElementById("builderOperation").addEventListener("change", (event) => {
-        state.builder.operation = event.target.value;
-        renderBuilder();
+      operationsEl.querySelectorAll("[data-case-select]").forEach((row) => {
+        row.addEventListener("click", () => {
+          state.selectedCaseRef = row.dataset.caseSelect;
+          renderOperations();
+          renderWorkspace();
+        });
       });
-      document.getElementById("builderCargo").addEventListener("input", (event) => {
-        state.builder.cargoMT = Number(event.target.value) || 0;
-        renderBuilder();
+      operationsEl.querySelectorAll("[data-create-mode]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.createMode = button.dataset.createMode;
+          renderOperations();
+        });
       });
-      document.getElementById("builderGRT").addEventListener("input", (event) => {
-        state.builder.grt = Number(event.target.value) || 0;
-        renderBuilder();
-      });
-      document.getElementById("builderCrew").addEventListener("input", (event) => {
-        state.builder.crew = Number(event.target.value) || 0;
-        renderBuilder();
-      });
-      document.getElementById("generatePda").addEventListener("click", () => {
-        state.builder.loading = true;
-        renderBuilder();
-        window.setTimeout(() => {
-          state.builder.loading = false;
-          state.builder.generated = true;
-          renderBuilder();
-        }, 2200);
+      document.getElementById("jumpToWorkspace").addEventListener("click", () => {
+        state.page = "workspace";
+        updatePages();
       });
     }
 
-    function renderFinancial() {
-      const financialEl = document.getElementById("page-financial");
-      financialEl.innerHTML = `
-        <div class="section-stack">
-          <section class="intro-card">
-            <div class="intro-grid">
-              <div>
-                <span class="eyebrow">${dual("Financial Control", "Control Financiero")}</span>
-                <h1 class="intro-title">${dual("Decision-ready visibility over disbursements, variance and category exposure.", "Visibilidad lista para decisión sobre desembolsos, varianza y exposición por categoría.")}</h1>
-                <p class="intro-copy">${dual("This view gives directors a compact read on where cash goes, how vessel cost profiles compare and how 2026 momentum is trending against the previous year.", "Esta vista le da a dirección una lectura compacta de hacia dónde va la caja, cómo se comparan los perfiles de costos por buque y cómo la tendencia 2026 se mueve frente al año anterior.")}</p>
-              </div>
-              <div class="intro-stats">
-                <div class="intro-stat">
-                  <strong>${dual("Board-ready", "Listo para directorio")}</strong>
-                  <span>${dual("Charts use concise labels and high-contrast surfaces for presentation settings.", "Los gráficos usan etiquetas concisas y superficies de alto contraste para contextos de presentación.")}</span>
-                </div>
-                <div class="intro-stat">
-                  <strong>${dual("Voyage aware", "Consciente del voyage")}</strong>
-                  <span>${dual("Disbursement totals stay connected to actual vessel names used in operations.", "Los totales de desembolso siguen conectados a nombres reales de buques usados en operación.")}</span>
-                </div>
-              </div>
+    function renderWorkspace() {
+      const active = currentCase();
+      const workspaceEl = document.getElementById("page-workspace");
+      const totalPda = active.pdaLines.reduce((sum, item) => sum + item.amount, 0);
+      const totalVariance = active.fdaVariance.reduce((sum, item) => sum + item.diff, 0);
+      workspaceEl.innerHTML = `
+        <section class="hero-card case-hero">
+          <div class="case-top">
+            <div>
+              <span class="eyebrow"><i class="ti ti-folders"></i> Case Workspace</span>
+              <h2>${active.ref} · ${active.vessel}</h2>
+              <p class="case-meta">${active.imo} · ${active.operator} · ${active.owner} · ${active.operationType} at ${active.terminal}</p>
             </div>
-          </section>
+            <div class="pill ${caseStatusClass(active.status)}">${active.status}</div>
+          </div>
+          <div class="summary-grid">
+            <div class="summary-item"><span>Voyage</span><strong>${active.voyage}</strong></div>
+            <div class="summary-item"><span>Port</span><strong>${active.port}</strong></div>
+            <div class="summary-item"><span>Principal</span><strong>${active.principal}</strong></div>
+            <div class="summary-item"><span>Client</span><strong>${active.client}</strong></div>
+            <div class="summary-item"><span>Team</span><strong>${active.team}</strong></div>
+            <div class="summary-item"><span>Laycan</span><strong>${active.laycan}</strong></div>
+          </div>
+        </section>
 
-          <section class="financial-grid">
-            <div class="card financial-card financial-kpi blue">
-              <span>${dual("Total Disbursements YTD", "Desembolsos Totales YTD")}</span>
-              <strong>$1.84M</strong>
-            </div>
-            <div class="card financial-card financial-kpi green">
-              <span>${dual("Agency Fees Collected", "Honorarios de Agencia Cobrados")}</span>
-              <strong>$127K</strong>
-            </div>
-            <div class="card financial-card financial-kpi amber">
-              <span>${dual("PDA vs FDA Variance", "Varianza PDA vs FDA")}</span>
-              <strong>+3.7%</strong>
-            </div>
-          </section>
+        <div class="workspace-tabs">
+          ${[
+            ["overview", "Overview"],
+            ["reporting", "Reporting"],
+            ["pda", "PDA"],
+            ["documents", "Documents"],
+            ["fda", "FDA"]
+          ].map(([key, label]) => `<button class="tab-btn ${state.workspaceTab === key ? "active" : ""}" type="button" data-workspace-tab="${key}">${label}</button>`).join("")}
+        </div>
 
-          <section class="chart-grid">
-            <article class="card chart-shell">
-              <div class="card-header" style="padding:0">
+        <section class="workspace-panel ${state.workspaceTab === "overview" ? "active" : ""}">
+          <div class="content-grid">
+            <div class="grid-wide">
+              <article class="card">
+                <div class="card-head">
+                  <div>
+                    <h3>Operational Overview</h3>
+                    <p>The core operating file with voyage, terminal, cargo and date control.</p>
+                  </div>
+                </div>
+                <div class="card-body stack">
+                  <div class="kv-grid">
+                    <div class="kv-card"><span>Operator</span><strong>${active.operator}</strong></div>
+                    <div class="kv-card"><span>Owner</span><strong>${active.owner}</strong></div>
+                    <div class="kv-card"><span>Voyage</span><strong>${active.voyage}</strong></div>
+                    <div class="kv-card"><span>Loading / Discharging</span><strong>${active.operationType}</strong></div>
+                    <div class="kv-card"><span>Terminal</span><strong>${active.terminal}</strong></div>
+                    <div class="kv-card"><span>Early Loading Allowed</span><strong>${active.earlyLoadingAllowed}</strong></div>
+                    <div class="kv-card"><span>ETA / ATA</span><strong>${active.dates.etaAta}</strong></div>
+                    <div class="kv-card"><span>ETB / ATB</span><strong>${active.dates.etbAtb}</strong></div>
+                    <div class="kv-card"><span>ETC / ATC</span><strong>${active.dates.etcAtc}</strong></div>
+                  </div>
+                  <div class="table-wrap">
+                    <table class="cargo-table">
+                      <thead>
+                        <tr>
+                          <th>Product</th>
+                          <th>Quantity</th>
+                          <th>OCR Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${active.cargo.map((item) => `
+                          <tr>
+                            <td>${item.product}</td>
+                            <td>${item.quantity}</td>
+                            <td><span class="badge">OCR updatable</span></td>
+                          </tr>
+                        `).join("")}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="card-head">
+                  <div>
+                    <h3>Vessel Finder Widget</h3>
+                    <p>Live vessel awareness stays inside the case because that is what users value from GATSHIP.</p>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="vessel-finder">
+                    <strong>${active.vessel}</strong>
+                    <div class="badge-row" style="margin-top:10px">
+                      <span class="badge">${active.port}</span>
+                      <span class="badge">${active.operationType}</span>
+                      <span class="badge">${active.team}</span>
+                    </div>
+                    <div class="map-box">
+                      <svg viewBox="0 0 440 220" aria-label="Vessel tracker mockup">
+                        <defs>
+                          <linearGradient id="routeTrack" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="rgba(68,212,200,0.2)"></stop>
+                            <stop offset="100%" stop-color="rgba(109,170,252,0.5)"></stop>
+                          </linearGradient>
+                        </defs>
+                        <rect width="440" height="220" fill="#0a1724"></rect>
+                        <path d="M24 132 C92 102 118 78 170 84 C218 90 250 138 292 146 C322 152 356 138 416 96" fill="none" stroke="url(#routeTrack)" stroke-width="3" stroke-dasharray="5 5">
+                          <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="2.4s" repeatCount="indefinite"></animate>
+                        </path>
+                        <circle cx="312" cy="128" r="8" fill="var(--sea)"></circle>
+                        <circle cx="312" cy="128" r="8" fill="none" stroke="var(--sea)" stroke-width="2">
+                          <animate attributeName="r" values="8;18;8" dur="2s" repeatCount="indefinite"></animate>
+                          <animate attributeName="opacity" values="0.9;0;0.9" dur="2s" repeatCount="indefinite"></animate>
+                        </circle>
+                        <text x="328" y="120" fill="#f4f7fb" font-size="13" font-family="IBM Plex Sans">Live vessel ${active.port}</text>
+                        <text x="328" y="140" fill="#87a1b3" font-size="11" font-family="IBM Plex Sans">${active.dates.etaAta}</text>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="grid-main-aside">
+              <article class="card">
+                <div class="card-head">
+                  <div>
+                    <h3>Audit Trail</h3>
+                    <p>Who changed what, when, without leaving the case.</p>
+                  </div>
+                </div>
+                <div class="card-body audit-list">
+                  ${active.events.map((event) => `
+                    <div class="list-row">
+                      <strong>${event.user}</strong>
+                      <span>${event.time} · ${event.change}</span>
+                    </div>
+                  `).join("")}
+                </div>
+              </article>
+
+              <aside class="card">
+                <div class="card-head">
+                  <div>
+                    <h3>Active Workspace Context</h3>
+                    <p>Everything the operator needs before taking the next action.</p>
+                  </div>
+                </div>
+                <div class="card-body stack">
+                  <div class="mini-card"><strong>Principal</strong><span>${active.principal}</span></div>
+                  <div class="mini-card"><strong>Client</strong><span>${active.client}</span></div>
+                  <div class="mini-card"><strong>Team Lane</strong><span>${active.team}</span></div>
+                  <button class="cta-btn" type="button" data-page-jump="operations">Back to Operations</button>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="workspace-panel ${state.workspaceTab === "reporting" ? "active" : ""}">
+          <div class="content-grid">
+            <article class="card">
+              <div class="card-head">
                 <div>
-                  <h3>${dual("Disbursements by Vessel", "Desembolsos por Buque")}</h3>
-                  <p>${dual("Active fleet comparison using current disbursement exposure.", "Comparativa de flota activa usando exposición actual de desembolsos.")}</p>
+                  <h3>Automated Reporting</h3>
+                  <p>Pre Arrival, Arrival and Departure outputs are generated from OCR updates, email inputs and the live case data model.</p>
                 </div>
               </div>
-              <canvas id="disbursementsChart" aria-label="Disbursements by vessel"></canvas>
+              <div class="card-body">
+                <div class="report-grid">
+                  ${active.reports.map((report) => `
+                    <div class="report-card">
+                      <strong>${report.title}</strong>
+                      <p>${report.summary}</p>
+                      <div class="badge-row">
+                        <span class="badge">${report.status}</span>
+                        <button class="link-btn" type="button">Generate ${report.title}</button>
+                      </div>
+                    </div>
+                  `).join("")}
+                </div>
+                <div class="funds-grid">
+                  <div class="funds-box">
+                    <span>PDA Required</span>
+                    <strong>${formatMoney(active.fundsRequired)}</strong>
+                  </div>
+                  <div class="funds-box">
+                    <span>Funds Received</span>
+                    <strong>${formatMoney(active.fundsReceived)}</strong>
+                  </div>
+                </div>
+                <div class="swift-box">
+                  <strong>Funds Monitoring</strong>
+                  <p class="muted">Alert ladder when funds received remain at zero: 🟡 72h · 🟠 48h · 🔴 24h · 🚨 12h</p>
+                  <div class="swift-fields">
+                    <div class="generated-item"><span>Amount</span><strong>${active.swift.amount}</strong></div>
+                    <div class="generated-item"><span>Currency</span><strong>${active.swift.currency}</strong></div>
+                    <div class="generated-item"><span>Sender</span><strong>${active.swift.sender}</strong></div>
+                    <div class="generated-item"><span>Reference</span><strong class="mono">${active.swift.reference}</strong></div>
+                  </div>
+                </div>
+              </div>
             </article>
+          </div>
+        </section>
 
-            <article class="card chart-shell">
-              <div class="card-header" style="padding:0">
+        <section class="workspace-panel ${state.workspaceTab === "pda" ? "active" : ""}">
+          <div class="grid-main-aside">
+            <article class="card">
+              <div class="card-head">
                 <div>
-                  <h3>${dual("Monthly Trend 2026", "Tendencia Mensual 2026")}</h3>
-                  <p>${dual("2026 run-rate compared against 2025 baseline.", "Ritmo 2026 comparado contra la base 2025.")}</p>
+                  <h3>PDA Intelligence</h3>
+                  <p>Upload a PDA, extract the core fees and benchmark them against historical hub agency performance.</p>
                 </div>
               </div>
-              <div class="legend-inline">
-                <span><span class="trend-line" style="background:#3b82f6"></span>2026</span>
-                <span><span class="trend-line" style="background:#94a3b8; border-top:2px dashed #94a3b8; background:transparent"></span>2025</span>
+              <div class="card-body stack">
+                <div class="ocr-box">
+                  <strong>OCR PDA Upload</strong>
+                  <p>Upload PDF and extract port dues, agency fee, launch, customs, tug and pilotage into a structured commercial view.</p>
+                  <div class="badge-row">
+                    <span class="badge">${active.pdaFile}</span>
+                    <span class="badge">Port Dues</span>
+                    <span class="badge">Agency Fee</span>
+                    <span class="badge">Launch</span>
+                    <span class="badge">Customs</span>
+                    <span class="badge">Tug</span>
+                    <span class="badge">Pilotage</span>
+                  </div>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Fee</th>
+                        <th>PDA</th>
+                        <th>Average</th>
+                        <th>Signal</th>
+                      </tr>
+                    </thead>
+                    <tbody class="benchmark-table">
+                      ${active.pdaBenchmark.map((row) => `
+                        <tr class="${row.alert ? "alert-row" : ""}">
+                          <td>${row.fee}</td>
+                          <td>${formatMoney(row.pda)}</td>
+                          <td>${formatMoney(row.average)}</td>
+                          <td>${row.alert ? "⚠ Above Historical Average" : "Within Expected Range"}</td>
+                        </tr>
+                      `).join("")}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-              <canvas id="trendChart" aria-label="Monthly trend"></canvas>
             </article>
-          </section>
 
-          <section class="card financial-card">
-            <div class="card-header" style="padding:0">
-              <div>
-                <h3>${dual("Cost Breakdown by Category", "Desglose de Costos por Categoría")}</h3>
-                <p>${dual("Where disbursement value concentrates across the platform portfolio.", "Dónde se concentra el valor de desembolso a través del portafolio de la plataforma.")}</p>
-              </div>
-            </div>
-            <div class="breakdown-list">
-              ${financialBreakdown.map((item) => `
-                <div class="breakdown-row">
-                  <strong>${dual(item.labelEn, item.labelEs)}</strong>
-                  <div class="breakdown-track"><span style="width:${item.percent}%; background:${item.color}"></span></div>
-                  <div class="breakdown-value">${item.percent}% · ${item.value}</div>
+            <aside class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Client Version</h3>
+                  <p>Commercially powerful one-click output.</p>
                 </div>
-              `).join("")}
-            </div>
-            <div class="footer-note">${dual("Illustrative board view. Charts are static for demo purposes and designed for boardroom storytelling, not accounting close.", "Vista ilustrativa para directorio. Los gráficos son estáticos para efectos de demo y están diseñados para storytelling ejecutivo, no para cierre contable.")}</div>
-          </section>
-        </div>
+              </div>
+              <div class="card-body stack">
+                <div class="mini-card"><strong>Total PDA</strong><span class="mono">${formatMoney(totalPda)}</span></div>
+                <div class="mini-card"><strong>Reference</strong><span class="mono">${active.ref}-PDA</span></div>
+                <div class="mini-card"><strong>Benchmark Status</strong><span>${active.pdaBenchmark.some((item) => item.alert) ? "Historical outlier detected" : "Aligned to history"}</span></div>
+                <button class="cta-btn" type="button">Generate NEW MARITIME PDA</button>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="workspace-panel ${state.workspaceTab === "documents" ? "active" : ""}">
+          <div class="grid-wide">
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h3>SOF Generator</h3>
+                  <p>Master emails become structured SOF events and reporting milestones automatically.</p>
+                </div>
+              </div>
+              <div class="card-body stack">
+                <div class="sof-box">
+                  <strong>Captured from OCR</strong>
+                  <p>EOSP, Anchor Down, Anchor Up, POB, First Line Ashore, All Fast, Ops Commenced, Ops Completed and COSP are recognized directly from master updates.</p>
+                </div>
+                <div class="timeline-list">
+                  ${active.sof.map((item) => `
+                    <div class="list-row">
+                      <strong>${item.event}</strong>
+                      <span>${item.time}</span>
+                    </div>
+                  `).join("")}
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h3>BL Generator</h3>
+                  <p>Draft BL output from charterer instructions plus surveyor figures, with human review before PDF.</p>
+                </div>
+              </div>
+              <div class="card-body stack">
+                <div class="field-grid">
+                  <div class="field">
+                    <label>Charterer Instructions</label>
+                    <textarea rows="4">Discharge sequence aligned to shore tank priority. Maintain split parcel visibility for Jet A1.</textarea>
+                  </div>
+                  <div class="field">
+                    <label>Surveyor Figures</label>
+                    <textarea rows="4">Gasoline 24,930 MT. Jet A1 4,985 MT. ROB validated with joint measurement note.</textarea>
+                  </div>
+                </div>
+                <div class="bl-preview">
+                  <strong>Draft BL Preview</strong>
+                  <p>${active.vessel} · ${active.port} · ${active.cargo.map((item) => `${item.product} ${item.quantity}`).join(" / ")}. Output staged for operations review before final PDF generation.</p>
+                </div>
+                <button class="cta-btn" type="button">Generate PDF Draft BL</button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="workspace-panel ${state.workspaceTab === "fda" ? "active" : ""}">
+          <div class="grid-main-aside">
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h3>FDA Variance Analysis</h3>
+                  <p>One of the sharpest demo moments: compare initial PDA vs final FDA and build a structured commercial response.</p>
+                </div>
+              </div>
+              <div class="card-body stack">
+                <div class="ocr-box">
+                  <strong>OCR FDA Upload</strong>
+                  <p>Upload the final account and compare it line-by-line against the original PDA inside the same case workspace.</p>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Item</th>
+                        <th>PDA</th>
+                        <th>FDA</th>
+                        <th>Diff</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${active.fdaVariance.map((row) => `
+                        <tr>
+                          <td>${row.item}</td>
+                          <td>${formatMoney(row.pda)}</td>
+                          <td>${formatMoney(row.fda)}</td>
+                          <td>${row.diff >= 0 ? "+" : ""}${formatMoney(row.diff)}</td>
+                        </tr>
+                      `).join("")}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </article>
+
+            <aside class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Query Generator</h3>
+                  <p>Email-ready commercial challenge for Sedna.</p>
+                </div>
+              </div>
+              <div class="card-body stack">
+                <div class="mini-card"><strong>Net Variance</strong><span class="mono">${totalVariance >= 0 ? "+" : ""}${formatMoney(totalVariance)}</span></div>
+                <div class="mini-card"><strong>Suggested action</strong><span>Challenge uplifted pilotage and tug components before FDA approval.</span></div>
+                <button class="cta-btn" type="button">Generate Query Email</button>
+                <div class="email-preview">To: localagent@newmaritime.demo
+Subject: ${active.ref} · FDA Query vs PDA
+
+Dear team,
+
+Please clarify the variance observed between the original PDA and the submitted FDA for ${active.vessel} at ${active.port}. The main items currently flagged are:
+
+${active.fdaVariance.map((row) => `- ${row.item}: PDA ${formatMoney(row.pda)} / FDA ${formatMoney(row.fda)} / Diff ${row.diff >= 0 ? "+" : ""}${formatMoney(row.diff)}`).join("\n")}
+
+Kindly send supporting invoices and the operational explanation for the uplifted items so we can close the case internally and update Sedna.
+
+Best regards,
+NEW MARITIME HUB OS</div>
+              </div>
+            </aside>
+          </div>
+        </section>
       `;
 
-      renderFinancialCharts();
+      workspaceEl.querySelectorAll("[data-workspace-tab]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.workspaceTab = button.dataset.workspaceTab;
+          renderWorkspace();
+        });
+      });
+      workspaceEl.querySelectorAll("[data-page-jump]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.page = button.dataset.pageJump;
+          updatePages();
+        });
+      });
     }
 
-    function renderFinancialCharts() {
-      destroyCharts();
+    function renderDatabase() {
+      const agent = currentAgent();
+      const databaseEl = document.getElementById("page-database");
+      databaseEl.innerHTML = `
+        <section class="hero-card">
+          <div class="hero-grid">
+            <div>
+              <span class="eyebrow"><i class="ti ti-database"></i> Database</span>
+              <h1 class="hero-title">The strategic memory of clients, local agents and port execution quality.</h1>
+              <p class="hero-copy">The database module turns operational repetition into advantage. Clients, charterers and local agents get a true CRM layer, while agent performance scores help the hub choose who to trust on the next call.</p>
+            </div>
+            <div class="hero-insight-grid">
+              <div class="insight-card"><strong>CRM surface</strong><span>Call counts, port spread, average profit and preference patterns per client.</span></div>
+              <div class="insight-card"><strong>Agent intelligence</strong><span>Contacts, banking, rating, issues and preferred-by signals in one place.</span></div>
+              <div class="insight-card"><strong>Country → Port lens</strong><span>Fast navigation from geography to the exact local operator network.</span></div>
+              <div class="insight-card"><strong>Performance score</strong><span>Based on response speed, PDA/FDA differences and reporting quality.</span></div>
+            </div>
+          </div>
+        </section>
 
+        <section class="crm-grid">
+          ${clients.map((client) => `
+            <article class="card crm-card">
+              <h4>${client.name}</h4>
+              <p>${client.role}</p>
+              <div class="crm-stats">
+                <div><span>Calls</span><strong>${client.calls}</strong></div>
+                <div><span>Ports</span><strong>${client.ports}</strong></div>
+                <div><span>Avg Profit</span><strong>${client.avgProfit}</strong></div>
+                <div><span>Preferred Agents</span><strong>${client.preferredAgents}</strong></div>
+              </div>
+              <p style="margin-top:16px">${client.note}</p>
+            </article>
+          `).join("")}
+        </section>
+
+        <section class="card" style="margin-top:20px">
+          <div class="card-head">
+            <div>
+              <h3>Local Agents</h3>
+              <p>Country to port view with the most valuable strategic layer in the product.</p>
+            </div>
+            <div class="pill">Tema · Takoradi · Dakar · Conakry · Freetown</div>
+          </div>
+          <div class="card-body agent-layout">
+            <div class="agent-list">
+              ${localAgents.map((item) => `
+                <button class="agent-item ${item.id === state.selectedAgentId ? "active" : ""}" type="button" data-agent-select="${item.id}">
+                  <strong>${item.port} · ${item.name}</strong>
+                  <span>${item.country} · Preferred by ${item.preferredBy}</span>
+                </button>
+              `).join("")}
+            </div>
+            <aside class="stack">
+              <div class="mini-card">
+                <strong>${agent.name}</strong>
+                <span>${agent.country} · ${agent.port}</span>
+              </div>
+              <div class="mini-card"><strong>Contacts</strong><span>${agent.contacts}</span></div>
+              <div class="mini-card"><strong>Banking</strong><span>${agent.banking}</span></div>
+              <div class="mini-card"><strong>Rating</strong><span class="score">${agent.rating}</span></div>
+              <div class="mini-card"><strong>Issues</strong><span>${agent.issues}</span></div>
+              <div class="mini-card"><strong>Preferred By</strong><span>${agent.preferredBy}</span></div>
+              <div class="mini-card"><strong>Performance Score</strong><span>${agent.score} / 100</span></div>
+            </aside>
+          </div>
+        </section>
+      `;
+
+      databaseEl.querySelectorAll("[data-agent-select]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.selectedAgentId = button.dataset.agentSelect;
+          renderDatabase();
+        });
+      });
+    }
+
+    function renderIntelligence() {
+      const intelligenceEl = document.getElementById("page-intelligence");
+      intelligenceEl.innerHTML = `
+        <section class="hero-card">
+          <div class="hero-grid">
+            <div>
+              <span class="eyebrow"><i class="ti ti-chart-arrows-vertical"></i> Market Intelligence</span>
+              <h1 class="hero-title">Where operations data becomes benchmark insight and market signal.</h1>
+              <p class="hero-copy">This is the innovation layer the client will feel immediately. SOF data becomes operational stats, port-to-port comparisons surface performance, and OCR line-up ingestion removes most of the manual intelligence work currently done by hand.</p>
+            </div>
+            <div class="hero-insight-grid">
+              <div class="insight-card"><strong>SOF-derived KPIs</strong><span>Arrival, berthing, terminal efficiency, cargo performance and sailing timelines.</span></div>
+              <div class="insight-card"><strong>Port benchmark</strong><span>Compare Tema vs Takoradi, Dakar vs Conakry and show where execution is cleaner.</span></div>
+              <div class="insight-card"><strong>Line-up OCR</strong><span>PDF line-ups become structured NEW MARITIME intelligence reports automatically.</span></div>
+              <div class="insight-card"><strong>Power BI feel</strong><span>Designed to read like a lightweight operational intelligence cockpit.</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid-3">
+          ${operationsStats.map((stat) => `
+            <article class="card metric-card metric-sky">
+              <div class="metric-label">${stat.label}</div>
+              <div class="metric-value">${stat.value}</div>
+              <div class="metric-subcopy">${stat.range} · ${stat.benchmark}</div>
+            </article>
+          `).join("")}
+        </section>
+
+        <section class="benchmark-grid" style="margin-top:20px">
+          <article class="card compare-card">
+            <strong>Tema vs Takoradi</strong>
+            ${[
+              ["Arrival speed", 76, "Tema"],
+              ["Funds readiness", 64, "Takoradi"],
+              ["Report turnaround", 82, "Tema"],
+              ["Agent consistency", 71, "Tema"]
+            ].map((row) => `
+              <div class="compare-row">
+                <span>${row[0]}</span>
+                <div class="bar-track"><span style="width:${row[1]}%"></span></div>
+                <span>${row[2]}</span>
+              </div>
+            `).join("")}
+          </article>
+
+          <article class="card compare-card">
+            <strong>Dakar vs Conakry</strong>
+            ${[
+              ["Arrival speed", 69, "Dakar"],
+              ["Funds readiness", 58, "Dakar"],
+              ["Report turnaround", 77, "Dakar"],
+              ["Agent consistency", 61, "Conakry"]
+            ].map((row) => `
+              <div class="compare-row">
+                <span>${row[0]}</span>
+                <div class="bar-track"><span style="width:${row[1]}%"></span></div>
+                <span>${row[2]}</span>
+              </div>
+            `).join("")}
+          </article>
+        </section>
+
+        <section class="grid-wide" style="margin-top:20px">
+          <article class="card chart-shell">
+            <div class="card-head" style="padding:0">
+              <div>
+                <h3>Operations Stats</h3>
+                <p>Dashboard-style chart summarizing the timing discipline captured from SOF milestones.</p>
+              </div>
+            </div>
+            <canvas id="opsChart" aria-label="Operations stats chart"></canvas>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <h3>Intelligence Reports</h3>
+                <p>OCR line-up parsing identifies vessels, ETA, cargo and terminal, then generates the NEW MARITIME report format.</p>
+              </div>
+            </div>
+            <div class="card-body stack">
+              <div class="intel-box">
+                <strong>Line-Up OCR</strong>
+                <p>Upload a PDF line-up and the system reconstructs structured vessel intelligence automatically.</p>
+                <div class="badge-row">
+                  <span class="badge">Identifies vessels</span>
+                  <span class="badge">Identifies ETA</span>
+                  <span class="badge">Identifies cargo</span>
+                  <span class="badge">Identifies terminal</span>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Vessel</th>
+                      <th>ETA</th>
+                      <th>Cargo</th>
+                      <th>Terminal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${lineupIntelligence.map((item) => `
+                      <tr>
+                        <td>${item.vessel}</td>
+                        <td>${item.eta}</td>
+                        <td>${item.cargo}</td>
+                        <td>${item.terminal}</td>
+                      </tr>
+                    `).join("")}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </article>
+        </section>
+      `;
+
+      renderOpsChart();
+    }
+
+    function renderManagement() {
+      const managementEl = document.getElementById("page-management");
+      managementEl.innerHTML = `
+        <section class="hero-card">
+          <div class="hero-grid">
+            <div>
+              <span class="eyebrow"><i class="ti ti-building-skyscraper"></i> Management Dashboard</span>
+              <h1 class="hero-title">Executive control over revenue, profit, exposure and performance by port, client, team and agent.</h1>
+              <p class="hero-copy">This screen is built for leadership. It compresses commercial health, case exposure and comparative rankings into one surface so management can see where the hub is winning, where operational drag is accumulating and which local agents generate friction.</p>
+            </div>
+            <div class="hero-insight-grid">
+              <div class="insight-card"><strong>Financial stack</strong><span>Gross revenue, gross profit, EBITDA and open FDA exposure in one place.</span></div>
+              <div class="insight-card"><strong>Ranking views</strong><span>By port, client, team and agent, with enough clarity for monthly reviews.</span></div>
+              <div class="insight-card"><strong>Incident visibility</strong><span>See which agents drive exception load and where escalation sits.</span></div>
+              <div class="insight-card"><strong>Board-friendly</strong><span>Compact enough for a management demo, specific enough to feel real.</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="exec-grid">
+          <article class="exec-card sky"><span>Gross Revenue</span><strong>$1.92M</strong><p>Total invoiced revenue across the active hub portfolio.</p></article>
+          <article class="exec-card sea"><span>Gross Profit</span><strong>$684K</strong><p>Contribution after port disbursement and agency cost reconciliation.</p></article>
+          <article class="exec-card gold"><span>EBITDA</span><strong>$411K</strong><p>Operating earnings after internal delivery structure.</p></article>
+          <article class="exec-card orange"><span>Open FDA Exposure</span><strong>$123K</strong><p>Cases still waiting for final reconciliation or commercial challenge resolution.</p></article>
+          <article class="exec-card green"><span>Reporting SLA</span><strong>94%</strong><p>Share of reports dispatched inside the promised service window.</p></article>
+        </section>
+
+        <section class="grid-wide">
+          <article class="card chart-shell">
+            <div class="card-head" style="padding:0">
+              <div>
+                <h3>Financial Mix by Port</h3>
+                <p>Leadership view of revenue concentration and operational dependency by port.</p>
+              </div>
+            </div>
+            <canvas id="execChart" aria-label="Financial mix chart"></canvas>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <h3>Operational Signals</h3>
+                <p>What needs management attention before it becomes a recurring cost drag.</p>
+              </div>
+            </div>
+            <div class="card-body ranking-list">
+              <div class="list-row"><strong>Agent exception load</strong><span>Alpha Guinea Hub has the highest incident count this month and needs process correction on FDA turnarounds.</span></div>
+              <div class="list-row"><strong>Team concentration risk</strong><span>Blade Runner is carrying the heaviest live case load and may need balancing before the next ETA cluster.</span></div>
+              <div class="list-row"><strong>Treasury sensitivity</strong><span>Three live cases still show zero funds received inside alert windows, keeping open exposure elevated.</span></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="rank-grid">
+          ${[
+            ["By Port", managementRankings.ports],
+            ["By Client", managementRankings.clients],
+            ["By Team", managementRankings.teams],
+            ["By Agent", managementRankings.agents]
+          ].map(([title, rows]) => `
+            <article class="card rank-card">
+              <h4>${title}</h4>
+              ${rows.map((row, index) => `
+                <div class="rank-item">
+                  <span class="rank-index">${index + 1}</span>
+                  <span>${row.name}</span>
+                  <strong>${row.value}</strong>
+                </div>
+              `).join("")}
+            </article>
+          `).join("")}
+        </section>
+
+        <div class="footer-note">Demo logic is intentionally static and board-oriented. The purpose is to show the operating model, automation narrative and management visibility defined in the approved functional document.</div>
+      `;
+
+      renderExecChart();
+    }
+
+    function destroyCharts() {
+      if (state.charts.ops) {
+        state.charts.ops.destroy();
+        state.charts.ops = null;
+      }
+      if (state.charts.exec) {
+        state.charts.exec.destroy();
+        state.charts.exec = null;
+      }
+    }
+
+    function renderOpsChart() {
       if (!window.Chart) return;
-
-      const axisColor = "#94a3b8";
-      const gridColor = "rgba(148,163,184,0.08)";
-      const font = { family: "Inter", size: 11 };
-
-      const barCanvas = document.getElementById("disbursementsChart");
-      if (barCanvas) {
-        state.charts.bar = new Chart(barCanvas, {
-          type: "bar",
-          data: {
-            labels: ["AFRICAN RUBY", "DIDDI", "NORDIC STAR", "CAPE VERDE", "VEGA STAR", "DUBAI PEARL", "RIVER CONGO", "BUENOS AIRES", "PACIFIC WAVE"],
-            datasets: [{
-              data: vessels.map((vessel) => vessel.disb),
-              backgroundColor: "rgba(59,130,246,0.7)",
-              borderColor: "#3b82f6",
-              borderWidth: 1.5,
-              borderRadius: 4
-            }]
+      if (state.charts.ops) state.charts.ops.destroy();
+      const ctx = document.getElementById("opsChart");
+      if (!ctx) return;
+      state.charts.ops = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: operationsStats.map((item) => item.label),
+          datasets: [{
+            label: "Operational Index",
+            data: [82, 74, 68, 79, 61],
+            backgroundColor: ["rgba(68,212,200,0.68)", "rgba(109,170,252,0.68)", "rgba(255,188,84,0.68)", "rgba(66,214,139,0.68)", "rgba(255,138,83,0.68)"],
+            borderColor: ["#44d4c8", "#6daafc", "#ffbc54", "#42d68b", "#ff8a53"],
+            borderWidth: 1.5,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
           },
-          options: {
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { display: false },
-              tooltip: {
-                callbacks: {
-                  label: (context) => moneyPrecise(context.raw)
-                }
-              }
+          scales: {
+            x: {
+              ticks: { color: "#a8bdcc", font: { family: "IBM Plex Sans", size: 11 } },
+              grid: { display: false }
             },
-            scales: {
-              x: {
-                ticks: { color: axisColor, font, maxRotation: 40, minRotation: 40 },
-                grid: { display: false }
-              },
-              y: {
-                ticks: {
-                  color: axisColor,
-                  font,
-                  callback: (value) => `$${Math.round(value / 1000)}K`
-                },
-                grid: { color: gridColor }
-              }
+            y: {
+              min: 0,
+              max: 100,
+              ticks: { color: "#a8bdcc", font: { family: "IBM Plex Sans", size: 11 } },
+              grid: { color: "rgba(122,171,197,0.08)" }
             }
           }
-        });
-      }
-
-      const trendCanvas = document.getElementById("trendChart");
-      if (trendCanvas) {
-        state.charts.trend = new Chart(trendCanvas, {
-          type: "line",
-          data: {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-            datasets: [
-              {
-                label: "2026",
-                data: [280000, 310000, 295000, 340000, 318000, 389000],
-                borderColor: "#3b82f6",
-                backgroundColor: "rgba(59,130,246,0.08)",
-                tension: 0.4,
-                fill: true,
-                borderWidth: 2.5,
-                pointBackgroundColor: "#60a5fa",
-                pointRadius: 3
-              },
-              {
-                label: "2025",
-                data: [240000, 255000, 270000, 260000, 290000, 310000],
-                borderColor: "#94a3b8",
-                tension: 0.35,
-                fill: false,
-                borderWidth: 2,
-                borderDash: [4, 4],
-                pointRadius: 0
-              }
-            ]
-          },
-          options: {
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { display: false },
-              tooltip: {
-                callbacks: {
-                  label: (context) => `${context.dataset.label}: ${moneyPrecise(context.raw)}`
-                }
-              }
-            },
-            scales: {
-              x: {
-                ticks: { color: axisColor, font },
-                grid: { display: false }
-              },
-              y: {
-                ticks: {
-                  color: axisColor,
-                  font,
-                  callback: (value) => `$${Math.round(value / 1000)}K`
-                },
-                grid: { color: gridColor }
-              }
-            }
-          }
-        });
-      }
-    }
-
-    function animateCounters() {
-      document.querySelectorAll("[data-counter]").forEach((element) => {
-        const target = Number(element.dataset.target);
-        const format = element.dataset.format;
-        const start = performance.now();
-        const duration = 800;
-
-        function formatter(value) {
-          if (format === "moneyk") return `$${Math.round(value)}K`;
-          return Math.round(value).toLocaleString("en-US");
         }
-
-        function tick(now) {
-          const progress = Math.min(1, (now - start) / duration);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          element.textContent = formatter(target * eased);
-          if (progress < 1) {
-            requestAnimationFrame(tick);
-          }
-        }
-
-        requestAnimationFrame(tick);
       });
     }
 
-    function setLanguage(lang) {
-      state.lang = lang;
-      document.body.dataset.lang = lang;
-      document.documentElement.lang = lang === "en" ? "en" : "es";
+    function renderExecChart() {
+      if (!window.Chart) return;
+      if (state.charts.exec) state.charts.exec.destroy();
+      const ctx = document.getElementById("execChart");
+      if (!ctx) return;
+      state.charts.exec = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: ["Tema", "Takoradi", "Conakry", "Dakar", "Freetown"],
+          datasets: [
+            {
+              label: "Revenue",
+              data: [412000, 296000, 244000, 191000, 132000],
+              borderColor: "#6daafc",
+              backgroundColor: "rgba(109,170,252,0.08)",
+              fill: true,
+              tension: 0.36,
+              borderWidth: 2.5,
+              pointBackgroundColor: "#6daafc",
+              pointRadius: 3
+            },
+            {
+              label: "Gross Profit",
+              data: [146000, 118000, 93000, 79000, 52000],
+              borderColor: "#44d4c8",
+              backgroundColor: "rgba(68,212,200,0.06)",
+              fill: true,
+              tension: 0.32,
+              borderWidth: 2.5,
+              pointBackgroundColor: "#44d4c8",
+              pointRadius: 3
+            }
+          ]
+        },
+        options: {
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: "#a8bdcc",
+                font: { family: "IBM Plex Sans", size: 11 }
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: "#a8bdcc", font: { family: "IBM Plex Sans", size: 11 } },
+              grid: { display: false }
+            },
+            y: {
+              ticks: {
+                color: "#a8bdcc",
+                font: { family: "IBM Plex Sans", size: 11 },
+                callback: (value) => `$${Math.round(value / 1000)}K`
+              },
+              grid: { color: "rgba(122,171,197,0.08)" }
+            }
+          }
+        }
+      });
     }
 
-    function updateNav() {
-      document.querySelectorAll("[data-page-link]").forEach((button) => {
-        button.classList.toggle("active", button.dataset.pageLink === state.page);
+    function updatePages() {
+      document.querySelectorAll(".nav-tab").forEach((button) => {
+        button.classList.toggle("active", button.dataset.page === state.page);
       });
       document.querySelectorAll(".page").forEach((page) => {
         page.classList.toggle("active", page.id === `page-${state.page}`);
       });
+      destroyCharts();
+      if (state.page === "operations") renderOperations();
+      if (state.page === "workspace") renderWorkspace();
+      if (state.page === "database") renderDatabase();
+      if (state.page === "intelligence") renderIntelligence();
+      if (state.page === "management") renderManagement();
     }
 
-    function setPage(page) {
-      state.page = page;
-      updateNav();
-      if (page === "vessel") renderVesselDetail();
-      if (page === "builder") renderBuilder();
-      if (page === "financial") renderFinancial();
-      if (page === "dashboard") renderDashboard();
-    }
-
-    function selectVessel(id) {
-      state.selectedVesselId = id;
-      setPage("vessel");
-    }
-
-    function startFleetFlash() {
-      window.setInterval(() => {
-        const items = Array.from(document.querySelectorAll(".fleet-item"));
-        if (!items.length) return;
-        const item = items[Math.floor(Math.random() * items.length)];
-        item.classList.remove("flash");
-        void item.offsetWidth;
-        item.classList.add("flash");
-      }, 3000);
-    }
-
-    function bindStaticEvents() {
-      document.getElementById("langToggle").addEventListener("click", () => {
-        setLanguage(state.lang === "en" ? "es" : "en");
-      });
-      document.querySelectorAll("[data-page-link]").forEach((button) => {
-        button.addEventListener("click", () => setPage(button.dataset.pageLink));
+    function bindNavigation() {
+      document.querySelectorAll("[data-page]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.page = button.dataset.page;
+          updatePages();
+        });
       });
     }
 
     function init() {
-      syncBuilderFromVessel(state.builder.vesselId);
-      bindStaticEvents();
-      renderDashboard();
-      renderVesselDetail();
-      renderBuilder();
-      renderFinancial();
-      setPage("dashboard");
-      startFleetFlash();
+      bindNavigation();
+      renderOperations();
+      renderWorkspace();
+      renderDatabase();
+      renderIntelligence();
+      renderManagement();
+      updatePages();
     }
 
     init();

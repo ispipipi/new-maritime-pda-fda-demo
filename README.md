@@ -1,17 +1,26 @@
-# NEW MARITIME PDA/FDA Automation Demo
+# NEW MARITIME HUB OS
 
-Single-file sales demo for PDA and FDA workflow automation.
+Single-file commercial demo for the NEW MARITIME HUB OS concept.
+
+## Included modules
+
+- Operations
+- Case Workspace
+- Database
+- Market Intelligence
+- Management Dashboard
 
 ## Open locally
 
-Open `index.html` in a browser.
+Open `index.html` in any desktop browser.
 
-## Included examples
+## Stack
 
-- `examples/pda-mt-diddi-calling-ango-ango.pdf`
-- `examples/dxb-1577-25-ango-ango-fda.pdf`
-- `examples/pda-of-mt-african-ruby.pdf`
-- `examples/dxb-1120-25-mt-african-ruby-banana-fda.pdf`
+- HTML
+- CSS
+- Vanilla JavaScript
+- Chart.js from CDN
+- Tabler Icons webfont from CDN
 
 ## Deploy
 
